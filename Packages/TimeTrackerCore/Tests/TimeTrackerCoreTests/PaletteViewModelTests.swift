@@ -70,7 +70,6 @@ struct PaletteViewModelTests {
         #expect(makeViewModel(input: "   ").items == [.stopCurrent])
     }
 
-
     @Test func itemsRefreshAfterStopSoRepeatLastAppears() throws {
         try store.startTimer(category: work, title: "созвон", tags: [])
         time.current = at(10, 20)
