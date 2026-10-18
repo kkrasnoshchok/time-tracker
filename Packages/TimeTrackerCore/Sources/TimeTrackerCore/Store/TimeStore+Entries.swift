@@ -93,6 +93,12 @@ extension TimeStore {
         try save()
     }
 
+    /// Edits only the description, e.g. while the timer is still running.
+    public func setNotes(_ notes: String?, for entry: TimeEntry) throws(StoreError) {
+        entry.notes = cleaned(notes)
+        try save()
+    }
+
     public func delete(_ entry: TimeEntry) throws(StoreError) {
         context.delete(entry)
         try save()

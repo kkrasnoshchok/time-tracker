@@ -5,7 +5,7 @@ import SwiftData
 @MainActor
 public final class TimeStore {
     let container: ModelContainer
-    let time: TimeProvider
+    public let time: TimeProvider
 
     var context: ModelContext { container.mainContext }
 

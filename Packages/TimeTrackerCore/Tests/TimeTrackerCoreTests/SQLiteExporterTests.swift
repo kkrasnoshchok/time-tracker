@@ -36,7 +36,8 @@ struct SQLiteExporterTests {
         defer { try? FileManager.default.removeItem(at: url) }
         try SQLiteExporter.write([row(), row(end: nil, title: "идёт")], to: url)
         let columns = try query(url, "SELECT name FROM pragma_table_info('entries') ORDER BY cid")
-        #expect(columns.compactMap(\.first) == ["start", "end", "duration_seconds", "category", "tags", "title", "notes"])
+        let expectedColumns = ["start", "end", "duration_seconds", "category", "tags", "title", "notes"]
+        #expect(columns.compactMap(\.first) == expectedColumns)
         let rows = try query(url, "SELECT * FROM entries ORDER BY rowid")
         #expect(rows[0] == ["2027-01-15T09:00:00Z", "2027-01-15T10:00:00Z", "3600", "Работа", "a;b", "созвон", ""])
         #expect(rows[1][1] == nil)

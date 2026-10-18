@@ -65,3 +65,12 @@
 - Параметризованные тесты: `@Test(arguments: [...])` запускает один тест на каждое значение, как `it.each` в Jest.
 - `Date.formatted(.iso8601)` даёт `2027-01-15T09:00:00Z`; форматтеры в Swift это типобезопасные «стили», а не строки формата.
 - Дыры в тестах находились мутациями: если после поломки кода тесты остаются зелёными, нужен ещё тест (так добавились тесты на «чистый» перевод строки).
+
+## Task 8: оболочка приложения и menu bar
+- `@main struct TimeTrackerApp: App` с `var body: some Scene` это корень приложения; сцены (`MenuBarExtra`, `Window`) играют роль «страниц»/окон. `MenuBarExtra` рисует иконку в menu bar, а его содержимое (`.menuBarExtraStyle(.window)`) показывается как всплывающее окно.
+- `@State private var model = AppModel(...)` в `App` создаёт модель один раз на всё приложение, как `useRef`/синглтон в корне React-приложения. Вью получают её параметром (`let model: AppModel`), без `Context`.
+- `@Observable` + чтение свойства во `body` = автоподписка: `Text(model.menuBarTitle)` перерисуется, когда оно изменится. Каждую секунду `AppModel` обновляет `now`: это аналог `setInterval` + `setState`, только внутри `Task { while ... await Task.sleep }`.
+- `@NSApplicationDelegateAdaptor` подключает старый AppKit-делегат к SwiftUI-приложению. Через него мы запрещаем завершение при закрытии последнего окна: `applicationShouldTerminateAfterLastWindowClosed` возвращает `false`.
+- `TextEditor(text: $notes)` — двусторонняя привязка (`$` это `Binding`), аналог контролируемого `<textarea value onChange>`; `.onChange(of: notes)` сохраняет при каждом изменении.
+- Модификаторы вью (`.padding`, `.frame`, `.font`) вызываются цепочкой и возвращают новую вью; порядок важен (как порядок обёрток в JSX).
+- Приложению нужны права (Accessibility, Screen Recording) для скриншотов и управления интерфейсом; поэтому визуальные проверки мы делаем руками по чек-листу.

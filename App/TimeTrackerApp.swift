@@ -1,12 +1,30 @@
 import SwiftUI
 import TimeTrackerCore
 
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    /// The app lives in the menu bar; closing the Journal window must not quit it.
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+}
+
 @main
 struct TimeTrackerApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
+    @State private var model = AppModel(store: AppEnvironment.makeStore())
+
     var body: some Scene {
-        WindowGroup("Журнал") {
-            Text("Time Tracker \(TimeTrackerCore.version)")
-                .frame(minWidth: 320, minHeight: 200)
+        MenuBarExtra {
+            MenuBarContent(model: model)
+        } label: {
+            if let title = model.menuBarTitle {
+                Text(title).monospacedDigit()
+            } else {
+                Image(systemName: "clock")
+            }
+        }
+        .menuBarExtraStyle(.window)
+
+        Window("Журнал", id: "journal") {
+            JournalPlaceholderView(model: model)
         }
     }
 }

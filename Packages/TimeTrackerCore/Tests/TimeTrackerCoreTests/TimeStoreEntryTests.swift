@@ -283,3 +283,35 @@ struct TimeStoreEntryTests {
         #expect(store.lastEntry() == nil)
     }
 }
+
+@MainActor
+struct TimeStoreNotesTests {
+    private let time = TestTimeProvider(at(10))
+    private let store: TimeStore
+    private let work: EntryCategory
+
+    init() throws {
+        store = try TimeStore.inMemory(time: time)
+        work = try store.addCategory(name: "Работа", colorHex: "#0A84FF")
+    }
+
+    @Test func setNotesStoresTrimmedTextOnRunningEntry() throws {
+        let entry = try store.startTimer(category: work, title: nil, tags: [])
+        try store.setNotes("  что сделал  ", for: entry)
+        #expect(store.runningEntry()?.notes == "что сделал")
+    }
+
+    @Test func blankNotesClearTheField() throws {
+        let entry = try store.startTimer(category: work, title: nil, tags: [])
+        try store.setNotes("текст", for: entry)
+        try store.setNotes("   \n ", for: entry)
+        #expect(entry.notes == nil)
+    }
+
+    @Test func setNotesDoesNotTouchOtherFields() throws {
+        let entry = try store.startTimer(category: work, title: "созвон", tags: ["a"])
+        try store.setNotes("описание", for: entry)
+        #expect(entry.title == "созвон" && entry.start == at(10) && entry.end == nil)
+        #expect(entry.tagList.map(\.name) == ["a"])
+    }
+}
