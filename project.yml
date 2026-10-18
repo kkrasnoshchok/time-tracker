@@ -1,0 +1,31 @@
+name: TimeTracker
+options:
+  bundleIdPrefix: dev.hesoyam
+  deploymentTarget:
+    macOS: "26.0"
+packages:
+  TimeTrackerCore:
+    path: Packages/TimeTrackerCore
+targets:
+  TimeTracker:
+    type: application
+    platform: macOS
+    sources: [App]
+    dependencies:
+      - package: TimeTrackerCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.hesoyam.TimeTracker
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Time Tracker
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+schemes:
+  TimeTracker:
+    build:
+      targets:
+        TimeTracker: all

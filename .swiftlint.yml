@@ -1,0 +1,7 @@
+included:
+  - App
+  - Packages/TimeTrackerCore/Sources
+  - Packages/TimeTrackerCore/Tests
+excluded:
+  - "**/.build"
+line_length: 120
