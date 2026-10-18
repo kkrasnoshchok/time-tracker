@@ -189,4 +189,40 @@ struct JournalViewModelTests {
         try viewModel.save(draft(at(9), at(10), tags: "#x #y"), to: nil)
         #expect(viewModel.tags.map(\.name) == ["x", "y"])
     }
+
+    // MARK: Edge cases found via coverage
+
+    @Test func savingWithEndBeforeStartThrows() {
+        #expect(throws: StoreError.endBeforeStart) {
+            try viewModel.save(draft(at(10), at(9)), to: nil)
+        }
+        #expect(viewModel.groups.isEmpty)
+    }
+
+    @Test func draftFromEntryWithoutOptionalFieldsUsesEmptyValues() {
+        let bare = TimeEntry(start: at(9), end: at(10))
+        store.context.insert(bare)
+        let draft = EntryDraft(entry: bare)
+        #expect(draft == EntryDraft(start: at(9), end: at(10), categoryID: nil, title: "", tags: "", notes: ""))
+    }
+
+    @Test func addingACategoryShowsUpImmediately() throws {
+        try viewModel.addCategory(name: "Спорт", colorHex: "#FF453A")
+        #expect(viewModel.categories.map(\.name) == ["Работа", "Учёба", "Спорт"])
+    }
+
+    @Test func renamingACategoryShowsUpImmediately() throws {
+        try viewModel.renameCategory(work, to: "Дело")
+        #expect(viewModel.categories.map(\.name) == ["Дело", "Учёба"])
+    }
+
+    @Test func recoloringACategoryShowsUpImmediately() throws {
+        try viewModel.setColor("#ABCDEF", for: study)
+        #expect(viewModel.categories.map(\.colorHex) == ["#0A84FF", "#ABCDEF"])
+    }
+
+    @Test func reorderingCategoriesShowsUpImmediately() throws {
+        try viewModel.reorderCategories([study, work])
+        #expect(viewModel.categories.map(\.name) == ["Учёба", "Работа"])
+    }
 }

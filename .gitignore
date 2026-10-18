@@ -5,3 +5,5 @@ DerivedData/
 *.xcodeproj
 xcuserdata/
 .superpowers/
+Packages/*_mutated/
+Packages/TimeTrackerCore/muter_logs/

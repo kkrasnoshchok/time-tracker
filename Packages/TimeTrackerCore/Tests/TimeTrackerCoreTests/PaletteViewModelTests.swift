@@ -194,4 +194,16 @@ struct PaletteViewModelTests {
         viewModel.input = ""
         #expect(viewModel.items.isEmpty)
     }
+
+    @Test func lastEntryWithoutCategoryIsNotOfferedForRepeat() {
+        store.context.insert(TimeEntry(start: at(8), end: at(9), title: "сирота"))
+        let viewModel = makeViewModel()
+        #expect(viewModel.items.isEmpty)
+        #expect(viewModel.submit() == .nothing)
+        #expect(store.runningEntry() == nil)
+    }
+
+    @Test func partialCategoryFollowedByMoreWordsOnlyOffersToCreate() {
+        #expect(makeViewModel(input: "раб созвон").items == [.createCategory("раб")])
+    }
 }

@@ -172,8 +172,8 @@ public final class PaletteViewModel {
         let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
             if store.runningEntry() != nil { return [.stopCurrent] }
-            guard let last = store.lastEntry() else { return [] }
-            return [.repeatLast(title: last.title, category: last.category?.name ?? "")]
+            guard let last = store.lastEntry(), let category = last.category else { return [] }
+            return [.repeatLast(title: last.title, category: category.name)]
         }
         let names = store.categories().map(\.name)
         guard let command = PaletteParser.parse(input, knownCategories: names) else { return [] }

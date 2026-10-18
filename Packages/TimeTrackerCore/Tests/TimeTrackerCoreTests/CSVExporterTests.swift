@@ -110,4 +110,13 @@ struct CSVExporterTests {
         #expect(row.tags == ["а", "б"])
         #expect(row.title.isEmpty && row.notes.isEmpty)
     }
+
+    @Test func exportRowForEntryWithoutCategoryOrTextUsesEmptyStrings() throws {
+        let store = try TimeStore.inMemory(time: TestTimeProvider(at(12)))
+        let bare = TimeEntry(start: at(9), end: at(10))
+        store.context.insert(bare)
+        let row = ExportRow(entry: bare, now: at(12))
+        #expect(row.category.isEmpty && row.title.isEmpty && row.notes.isEmpty && row.tags.isEmpty)
+        #expect(row.durationSeconds == 3600)
+    }
 }
