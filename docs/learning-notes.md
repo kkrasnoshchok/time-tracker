@@ -23,3 +23,12 @@
 - `split(whereSeparator:)`, `map`, `prefix`, `dropFirst`, `joined` это те же `split`, `map`, `slice`, `join`, только ленивые и безопасные по границам. `\.isWhitespace` это key path: короткая запись `{ $0.isWhitespace }`.
 - `guard let x = ... else { return }` это ранний выход с распаковкой Optional: в TS аналог `if (x == null) return;`, после которого `x` уже не `undefined`.
 - Кортеж `(name: String, wordCount: Int)` это лёгкий безымянный объект `{ name, wordCount }` без объявления типа.
+
+## Task 3: модели SwiftData и Store
+- `@Model` это макрос: он на этапе компиляции превращает обычный `class` в сущность БД (как декоратор `@Entity` в TypeORM, только без рефлексии в рантайме). Поля с значениями по умолчанию и опциональные связи нужны для совместимости с CloudKit.
+- `@MainActor` привязывает класс к главному потоку. В JS поток один, поэтому такого нет; в Swift компилятор проверяет, что вы не трогаете `TimeStore` из фонового потока.
+- `class` против `struct`: модели БД это классы (ссылки: два места видят один и тот же объект), а `TimeSpan` из прошлой задачи struct (значение). `===` сравнивает ссылки, как `Object.is`.
+- `#Predicate { $0.category?.id == id }` это типобезопасный фильтр запроса. Как `where` в ORM, но компилятор проверяет имена полей.
+- `FetchDescriptor` + `context.fetch` это `SELECT`; `context.insert/delete/save` это INSERT/DELETE/COMMIT. Контекст ведёт себя как unit of work в ORM.
+- Конфликт имён: `Category` оказался занят типом из Objective-C рантайма, который тянет `Foundation`. В JS таких «скрытых» глобальных имён нет, в Swift при импорте Apple-фреймворков они бывают, поэтому тип назван `EntryCategory`.
+- `throws(StoreError)`: функция может бросить только `StoreError`. Системные ошибки (например, неудачное сохранение) мы ловим в `do/catch` и превращаем в `.saveFailed`.

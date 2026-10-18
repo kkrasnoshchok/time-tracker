@@ -1,6 +1,6 @@
 import Foundation
 
-/// Parses palette input of the form `Category title words #tag #tag [-20m]`.
+/// Parses palette input of the form `EntryCategory title words #tag #tag [-20m]`.
 public enum PaletteParser {
     public static func parse(_ input: String, knownCategories: [String]) -> PaletteCommand? {
         var tags: [String] = []
@@ -58,7 +58,10 @@ public enum PaletteParser {
         return TimeInterval(amount) * (unit == "h" ? 3600 : 60)
     }
 
-    private static func longestMatch(in words: [String], among categories: [String]) -> (name: String, wordCount: Int)? {
+    private static func longestMatch(
+        in words: [String],
+        among categories: [String]
+    ) -> (name: String, wordCount: Int)? {
         var best: (name: String, wordCount: Int)?
         for name in categories {
             let nameWords = name.split(whereSeparator: \.isWhitespace).map { $0.lowercased() }
