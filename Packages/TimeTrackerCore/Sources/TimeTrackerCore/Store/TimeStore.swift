@@ -50,6 +50,21 @@ public final class TimeStore {
         try save()
     }
 
+    public func setColor(_ colorHex: String, for category: EntryCategory) throws(StoreError) {
+        category.colorHex = colorHex
+        try save()
+    }
+
+    /// Gives categories the order of `ordered`; categories left out keep their relative order after them.
+    public func reorderCategories(_ ordered: [EntryCategory]) throws(StoreError) {
+        let listed = Set(ordered.map(\.id))
+        let rest = categories().filter { !listed.contains($0.id) }
+        for (index, category) in (ordered + rest).enumerated() {
+            category.sortOrder = index
+        }
+        try save()
+    }
+
     /// Deletes a category. If it still has entries, they must be moved to another category first.
     public func deleteCategory(
         _ category: EntryCategory,

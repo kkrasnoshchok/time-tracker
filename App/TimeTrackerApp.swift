@@ -30,8 +30,12 @@ struct TimeTrackerApp: App {
         }
         .menuBarExtraStyle(.window)
 
+        Settings {
+            SettingsView()
+        }
+
         Window("Журнал", id: "journal") {
-            JournalPlaceholderView(model: model)
+            JournalRootView(model: model)
         }
     }
 }

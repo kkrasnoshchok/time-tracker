@@ -122,3 +122,40 @@ struct TimeStoreCategoryTests {
         #expect(store.tags().count == 1)
     }
 }
+
+@MainActor
+struct TimeStoreCategoryOrderTests {
+    private let store: TimeStore
+    private let first: EntryCategory
+    private let second: EntryCategory
+    private let third: EntryCategory
+
+    init() throws {
+        store = try TimeStore.inMemory(time: TestTimeProvider(at(12)))
+        first = try store.addCategory(name: "A", colorHex: "#111111")
+        second = try store.addCategory(name: "B", colorHex: "#222222")
+        third = try store.addCategory(name: "C", colorHex: "#333333")
+    }
+
+    @Test func setColorChangesTheColor() throws {
+        try store.setColor("#ABCDEF", for: second)
+        #expect(store.categories().map(\.colorHex) == ["#111111", "#ABCDEF", "#333333"])
+    }
+
+    @Test func reorderAssignsSortOrderByPosition() throws {
+        try store.reorderCategories([third, first, second])
+        #expect(store.categories().map(\.name) == ["C", "A", "B"])
+        #expect(store.categories().map(\.sortOrder) == [0, 1, 2])
+    }
+
+    @Test func reorderKeepsOmittedCategoriesAfterTheListedOnes() throws {
+        try store.reorderCategories([third])
+        #expect(store.categories().map(\.name) == ["C", "A", "B"])
+    }
+
+    @Test func newCategoryAfterReorderGoesLast() throws {
+        try store.reorderCategories([third, second, first])
+        try store.addCategory(name: "D", colorHex: "#444444")
+        #expect(store.categories().map(\.name) == ["C", "B", "A", "D"])
+    }
+}
