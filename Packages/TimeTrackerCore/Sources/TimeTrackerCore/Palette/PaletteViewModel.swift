@@ -18,14 +18,31 @@ public enum PaletteOutcome: Equatable {
     case nothing
 }
 
+/// A question or message the palette shows under the input after Enter.
+public enum PalettePrompt: Equatable, Sendable {
+    /// Unknown category: Enter again creates it and starts the timer.
+    case createCategory(String)
+    /// The new entry overlaps others: Enter again starts it anyway.
+    case overlap(count: Int)
+    case error(String)
+}
+
 /// State and actions behind the palette window. The view only renders `items` and forwards keys.
 @MainActor
 @Observable
 public final class PaletteViewModel {
+    public static let categoryColors = [
+        "#0A84FF", "#30D158", "#FF9F0A", "#FF453A", "#BF5AF2", "#64D2FF", "#FFD60A", "#AC8E68"
+    ]
+
     public var input: String = "" {
-        didSet { reload() }
+        didSet {
+            prompt = nil
+            reload()
+        }
     }
     public private(set) var items: [PaletteItem] = []
+    public private(set) var prompt: PalettePrompt?
 
     private let store: TimeStore
 
@@ -50,6 +67,30 @@ public final class PaletteViewModel {
             input = text
             return
         }
+    }
+
+    /// Enter key. The first press may raise a `prompt`; pressing Enter again confirms it.
+    @discardableResult
+    public func enter() -> PaletteOutcome {
+        let outcome: PaletteOutcome
+        switch prompt {
+        case .createCategory:
+            let color = Self.categoryColors[store.categories().count % Self.categoryColors.count]
+            outcome = createCategoryAndSubmit(colorHex: color)
+        case .overlap:
+            outcome = submit(allowOverlap: true)
+        case .error, nil:
+            outcome = submit()
+        }
+        prompt = Self.prompt(for: outcome)
+        return outcome
+    }
+
+    /// Esc: dismisses a visible prompt. Returns false when there was none (the window should close).
+    public func cancelPrompt() -> Bool {
+        guard prompt != nil else { return false }
+        prompt = nil
+        return true
     }
 
     @discardableResult
@@ -82,6 +123,15 @@ public final class PaletteViewModel {
     }
 
     // MARK: Private
+
+    private static func prompt(for outcome: PaletteOutcome) -> PalettePrompt? {
+        switch outcome {
+        case .needsCategoryCreation(let name): .createCategory(name)
+        case .overlap(let ids): .overlap(count: ids.count)
+        case .failed(let error): .error(error.message)
+        case .started, .stopped, .nothing: nil
+        }
+    }
 
     private func parsedCommand() -> PaletteCommand? {
         PaletteParser.parse(input, knownCategories: store.categories().map(\.name))

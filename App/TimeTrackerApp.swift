@@ -9,11 +9,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct TimeTrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
-    @State private var model = AppModel(store: AppEnvironment.makeStore())
+    @State private var model: AppModel
+    @State private var coordinator: AppCoordinator
+
+    init() {
+        let model = AppModel(store: AppEnvironment.makeStore())
+        _model = State(initialValue: model)
+        _coordinator = State(initialValue: AppCoordinator(model: model))
+    }
 
     var body: some Scene {
         MenuBarExtra {
-            MenuBarContent(model: model)
+            MenuBarContent(model: model, onTogglePalette: coordinator.palette.toggle)
         } label: {
             if let title = model.menuBarTitle {
                 Text(title).monospacedDigit()

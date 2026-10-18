@@ -6,6 +6,9 @@ options:
 packages:
   TimeTrackerCore:
     path: Packages/TimeTrackerCore
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    exactVersion: 1.10.0
 targets:
   TimeTracker:
     type: application
@@ -13,6 +16,7 @@ targets:
     sources: [App]
     dependencies:
       - package: TimeTrackerCore
+      - package: KeyboardShortcuts
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.hesoyam.TimeTracker
