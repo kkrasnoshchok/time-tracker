@@ -5,3 +5,7 @@ included:
 excluded:
   - "**/.build"
 line_length: 120
+disabled_rules:
+  - function_parameter_count # store API mirrors the plan's explicit parameter lists
+identifier_name:
+  min_length: 2

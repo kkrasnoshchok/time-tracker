@@ -84,7 +84,9 @@ struct TimeStoreEntryTests {
             try store.startTimer(category: work, title: nil, tags: [], startedAt: at(10, 30))
         }
         #expect(store.runningEntry() == nil)
-        let forced = try store.startTimer(category: work, title: nil, tags: [], startedAt: at(10, 30), allowOverlap: true)
+        let forced = try store.startTimer(
+            category: work, title: nil, tags: [], startedAt: at(10, 30), allowOverlap: true
+        )
         #expect(store.runningEntry() === forced)
     }
 
@@ -132,7 +134,8 @@ struct TimeStoreEntryTests {
     @Test func addEntryStoresAllFields() throws {
         time.current = at(12)
         let entry = try store.addEntry(
-            span: span(at(9), at(10)), category: study, title: "лекция", tags: ["swift"], notes: "заметки", allowOverlap: false
+            span: span(at(9), at(10)), category: study, title: "лекция",
+            tags: ["swift"], notes: "заметки", allowOverlap: false
         )
         #expect(entry.start == at(9) && entry.end == at(10))
         #expect(entry.category === study)
