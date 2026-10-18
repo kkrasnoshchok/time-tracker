@@ -14,13 +14,18 @@ public final class TimeStore {
         self.time = time
     }
 
-    public static func inMemory(time: TimeProvider) throws -> TimeStore {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(
+    /// `storeURL == nil` gives an in-memory store (tests); a URL gives a persistent file.
+    public static func makeContainer(storeURL: URL?) throws -> ModelContainer {
+        let configuration = storeURL.map { ModelConfiguration(url: $0) }
+            ?? ModelConfiguration(isStoredInMemoryOnly: true)
+        return try ModelContainer(
             for: EntryCategory.self, Tag.self, TimeEntry.self,
             configurations: configuration
         )
-        return TimeStore(container: container, time: time)
+    }
+
+    public static func inMemory(time: TimeProvider) throws -> TimeStore {
+        TimeStore(container: try makeContainer(storeURL: nil), time: time)
     }
 
     // MARK: Categories
@@ -46,7 +51,10 @@ public final class TimeStore {
     }
 
     /// Deletes a category. If it still has entries, they must be moved to another category first.
-    public func deleteCategory(_ category: EntryCategory, movingEntriesTo destination: EntryCategory?) throws(StoreError) {
+    public func deleteCategory(
+        _ category: EntryCategory,
+        movingEntriesTo destination: EntryCategory?
+    ) throws(StoreError) {
         let entries = entries(in: category)
         if !entries.isEmpty {
             guard let destination, destination !== category else { throw .categoryHasEntries }
