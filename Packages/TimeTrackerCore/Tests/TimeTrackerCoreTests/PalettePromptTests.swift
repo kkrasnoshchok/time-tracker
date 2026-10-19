@@ -107,4 +107,25 @@ struct PalettePromptTests {
         #expect(viewModel.enter() == .stopped)
         #expect(viewModel.prompt == nil)
     }
+
+    /// SwiftUI's TextField writes its text back to the binding on Enter, right before `onSubmit`.
+    /// That unchanged write must not dismiss the question the first Enter just raised.
+    @Test func writingTheSameInputBackKeepsThePrompt() {
+        let viewModel = makeViewModel(input: "Йога утро")
+        viewModel.enter()
+        viewModel.input = "Йога утро"
+        #expect(viewModel.prompt == .createCategory("Йога"))
+        #expect(viewModel.enter() == .started)
+        #expect(store.categories().map(\.name) == ["Работа", "Йога"])
+    }
+
+    @Test func resetClearsInputPromptAndItems() throws {
+        try store.startTimer(category: work, title: nil, tags: [])
+        let viewModel = makeViewModel(input: "Йога")
+        viewModel.enter()
+        viewModel.reset()
+        #expect(viewModel.input.isEmpty)
+        #expect(viewModel.prompt == nil)
+        #expect(viewModel.items == [.stopCurrent])
+    }
 }

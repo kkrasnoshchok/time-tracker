@@ -37,6 +37,8 @@ public final class PaletteViewModel {
 
     public var input: String = "" {
         didSet {
+            // SwiftUI's TextField re-assigns the same text when Enter is pressed; that is not an edit.
+            guard input != oldValue else { return }
             prompt = nil
             reload()
         }
@@ -48,6 +50,13 @@ public final class PaletteViewModel {
 
     public init(store: TimeStore) {
         self.store = store
+        reload()
+    }
+
+    /// Back to a blank palette, e.g. when the window is shown again.
+    public func reset() {
+        input = ""
+        prompt = nil
         reload()
     }
 

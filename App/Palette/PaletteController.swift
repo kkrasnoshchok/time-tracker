@@ -21,8 +21,7 @@ final class PaletteController {
     }
 
     func show() {
-        viewModel.input = ""
-        viewModel.reload()
+        viewModel.reset()
         panel?.centerOnActiveScreen()
         panel?.makeKeyAndOrderFront(nil)
     }
