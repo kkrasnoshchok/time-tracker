@@ -13,19 +13,19 @@
 В React-мире это похоже на: `TimeStore` = слой данных/API-клиент, view-модели = хуки/сторы с логикой (Zustand/MobX), SwiftUI-вью = «глупые» компоненты, пакет = отдельный npm-пакет без зависимости от React.
 
 ```
-┌──────────────────────────── App (SwiftUI, AppKit) ────────────────────────────┐
-│  TimeTrackerApp ─ сцены: MenuBarExtra, Window «Журнал», Settings              │
-│  MenuBar/*   Palette/*   Journal/*   Settings/*   Hotkey/*   Export/*         │
-│  AppModel (бегущий таймер, часы раз в секунду)   AppEnvironment (где БД)      │
+┌─ App (SwiftUI, AppKit) ────────────────────────────────────────────────────────┐
+│  TimeTrackerApp: сцены MenuBarExtra, Window «Журнал», Settings                 │
+│  MenuBar/   Palette/   Journal/   Settings/   Hotkey/   Export/                │
+│  AppModel (бегущий таймер, часы раз в секунду)   AppEnvironment (где БД)       │
 └───────────────────────────────────────┬────────────────────────────────────────┘
                                         │ вызывает методы, читает свойства
 ┌───────────────────────────────────────▼────────────────────────────────────────┐
 │ TimeTrackerCore (Swift Package, без UI)                                        │
-│  Palette/   PaletteParser, PaletteViewModel   ← ввод и Enter/Tab/Esc           │
+│  Palette/   PaletteParser, PaletteViewModel      ввод, Enter/Tab/Esc           │
 │  Journal/   JournalViewModel, DayGrouping, EntryFilter, EntryDraft, TagInput   │
 │  Export/    ExportRow, CSVExporter, SQLiteExporter                             │
 │  Store/     TimeStore (+Entries), Models (SwiftData), StoreError               │
-│  Domain/    TimeSpan, TimeProvider, DurationFormat   ← чистые правила          │
+│  Domain/    TimeSpan, TimeProvider, DurationFormat      чистые правила         │
 └────────────────────────────────────────────────────────────────────────────────┘
 ```
 
