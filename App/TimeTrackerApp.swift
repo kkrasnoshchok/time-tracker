@@ -4,6 +4,12 @@ import TimeTrackerCore
 final class AppDelegate: NSObject, NSApplicationDelegate {
     /// The app lives in the menu bar; closing the Journal window must not quit it.
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+
+    /// Clicking the Dock icon while no window is open should show the Journal.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag { AppRouter.shared.openJournal() }
+        return true
+    }
 }
 
 @main
@@ -22,11 +28,14 @@ struct TimeTrackerApp: App {
         MenuBarExtra {
             MenuBarContent(model: model, onTogglePalette: coordinator.palette.toggle)
         } label: {
-            if let title = model.menuBarTitle {
-                Text(title).monospacedDigit()
-            } else {
-                Image(systemName: "clock")
+            Group {
+                if let title = model.menuBarTitle {
+                    Text(title).monospacedDigit()
+                } else {
+                    Image(systemName: "clock")
+                }
             }
+            .background(RouterCapture())
         }
         .menuBarExtraStyle(.window)
 

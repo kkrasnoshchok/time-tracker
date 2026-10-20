@@ -4,7 +4,6 @@ import TimeTrackerCore
 struct MenuBarContent: View {
     let model: AppModel
     let onTogglePalette: () -> Void
-    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -13,7 +12,7 @@ struct MenuBarContent: View {
             } else {
                 Text("Таймер не запущен")
                     .font(.headline)
-                Text("Начните запись: \(HotkeyService.currentShortcutDescription ?? "задайте хоткей в настройках").")
+                Text("Начните запись хоткеем или кнопкой «Палитра».")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -22,11 +21,15 @@ struct MenuBarContent: View {
             }
             Divider()
             HStack {
+                Text("Палитра: \(HotkeyService.currentShortcutDescription ?? "не задан")")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button("Изменить…") { AppRouter.shared.openSettings() }
+            }
+            HStack {
                 Button("Палитра") { onTogglePalette() }
-                Button("Журнал") {
-                    openWindow(id: "journal")
-                    NSApp.activate()
-                }
+                Button("Журнал") { AppRouter.shared.openJournal() }
                 Spacer()
                 Button("Выйти") { NSApp.terminate(nil) }
             }
