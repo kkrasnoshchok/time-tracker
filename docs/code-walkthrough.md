@@ -198,6 +198,6 @@
 ## 10. Куда смотреть дальше
 
 - Документация Apple прямо в сессии: подключённый MCP `apple-docs` (ищите `MenuBarExtra`, `NSPanel`, `SwiftData`).
-- Как это проверялось: [testing.md](testing.md) (команды, мутации, чек-лист).
+- Как это проверялось: [testing.md](testing.md), оценка качества: [code-quality.md](code-quality.md) (команды, мутации, чек-лист).
 - Решения и причины: [application-design.md](application-design.md).
 - Что менялось и почему: `.superpowers/sdd/.../progress.md` (локальный журнал решений, в git не попадает) и история коммитов `git log --oneline`.
