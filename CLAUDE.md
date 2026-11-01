@@ -13,6 +13,14 @@
 - Сторонний код (MCP, skills, пакеты) подключается после ручной проверки (cc-audit даёт много ложных срабатываний, на него не полагаться).
 - Автор учит Swift (опыт JS/TS/React Native): после каждой задачи кратко объяснять новые концепции через аналогии с TypeScript/React.
 
+## Процесс (spec-driven, BMAD)
+- BMAD 6.12.4 (модули `core` и `bmm`, версия закреплена) ведёт идею → spec → задачи → реализацию. Навыки лежат в `.claude/skills/bmad-*`, конфиг в `_bmad/`, артефакты в `_bmad-output/`.
+- Не знаешь, с чего начать: `bmad-help`. Фича: `bmad-prd` → `bmad-ux` / `bmad-architecture` → `bmad-create-epics-and-stories` → `bmad-sprint-planning` → `bmad-build` → `bmad-code-review`. Мелочи: `bmad-spec` + `bmad-build`.
+- Superpowers остаётся набором отдельных навыков (TDD, отладка, ревью), но spec и планы пишем через BMAD. Старые спеки лежат в `docs/superpowers/`.
+- Обновление BMAD: только осознанно, с пересмотром архива по правилу про сторонний код; внешние модули не ставим.
+- Личные настройки BMAD (имя, язык) в `_bmad/custom/config.user.toml`, он в `.gitignore`.
+- Дорожная карта: `docs/superpowers/specs/2026-11-01-bmad-and-ui-roadmap-design.md`.
+
 ## Команды
 ```bash
 swift test --package-path Packages/TimeTrackerCore            # тесты логики
