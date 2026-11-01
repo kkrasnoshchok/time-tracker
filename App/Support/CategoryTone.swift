@@ -50,9 +50,8 @@ enum CategoryTone: String, CaseIterable, Sendable {
         var best: (tone: CategoryTone, distance: Double)?
         for tone in tieBreakOrder {
             guard let distance = distances[tone] else { continue }
-            if best == nil || distance < best!.distance {
-                best = (tone, distance)
-            }
+            if let current = best, distance >= current.distance { continue }
+            best = (tone, distance)
         }
         return best?.tone ?? .taupe
     }

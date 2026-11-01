@@ -1,4 +1,5 @@
 import Testing
+import TimeTrackerCore
 @testable import TimeTracker
 
 struct CategoryToneTests {
@@ -10,7 +11,7 @@ struct CategoryToneTests {
         ("#BF5AF2", .plum),
         ("#64D2FF", .lagoon),
         ("#FFD60A", .ochre),
-        ("#AC8E68", .taupe),
+        ("#AC8E68", .taupe)
     ])
     func coreDefaultHexMapsToItsTone(hex: String, tone: CategoryTone) {
         #expect(CategoryTone(storedHex: hex) == tone)
@@ -27,11 +28,34 @@ struct CategoryToneTests {
         #expect(CategoryTone(storedHex: tone.hex) == tone)
     }
 
+    @Test(arguments: [
+        ("#B47059", CategoryTone.clay),
+        ("#B89649", .ochre),
+        ("#8A9A69", .moss),
+        ("#5F8A8B", .lagoon),
+        ("#6F86A3", .slate),
+        ("#8D6F8C", .plum),
+        ("#B88A89", .rose),
+        ("#7A7573", .taupe)
+    ])
+    func hexNearAToneGoesToThatTone(hex: String, tone: CategoryTone) {
+        #expect(CategoryTone(storedHex: hex) == tone)
+    }
+
     @Test func unknownHexGoesToNearestTone() {
-        // Pure red is far from the muted tones; rose (#B88A8A) and clay (#B4705A) are the closest.
-        #expect(CategoryTone(storedHex: "#6F86A1") == .slate)   // one step off slate
-        #expect(CategoryTone(storedHex: "#8A9A6B") == .moss)    // one step off moss
+        // Oklab distance from pure red: clay 0.167, rose 0.208, ochre 0.226.
         #expect(CategoryTone(storedHex: "#FF0000") == .clay)
+    }
+
+    @Test func nearestUsesOklabNotRGBDistance() {
+        // Plain RGB distance puts #BE6205 nearest to ochre; Oklab puts it nearest to clay.
+        #expect(CategoryTone(storedHex: "#BE6205") == .clay)
+    }
+
+    @MainActor
+    @Test func everyCoreCategoryColorGetsItsOwnTone() {
+        let tones = PaletteViewModel.categoryColors.map { CategoryTone(storedHex: $0) }
+        #expect(Set(tones).count == PaletteViewModel.categoryColors.count)
     }
 
     @Test func exactTieGoesToEarlierToneInOrder() {
