@@ -18,6 +18,9 @@ final class AppRouter {
     }
 
     func openJournal() {
+        // A minimized window is not brought back by `openWindow`, so restore it first.
+        // The title is the one declared in `Window("Журнал", id: "journal")`.
+        NSApp.windows.first { $0.title == "Журнал" && $0.isMiniaturized }?.deminiaturize(nil)
         openWindowAction?(id: "journal")
         bringToFront()
     }

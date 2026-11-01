@@ -1,3 +1,4 @@
+import KeyboardShortcuts
 import SwiftUI
 import TimeTrackerCore
 
@@ -20,13 +21,8 @@ struct MenuBarContent: View {
                 Text(message).font(.caption).foregroundStyle(.red)
             }
             Divider()
-            HStack {
-                Text("Палитра: \(HotkeyService.currentShortcutDescription ?? "не задан")")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Button("Изменить…") { AppRouter.shared.openSettings() }
-            }
+            shortcutRow("Палитра", name: .togglePalette)
+            shortcutRow("Журнал", name: .openJournal)
             HStack {
                 Button("Палитра") { onTogglePalette() }
                 Button("Журнал") { AppRouter.shared.openJournal() }
@@ -36,5 +32,15 @@ struct MenuBarContent: View {
         }
         .padding(16)
         .frame(width: 300)
+    }
+
+    private func shortcutRow(_ title: String, name: KeyboardShortcuts.Name) -> some View {
+        HStack {
+            Text("\(title): \(HotkeyService.shortcutDescription(for: name) ?? "не задан")")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Button("Изменить…") { AppRouter.shared.openSettings() }
+        }
     }
 }

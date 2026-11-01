@@ -33,9 +33,10 @@ struct JournalEntriesView: View {
 
     var body: some View {
         HSplitView {
-            entryList.frame(minWidth: 400)
-            detail.frame(minWidth: 360)
+            entryList.frame(minWidth: 400, idealWidth: 500, maxWidth: .infinity, maxHeight: .infinity)
+            detail.frame(minWidth: 360, idealWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .searchable(text: $journal.filter.text, prompt: "Поиск по названию, описанию, тегам")
         .toolbar { toolbarContent }
         .sheet(isPresented: $showingAddSheet) {

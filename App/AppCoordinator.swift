@@ -1,6 +1,6 @@
 import Foundation
 
-/// Wires the global hotkey to the palette window for the lifetime of the app.
+/// Wires the global hotkeys to the palette and Journal windows for the lifetime of the app.
 @MainActor
 final class AppCoordinator {
     let palette: PaletteController
@@ -8,6 +8,9 @@ final class AppCoordinator {
 
     init(model: AppModel) {
         palette = PaletteController(model: model)
-        hotkey = HotkeyService { [palette] in palette.toggle() }
+        hotkey = HotkeyService(
+            onTogglePalette: { [palette] in palette.toggle() },
+            onOpenJournal: { AppRouter.shared.openJournal() }
+        )
     }
 }
