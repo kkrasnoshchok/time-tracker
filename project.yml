@@ -30,8 +30,25 @@ targets:
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
+  TimeTrackerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [AppTests]
+    dependencies:
+      - target: TimeTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.hesoyam.TimeTrackerTests
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
 schemes:
   TimeTracker:
     build:
       targets:
         TimeTracker: all
+    test:
+      targets:
+        - TimeTrackerTests
