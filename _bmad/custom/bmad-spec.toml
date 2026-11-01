@@ -1,0 +1,6 @@
+# Team override (committed): project rules every run must keep in context.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/CLAUDE.md",
+  "file:{project-root}/docs/application-design.md",
+]
