@@ -20,3 +20,15 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-3-primary-button-ghost-button-and-card.md`
   summary: Check that the custom keyboard-focus ring on `.primary`/`.ghost` buttons really shows, and that the system focus ring does not appear beside it.
   evidence: `@Environment(\.isFocused)` may not report focus inside a `ButtonStyle`, and `.focusEffectDisabled()` sits inside the style, so it may not remove the system ring. Unverified (maybe-false, medium if true). Settle by tabbing to a styled button with Full Keyboard Access on; if there are two rings or none, move `.focusEffectDisabled()` to the call site or read focus via `@FocusState`.
+
+## Deferred from: code review of spec-1-4-input-field-badge-and-error-strip (2026-11-02)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-input-field-badge-and-error-strip.md`
+  summary: Unverified (possibly medium): the `InputField` placeholder may not render in `textTertiary` on macOS, because it is styled through `TextField`'s `prompt`.
+  evidence: Not seen in a running field. Settle by placing an `InputField` in a running view and checking the empty-state color.
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-input-field-badge-and-error-strip.md`
+  summary: Unverified (possibly medium): the parent `onTapGesture` in `InputField` may disturb caret placement, drag selection or double-click.
+  evidence: Settle by clicking and selecting text in a running field; if broken, move the tap to a background layer.
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-4-input-field-badge-and-error-strip.md`
+  summary: Tabbing to a real `InputField` (border becomes `actionPrimary`) is not checked, and no screen hosts one yet.
+  evidence: The AC is manual; check it together with the open Story 1.3 focus-ring item, at the first story that puts an `InputField` on a screen.

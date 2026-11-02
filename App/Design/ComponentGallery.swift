@@ -37,3 +37,23 @@ private struct StateRow: View {
     .padding(Space.x6)
     .background(Color.surfaceCanvas)
 }
+
+/// Hosts a real `InputField` with its own state, since a preview needs a binding.
+private struct InputHost: View {
+    @State var text: String
+    var body: some View { InputField("Что делаете?", text: $text) }
+}
+
+#Preview("Input, badge and error strip") {
+    VStack(alignment: .leading, spacing: Space.x4) {
+        InputHost(text: "")
+        InputHost(text: "Design")
+        InputFieldShell(isFocused: true, content: Text("Design (focused)"))
+        Badge("3 записи")
+        ErrorStrip("Не удалось сохранить запись")
+        ErrorStrip("Таймер уже запущен", action: (label: "Всё равно", handler: {}))
+    }
+    .frame(width: 360)
+    .padding(Space.x6)
+    .background(Color.surfaceCanvas)
+}
