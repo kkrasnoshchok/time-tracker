@@ -51,6 +51,7 @@ run "bad-named";    expect "named colors"          1 "bad-named/Sample.swift:3: 
 run "bad-accent";   expect "accent color"          1 "bad-accent/Sample.swift:3: "
 run "bad-font";     expect "ad-hoc font size"      1 "bad-font/Sample.swift:3: " "bad-font/Sample.swift:4: "
 run "token-layer";  expect "token layer skipped"   0
+run "token-layer-mixed"; expect "violation next to token layer" 1 "token-layer-mixed/Bad.swift:2: "
 run "nonexistent";  expect "missing path"          2 "nonexistent"
 run "$(printf '# comment\n\n   \nclean\n# another')"
 expect "comments and blanks ignored" 0
@@ -63,6 +64,14 @@ for opt in --paths --root; do
   OUT="$("$GUARD" "$opt" 2>&1)" || CODE=$?
   expect "$opt without value" 2 "usage"
 done
+
+# Unknown argument and missing --paths file / --root dir are usage errors (exit 2).
+CODE=0; OUT="$("$GUARD" --bogus 2>&1)" || CODE=$?
+expect "unknown argument" 2 "usage"
+CODE=0; OUT="$("$GUARD" --root "$ROOT" --paths "$TMP/no-such-list.txt" 2>&1)" || CODE=$?
+expect "missing --paths file" 2 "list file not found"
+CODE=0; OUT="$("$GUARD" --root "$TMP/no-such-dir" --paths "$TMP/list.txt" 2>&1)" || CODE=$?
+expect "missing --root dir" 2 "root not found"
 
 if [ "$FAILED" -ne 0 ]; then
   echo "SOME TESTS FAILED"

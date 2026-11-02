@@ -47,3 +47,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-token-guard-script.md`
   summary: Widen the token guard patterns to other system colors (`.green`, `.gray`, ...), implicit `.accentColor`, `Font.system(size:)` outside `.font(`, and non-literal sizes.
   evidence: The guard only matches the spec's exact list, so `.tint(.accentColor)` or `.foregroundStyle(.green)` in a migrated file passes; decide when a later epic migrates such code.
+  also not matched (found in code review): `Color(red:green:blue:)`, `0x` integer literals, 3-digit and 8-digit hex shorthand beyond the 6-digit prefix, `NSColor.red`/`UIColor.red` (the `.red` rule needs a non-identifier char before the dot), `.systemBlue`-style colors, and `.font(.system(` split across lines or with extra spaces.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-token-guard-script.md`
+  summary: CLAUDE.md does not say when to run `scripts/check-tokens.sh` (before finishing a UI task) or what the exit codes mean.
+  evidence: Nothing runs the guard automatically (hooks and CI are out of scope), so only a rule in CLAUDE.md makes it a habit; the fix edits an agent-context file, so it needs a deliberate decision.

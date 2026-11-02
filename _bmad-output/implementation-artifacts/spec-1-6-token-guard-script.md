@@ -84,6 +84,33 @@ context:
 | Output prints whole line, not only matched text | false | rejected | Matrix shows `file:line: …`; line text is acceptable. |
 | CLAUDE.md comment column alignment | low | rejected | Cosmetic; fix edits agent-context file. |
 
+### Review Findings
+
+Code review 2026-11-02 (Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor). AC2, AC3 and AC4 checked by hand: clean run exits 0 with no output, a temporary `Color.red` in `App/Design/Badge.swift` prints `file:21` and exits 1, `git diff -- App Packages project.yml` is empty.
+
+- [x] [Review][Patch] Test gaps in `test-check-tokens.sh`: no fixture with a violating file next to `ColorToken.swift` in the same directory (a bug that skips the whole directory would pass, and the real list `App/Design` contains `ColorToken.swift`); no test for an unknown argument (exit 2) or a missing `--paths` file / `--root` dir [scripts/test-check-tokens.sh:53] (medium; blind-hunter+edge-case-hunter)
+- [x] [Review][Patch] `last_updated` moved backwards from `11-02-2026 09:20` to `09:11` [_bmad-output/implementation-artifacts/sprint-status.yaml:32] (low; all four layers)
+- [x] [Review][Patch] `deferred-work.md` note on widening the patterns omits known bypasses: `Color(red:green:blue:)`, `0x` integer literals, 3-digit and 8-digit hex, `NSColor.red`/`UIColor.red` (the `.red` rule needs a non-identifier char before the dot), `.systemBlue`-style colors, `.font(.system(` split across lines or with extra spaces [_bmad-output/implementation-artifacts/deferred-work.md:47] (low; blind-hunter+edge-case-hunter)
+- [x] [Review][Defer] CLAUDE.md says what the script does but not when to run it (before finishing a UI task, exit codes) [CLAUDE.md] — deferred: fix edits an agent-context file
+
+#### Rejected
+
+- Grep error swallowed by `|| true` (low): reproduced, an unreadable file with `Color.red` exits 0 (grep prints a message to stderr); unlikely in a repo checkout, fix adds branching.
+- `find` failure inside process substitution is not caught (low): same situation, unlikely, fix adds branching.
+- Empty list or zero scanned files exits 0 (low): unlikely, fix adds a guard.
+- Non-`.swift` file entry silently skipped (low): every migrated file is Swift, fix adds a branch.
+- Filename unescaped in the `sed` replacement (`|`, `&`, `\`) (low): unlikely repo paths.
+- Path containing `#` truncated in the list (low): unlikely repo paths.
+- Absolute paths, `..`, non-file entries and overlapping entries not validated or de-duplicated (low): unlikely, fix adds guards.
+- Basename exemption matches anywhere under a listed path (false): spec says the token layer files are always skipped by name.
+- `NSColor.red`, 3-digit hex, multi-line `.font(.system(` bypasses (low): the patterns are in the frozen block, so the fix edits the spec; recorded in the patch above.
+- `.red` after `)` or `]` false positive (low): fails loudly, fix complicates the regex.
+- "No dependencies beyond `grep`" vs `sed`/`find`/`sort` (false): POSIX tools on macOS, intent is no third-party tools.
+- Output is the whole line, not only the matched text (false): the matrix shows `file:line: …`.
+- Spec `done` while sprint status says `review` (false): specs 1.2 to 1.5 are the same.
+- Implementation Notes empty, no record of the red-first run (low): fix edits the spec.
+- AC2/AC3 "depend on the real `App/Design` contents" (false): verified above.
+
 ## Design Notes
 
 A lint rule is a `grep` that fails the build (TS: an ESLint `no-restricted-syntax` rule run in CI). The list file is the rule's `files` glob; growing it per epic is how migration progress is enforced.
