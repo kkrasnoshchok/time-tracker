@@ -1,4 +1,5 @@
 import Testing
+import TimeTrackerCore
 @testable import TimeTracker
 
 struct PaletteSelectionTests {
@@ -50,5 +51,44 @@ struct PaletteSelectionTests {
         selection.moveDown(count: 3)
         selection.reset()
         #expect(selection.index == nil)
+    }
+
+    @Test func movingUpAfterTheRowsShrankLandsOnTheLastRow() {
+        var selection = PaletteSelection()
+        for _ in 0..<3 { selection.moveDown(count: 3) }
+        selection.moveUp(count: 1)
+        #expect(selection.index == 0)
+    }
+
+    @Test func movingDownAfterTheRowsShrankLandsOnTheLastRow() {
+        var selection = PaletteSelection()
+        for _ in 0..<3 { selection.moveDown(count: 3) }
+        selection.moveDown(count: 1)
+        #expect(selection.index == 0)
+    }
+
+    private static let items: [PaletteItem] = [.suggestion("Работа план"), .suggestion("Работа ревью"), .createCategory("Работа")]
+
+    @Test func fillTextIsTheSelectedSuggestion() {
+        var selection = PaletteSelection()
+        selection.moveDown(count: 3)
+        selection.moveDown(count: 3)
+        #expect(selection.fillText(in: Self.items) == "Работа ревью")
+    }
+
+    @Test func fillTextIsNilWithNothingSelected() {
+        #expect(PaletteSelection().fillText(in: Self.items) == nil)
+    }
+
+    @Test func fillTextIsNilForARowThatIsNotASuggestion() {
+        var selection = PaletteSelection()
+        for _ in 0..<3 { selection.moveDown(count: 3) }
+        #expect(selection.fillText(in: Self.items) == nil)
+    }
+
+    @Test func fillTextIsNilWhenTheIndexIsOutOfRange() {
+        var selection = PaletteSelection()
+        for _ in 0..<3 { selection.moveDown(count: 3) }
+        #expect(selection.fillText(in: [.suggestion("Работа план")]) == nil)
     }
 }

@@ -116,7 +116,7 @@ struct PaletteView: View {
                     return .handled
                 }
                 .onKeyPress(.tab) {
-                    viewModel.tab()
+                    tab()
                     return .handled
                 }
                 .onKeyPress(.escape) {
@@ -159,8 +159,11 @@ struct PaletteView: View {
             Spacer(minLength: Space.x2)
             HStack(spacing: Space.x2) {
                 CategoryDot(storedHex: entry.category?.colorHex ?? "")
-                Text(entry.category?.name ?? "")
-                    .lineLimit(1)
+                // Without a title the category name is already the main text on the left.
+                if entry.title != nil {
+                    Text(entry.category?.name ?? "")
+                        .lineLimit(1)
+                }
             }
             Text(DurationFormat.clock(model.elapsed)).monospacedDigit()
         }
@@ -236,11 +239,19 @@ struct PaletteView: View {
             .padding(.vertical, Space.x2)
     }
 
+    /// Tab: a selected suggestion fills the field; otherwise complete the category or take the first suggestion.
+    private func tab() {
+        if let text = selection.fillText(in: viewModel.items) {
+            viewModel.input = text
+        } else {
+            viewModel.tab()
+        }
+    }
+
     /// Enter: a selected suggestion fills the field; anything else submits as before.
     private func submit() {
-        if let index = selection.index, viewModel.items.indices.contains(index),
-           case .suggestion = viewModel.items[index] {
-            activate(viewModel.items[index])
+        if let text = selection.fillText(in: viewModel.items) {
+            viewModel.input = text
             return
         }
         handle(viewModel.enter())

@@ -35,3 +35,25 @@ context:
 - low, rejected: stale index after items change. `.onChange(of: items)` resets it; guarded by `indices.contains`.
 - low, rejected: ErrorStrip for non-error prompts, hint text, scroll-into-view, extra edge-case tests. Specified by the story or not reachable (max few rows).
 - false: guard on PaletteView. `check-tokens.sh` run against the file's path exits 0; the path is added in Story 2.4.
+
+### Review Findings
+
+Code review 2026-11-02, commit `ea9aea8`, layers: blind-hunter, edge-case-hunter, verification-gap, acceptance-auditor.
+
+- [x] [Review][Decision] (resolved: option a, applied as a patch) Tab ignores the highlighted suggestion — each suggestion row shows the `⇥` hint, but `.onKeyPress(.tab) { viewModel.tab() }` still completes the category or takes the first suggestion. With the 2nd row highlighted, Tab fills the 1st. Options: (a) Tab fills the highlighted suggestion when one is selected, otherwise as before; (b) leave as is and record that Tab is independent of the highlight. [App/Palette/PaletteView.swift:118]
+- [x] [Review][Decision] (resolved: option b, applied) Untitled running entry shows the category twice — `Text(entry.title ?? entry.category?.name ?? "")` in the title slot plus the dot+name group on the right (and VoiceOver `.combine` reads both). Options: (a) leave the title slot empty when `title == nil`; (b) keep the fallback and hide the right-hand name in that case; (c) accept. [App/Palette/PaletteView.swift:155]
+- [x] [Review][Patch] Enter-on-selected-suggestion rule has no test — the branch lives in `PaletteView.submit()`; `PaletteSelectionTests` cover only index moves. Move the rule into `PaletteSelection` (e.g. `fillText(in items:) -> String?`, App-internal), test: selected suggestion → its text, no selection, out-of-range index, `.stopCurrent`/`.repeatLast`/`.createCategory` → nil; TDD, FAIL first. [App/Palette/PaletteView.swift:240]
+- [x] [Review][Patch] `moveUp`/`moveDown` with a shrunk `count` is untested — the `min(current, count)` branch is never exercised; add a test (index 2, `moveUp(count: 1)` → 0; `moveDown(count: 1)` from index 2 → 0). [App/Palette/PaletteSelection.swift:15]
+
+#### Rejected
+
+- false: Enter on a highlighted `.stopCurrent` / `.repeatLast` / `.createCategory` does something other than the row says. `computeItems` returns `.stopCurrent` or `.repeatLast` only with empty input, where `enter()` runs exactly that action; `.createCategory` is only shown for an unknown word, where `enter()` raises the create-category prompt the row names.
+- false: `.onChange(of: items)` needs `Equatable`. `PaletteItem` is `Equatable`.
+- low, rejected: Enter fills a suggestion while a prompt is visible. Needs an arrow press after the prompt; filling clears the prompt and the user chose the row.
+- low, rejected: stale highlight when `items` stay equal. Same items means the same rows; suggestions only exist for non-empty input, and after `reset()` the empty-input rows fall through to `enter()`.
+- low, rejected: ↑/↓ always `.handled` (caret and IME). Rare in a single-line field, the fix adds a guard.
+- low, rejected: no scroll-into-view. Rows are at most 5 titles or the matching category names, the panel grows with its content.
+- low, rejected: nil category or empty title in the running row, long title/category squeezing the clock. A started entry always has a category; long-name squeeze is cosmetic.
+- low, rejected: `ErrorStrip` for non-error prompts. The spec asks for it.
+- low, rejected: VoiceOver announcement of the highlight, Dynamic Type at a fixed 40px, Reduce Motion read from the environment, hover not tested, `onChange` wiring untested, removed dividers, 20pt vs 16pt text inset. Covered by spec choices or Story 2.4 manual checks; no named harm.
+- rejected (edits the spec): `PaletteController.swift` listed in Files but not changed.
