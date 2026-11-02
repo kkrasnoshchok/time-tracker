@@ -40,3 +40,4 @@ context:
 
 - Bug: Backspace never removed the token. The text field handles Backspace itself, so `onKeyPress(.delete)` never fired.
 - Fix: while a token is shown the field text starts with an invisible anchor (`U+200B`); deleting it dissolves the token (`CategoryResolver.fieldText` / `input(afterEditing:)`, tests seen failing first). `onKeyPress(.delete)` removed. Build, 43 App tests, swiftlint and the token guard pass; the fix itself is not yet seen in the running app.
+- Confirmed by the author in the running Palette: Backspace removes the token, tag muting and token look are fine. This settles the two deferred Story 2.2 items about layer drift and caret position (long-line drift was not specifically tried).

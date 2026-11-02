@@ -68,7 +68,7 @@
 ## Deferred from: build of spec-2-2-category-token-in-the-typed-line (2026-11-02)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-category-token-in-the-typed-line.md`
-  summary: Unverified (possibly medium): the `#tag` muting layer behind the transparent-text `TextField` may drift on long lines and the caret may be wrong after Backspace dissolves the token.
+  summary: Partly settled (author saw token, tag styling and Backspace work in the running Palette); still unchecked: the `#tag` muting layer behind the transparent-text `TextField` may drift on long lines and the caret may be wrong after Backspace dissolves the token.
   evidence: Not seen in the running Palette (hotkey cannot be sent here). Settle by typing a long line with `#tags` and pressing Backspace at the start of the text, in Story 2.4; if it fails, replace the layered field with an `NSTextField` wrapper.
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-category-token-in-the-typed-line.md`
   summary: Leading whitespace before the category name gives no token although `PaletteParser` accepts it.
