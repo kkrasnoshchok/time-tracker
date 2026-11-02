@@ -49,7 +49,7 @@ struct PaletteView: View {
 
     /// Category the line starts with, if any. Recomputed on each render from the live store.
     private var categorySplit: CategoryResolver.Split? {
-        CategoryResolver.split(viewModel.input, among: model.store.categories().map(\.name))
+        CategoryResolver.split(viewModel.input, among: categoryNames)
     }
 
     private var inputRow: some View {
@@ -80,8 +80,8 @@ struct PaletteView: View {
                 let input = CategoryResolver.input(afterEditing: newText, split: split)
                 let dissolved = input == split.inputAfterBackspace
                 viewModel.input = input
-                if dissolved {
-                    selection = TextSelection(insertionPoint: input.index(input.startIndex, offsetBy: split.name.count))
+                if dissolved, let offset = CategoryResolver.caretOffsetAfterDissolve(split, among: categoryNames) {
+                    selection = TextSelection(insertionPoint: input.index(input.startIndex, offsetBy: offset))
                 }
             }
         )
@@ -115,13 +115,18 @@ struct PaletteView: View {
         }
     }
 
+    private var categoryNames: [String] {
+        model.store.categories().map(\.name)
+    }
+
     private func hex(forCategory name: String) -> String {
         model.store.categories().first { $0.name == name }?.colorHex ?? ""
     }
 
-    /// The typed text with `#tag` words in the secondary color.
+    /// The typed text with `#tag` words in the secondary color. The invisible token anchor has no
+    /// width, so it is left out of the drawn layer: it would hide a `#` that follows it.
     static func mutingTags(in text: String) -> AttributedString {
-        var result = AttributedString(text)
+        var result = AttributedString(text.replacingOccurrences(of: CategoryResolver.anchor, with: ""))
         result.foregroundColor = Color.textPrimary
         var index = result.startIndex
         while index < result.endIndex {

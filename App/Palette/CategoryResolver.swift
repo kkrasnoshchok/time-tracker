@@ -47,4 +47,12 @@ enum CategoryResolver {
         if !text.contains(anchor), text == split.rest { return split.inputAfterBackspace }
         return split.prefix + text.replacingOccurrences(of: anchor, with: "")
     }
+
+    /// Where the caret goes (in characters from the start of the new line) after Backspace removed the
+    /// separator: right after the name as typed. `nil` when the line still resolves to a token
+    /// (several spaces after the name), because the field text then differs from the line.
+    static func caretOffsetAfterDissolve(_ split: Split, among names: [String]) -> Int? {
+        guard Self.split(split.inputAfterBackspace, among: names) == nil else { return nil }
+        return split.prefix.dropLast().count
+    }
 }

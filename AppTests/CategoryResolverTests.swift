@@ -80,6 +80,10 @@ struct TagMutingTests {
         #expect(mutedWords(in: "отчёт #ops #дом -20m") == ["#ops", "#дом"])
     }
 
+    @Test func aTagRightAfterTheTokenAnchorIsMuted() {
+        #expect(mutedWords(in: CategoryResolver.anchor + "#ops x") == ["#ops"])
+    }
+
     @Test func aLoneHashAndPlainTextAreNotMuted() {
         #expect(mutedWords(in: "# отчёт a#b").isEmpty)
         #expect(mutedWords(in: "").isEmpty)
@@ -129,5 +133,23 @@ struct TokenEditingTests {
         let pasted = CategoryResolver.anchor + "a" + CategoryResolver.anchor + "b"
 
         #expect(CategoryResolver.input(afterEditing: pasted, split: s) == "Работа ab")
+    }
+
+    @Test func caretAfterDissolveSitsBetweenTheTypedNameAndTheText() {
+        #expect(CategoryResolver.caretOffsetAfterDissolve(split("Работа отчёт"), among: names) == 6)
+        #expect(CategoryResolver.caretOffsetAfterDissolve(split("рАБОТА x"), among: names) == 6)
+        #expect(CategoryResolver.caretOffsetAfterDissolve(split("Работа "), among: names) == 6)
+    }
+
+    @Test func caretFollowsTheTypedPrefixNotTheStoredName() {
+        // Case-insensitive match whose typed form is shorter than the stored name.
+        let s = CategoryResolver.Split(name: "STRASSE", prefix: "straße ", rest: "x")
+
+        #expect(CategoryResolver.caretOffsetAfterDissolve(s, among: ["STRASSE"]) == 6)
+    }
+
+    @Test func noCaretIsSetWhileTheLineStillResolvesToAToken() {
+        // Two spaces: Backspace removes one, "Работа два" is still a token.
+        #expect(CategoryResolver.caretOffsetAfterDissolve(split("Работа  два"), among: names) == nil)
     }
 }

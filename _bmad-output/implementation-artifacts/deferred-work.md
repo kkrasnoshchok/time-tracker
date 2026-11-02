@@ -73,3 +73,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-2-category-token-in-the-typed-line.md`
   summary: Leading whitespace before the category name gives no token although `PaletteParser` accepts it.
   evidence: `CategoryResolver.split` anchors at the string start; low, trim in Story 2.4 if it shows up.
+
+## Deferred from: code review of spec-2-2-category-token-in-the-typed-line (2026-11-02)
+
+- Stale `TextSelection` when the token appears or disappears without Backspace (Tab completion, typing the space, clear, submit): caret may sit before the anchor or out of range. Unverified, medium if real. Settle by pressing Backspace after each of those in the running Palette (Story 2.4).
+- Accessibility of the transparent `TextField` over the drawn `Text`: U+200B in the field value may be spoken by VoiceOver, nothing in the field says a token is active, the token label «Категория …» is not heard-checked. Unverified, medium if real. Settle with VoiceOver on the palette in token mode (Story 2.4).
+- `#tag` layer drift on a long line: same item as the Story 2.2 build entry above; still open, `NSTextField` wrapper is the fallback.
