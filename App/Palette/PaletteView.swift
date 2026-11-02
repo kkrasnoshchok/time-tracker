@@ -7,6 +7,8 @@ struct PaletteView: View {
     let onClose: () -> Void
     @FocusState private var focused: Bool
 
+    private static let inputHint = "Категория название #тег -20m"
+
     var body: some View {
         VStack(spacing: 0) {
             inputRow
@@ -53,12 +55,12 @@ struct PaletteView: View {
             TextField(
                 "",
                 text: $viewModel.input,
-                prompt: Text("Категория название #тег -20m").foregroundStyle(Color.textTertiary)
+                prompt: Text(Self.inputHint).foregroundStyle(Color.textTertiary)
             )
                 .textFieldStyle(.plain)
                 .typeRole(.paletteInput)
                 .foregroundStyle(Color.textPrimary)
-                .accessibilityLabel("Категория название #тег -20m")
+                .accessibilityLabel(Self.inputHint)
                 .focused($focused)
                 .onSubmit { handle(viewModel.enter()) }
                 .onKeyPress(.tab) {

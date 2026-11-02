@@ -58,3 +58,9 @@
 - Guard patterns widened (system colors, `.accentColor`, `Color(red:)`, `0x`, 3-digit hex, `.systemBlue`, `.system(size:` any value or line-split); fixtures `bad-named-more`, `bad-literals`, `bad-font-more`, `clean-lookalikes` seen failing first. `App/Support/CategoryTone.swift` stays unlisted on purpose (documented in `scripts/token-guard-paths.txt`).
 - `CategoryToken` 22% fraction and `surfaceCard` base pinned by `CategoryTokenTests` in `AppTests/CategoryTintTests.swift`.
 - Six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens) moved into acceptance criteria of Stories 2.1, 3.1 and 4.2 in epics.md (A4). CLAUDE.md rules (A2) and the commit-subject rule (A5) were added.
+
+## Deferred from: code review of spec-2-1-opaque-paper-panel-and-60px-field (2026-11-02)
+
+- `PaletteController.show()` / `PalettePanel.resignKey()`: the palette may close right after opening if the panel resigns key during activation (hotkey race). Unverified, medium if real. Settle by opening it with the hotkey from several apps in Story 2.4.
+- `PaletteView` fixed-light card in system dark mode: caret, selection and `Divider()` follow the system appearance, so the caret may be white on white. Unverified, medium if real. Settle by checking the field in system dark mode (Story 2.4).
+- Story 2.1 manual checks not done: keyboard flows, visual result, `typeRole` Dynamic Type scaling, eight-tone dots, `prompt:` styling under `.plain`. The spec hands them to the author and Story 2.4.
