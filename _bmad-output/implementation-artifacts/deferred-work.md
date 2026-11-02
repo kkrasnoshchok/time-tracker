@@ -16,3 +16,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-2-semantic-design-tokens.md`
   summary: Unverified (possibly medium): `@ScaledMetric` in `TypeRoleModifier` may not scale on macOS, so the "every role scales with Dynamic Type" rule could silently fail.
   evidence: No test or manual check shows `scale` changing with `dynamicTypeSize` on macOS 26; settle it by checking that in a preview or a small test.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-3-primary-button-ghost-button-and-card.md`
+  summary: Check that the custom keyboard-focus ring on `.primary`/`.ghost` buttons really shows, and that the system focus ring does not appear beside it.
+  evidence: `@Environment(\.isFocused)` may not report focus inside a `ButtonStyle`, and `.focusEffectDisabled()` sits inside the style, so it may not remove the system ring. Unverified (maybe-false, medium if true). Settle by tabbing to a styled button with Full Keyboard Access on; if there are two rings or none, move `.focusEffectDisabled()` to the call site or read focus via `@FocusState`.
