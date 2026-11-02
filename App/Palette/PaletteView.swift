@@ -6,6 +6,8 @@ struct PaletteView: View {
     let model: AppModel
     let onClose: () -> Void
     @FocusState private var focused: Bool
+    /// Caret/selection inside the text field, like a ref to the input's `selectionStart`.
+    @State private var selection: TextSelection?
 
     private static let inputHint = "Категория название #тег -20m"
 
@@ -45,21 +47,52 @@ struct PaletteView: View {
         RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
     }
 
+    /// Category the line starts with, if any. Recomputed on each render from the live store.
+    private var categorySplit: CategoryResolver.Split? {
+        CategoryResolver.split(viewModel.input, among: model.store.categories().map(\.name))
+    }
+
     private var inputRow: some View {
-        HStack(spacing: Space.x3) {
+        let split = categorySplit
+        return HStack(spacing: Space.x3) {
             Image(systemName: "magnifyingglass")
                 .typeRole(.paletteInput)
                 .fontWeight(.light)
                 .foregroundStyle(Color.textTertiary)
                 .accessibilityHidden(true)
+            if let split {
+                CategoryToken(name: split.name, storedHex: hex(forCategory: split.name))
+                    .accessibilityLabel("Категория \(split.name)")
+            }
+            inputField(split: split)
+        }
+        .padding(.horizontal, Space.x4)
+        .frame(height: Space.paletteFieldHeight)
+    }
+
+    /// The field edits only the text after the token; `viewModel.input` stays `prefix + rest`.
+    /// Like a controlled `<input value={rest} onChange={e => setInput(prefix + e.target.value)}>`.
+    private func inputField(split: CategoryResolver.Split?) -> some View {
+        let text = Binding(
+            get: { split?.rest ?? viewModel.input },
+            set: { viewModel.input = (split?.prefix ?? "") + $0 }
+        )
+        return ZStack(alignment: .leading) {
+            Text(Self.mutingTags(in: text.wrappedValue))
+                .typeRole(.paletteInput)
+                .lineLimit(1)
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
             TextField(
                 "",
-                text: $viewModel.input,
+                text: text,
+                selection: $selection,
                 prompt: Text(Self.inputHint).foregroundStyle(Color.textTertiary)
             )
                 .textFieldStyle(.plain)
                 .typeRole(.paletteInput)
-                .foregroundStyle(Color.textPrimary)
+                // The text is drawn by the layer behind (to mute #tags); the field keeps caret and editing.
+                .foregroundStyle(Color.clear)
                 .accessibilityLabel(Self.inputHint)
                 .focused($focused)
                 .onSubmit { handle(viewModel.enter()) }
@@ -71,9 +104,38 @@ struct PaletteView: View {
                     if !viewModel.cancelPrompt() { onClose() }
                     return .handled
                 }
+                .onKeyPress(.delete) {
+                    guard let split, caretIsAtStart(of: split.rest) else { return .ignored }
+                    viewModel.input = split.inputAfterBackspace
+                    selection = TextSelection(insertionPoint: viewModel.input.index(
+                        viewModel.input.startIndex, offsetBy: split.name.count))
+                    return .handled
+                }
         }
-        .padding(.horizontal, Space.x4)
-        .frame(height: Space.paletteFieldHeight)
+    }
+
+    private func caretIsAtStart(of text: String) -> Bool {
+        guard case .selection(let range)? = selection?.indices else { return false }
+        return range.isEmpty && range.lowerBound == text.startIndex
+    }
+
+    private func hex(forCategory name: String) -> String {
+        model.store.categories().first { $0.name == name }?.colorHex ?? ""
+    }
+
+    /// The typed text with `#tag` words in the secondary color.
+    static func mutingTags(in text: String) -> AttributedString {
+        var result = AttributedString(text)
+        result.foregroundColor = Color.textPrimary
+        var index = result.startIndex
+        while index < result.endIndex {
+            let wordEnd = result[index...].characters.firstIndex(where: \.isWhitespace) ?? result.endIndex
+            if result.characters[index] == "#", result.characters.distance(from: index, to: wordEnd) > 1 {
+                result[index..<wordEnd].foregroundColor = Color.textTertiary
+            }
+            index = wordEnd == result.endIndex ? wordEnd : result.characters.index(after: wordEnd)
+        }
+        return result
     }
 
     private func runningRow(_ entry: TimeEntry) -> some View {

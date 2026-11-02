@@ -64,3 +64,12 @@
 - `PaletteController.show()` / `PalettePanel.resignKey()`: the palette may close right after opening if the panel resigns key during activation (hotkey race). Unverified, medium if real. Settle by opening it with the hotkey from several apps in Story 2.4.
 - `PaletteView` fixed-light card in system dark mode: caret, selection and `Divider()` follow the system appearance, so the caret may be white on white. Unverified, medium if real. Settle by checking the field in system dark mode (Story 2.4).
 - Story 2.1 manual checks not done: keyboard flows, visual result, `typeRole` Dynamic Type scaling, eight-tone dots, `prompt:` styling under `.plain`. The spec hands them to the author and Story 2.4.
+
+## Deferred from: build of spec-2-2-category-token-in-the-typed-line (2026-11-02)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-category-token-in-the-typed-line.md`
+  summary: Unverified (possibly medium): the `#tag` muting layer behind the transparent-text `TextField` may drift on long lines and the caret may be wrong after Backspace dissolves the token.
+  evidence: Not seen in the running Palette (hotkey cannot be sent here). Settle by typing a long line with `#tags` and pressing Backspace at the start of the text, in Story 2.4; if it fails, replace the layered field with an `NSTextField` wrapper.
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-2-category-token-in-the-typed-line.md`
+  summary: Leading whitespace before the category name gives no token although `PaletteParser` accepts it.
+  evidence: `CategoryResolver.split` anchors at the string start; low, trim in Story 2.4 if it shows up.
