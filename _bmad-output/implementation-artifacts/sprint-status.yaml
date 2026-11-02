@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-02-2026 10:18
+last_updated: 11-02-2026 10:21
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -84,7 +84,7 @@ action_items:
       a UI task, exit codes 0/1/2), run test-check-tokens.sh after guard changes,
       and add the xcodebuild test command"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
   - id: "epic-1-retro-item-3-a3-before-the-first-screen-enters-token"
     epic: 1
@@ -107,7 +107,7 @@ action_items:
     epic: 1
     action: "A5: Name the story id in every implementation commit subject"
     owner: "Vadym"
-    status: in-progress
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
   - id: "epic-1-retro-item-6-a6-commit-the-uncommitted-1-6-review-pat"
     epic: 1

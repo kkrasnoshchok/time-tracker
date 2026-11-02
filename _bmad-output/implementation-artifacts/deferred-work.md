@@ -57,4 +57,4 @@
 
 - Guard patterns widened (system colors, `.accentColor`, `Color(red:)`, `0x`, 3-digit hex, `.systemBlue`, `.system(size:` any value or line-split); fixtures `bad-named-more`, `bad-literals`, `bad-font-more`, `clean-lookalikes` seen failing first. `App/Support/CategoryTone.swift` stays unlisted on purpose (documented in `scripts/token-guard-paths.txt`).
 - `CategoryToken` 22% fraction and `surfaceCard` base pinned by `CategoryTokenTests` in `AppTests/CategoryTintTests.swift`.
-- Still open: the six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens) and the CLAUDE.md rules (A2).
+- Still open: the six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens). CLAUDE.md rules (A2) and the commit-subject rule (A5) were added.

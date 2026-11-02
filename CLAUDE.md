@@ -11,6 +11,7 @@
 - Идёт ли таймер, определяет только `end == nil`; одновременно не больше одной такой записи.
 - Модели совместимы с CloudKit: значения по умолчанию, опциональные связи, без `@Attribute(.unique)`.
 - Сторонний код (MCP, skills, пакеты) подключается после ручной проверки (cc-audit даёт много ложных срабатываний, на него не полагаться).
+- Тема коммита называет историю: `feat(1-4): …`, `test(1-6): …`. Без этого `git_evidence.py` в ретро не привязывает коммиты к историям.
 - Автор учит Swift (опыт JS/TS/React Native): после каждой задачи кратко объяснять новые концепции через аналогии с TypeScript/React.
 
 ## Процесс (spec-driven, BMAD)
@@ -27,11 +28,13 @@ swift test --package-path Packages/TimeTrackerCore            # тесты ло�
 swift test --package-path Packages/TimeTrackerCore --filter X # один набор
 xcodegen generate                                             # собрать TimeTracker.xcodeproj из project.yml
 xcodebuild -scheme TimeTracker -destination 'platform=macOS' build | xcbeautify
+xcodebuild test -scheme TimeTracker -destination 'platform=macOS'  # тесты приложения (App/), Core ими не покрыт
 swiftlint
-scripts/check-tokens.sh                                    # guard: нет hex/.red/системного акцента/своих размеров шрифта в мигрированных файлах
+scripts/check-tokens.sh                                    # guard: нет hex/системных цветов/акцента/своих размеров шрифта в мигрированных файлах
 scripts/test-check-tokens.sh                               # тесты guard на фикстурах
 ```
 Список мигрированных путей для guard лежит в `scripts/token-guard-paths.txt` (по одному пути в строке); каждый следующий эпик добавляет туда свои файлы.
+Перед тем как закончить UI-задачу, запусти `scripts/check-tokens.sh`. Коды выхода: 0 чисто, 1 нарушения (выводит `файл:строка`), 2 ошибка запуска. После любой правки guard или его паттернов запусти `scripts/test-check-tokens.sh`; новый паттерн сначала добавь в фикстуру и увидь FAIL. `App/Support/CategoryTone.swift` в списке не числится намеренно: его hex это ключи данных.
 `TimeTracker.xcodeproj` не коммитится, его генерирует XcodeGen.
 
 ## MCP (project-local)
