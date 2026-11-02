@@ -14,6 +14,7 @@ final class PaletteController {
         self.panel = PalettePanel(rootView: PaletteView(viewModel: viewModel, model: model) { [weak self] in
             self?.hide()
         })
+        self.panel?.onResignKey = { [weak self] in self?.hide() }
     }
 
     func toggle() {

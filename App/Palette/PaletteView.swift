@@ -26,6 +26,8 @@ struct PaletteView: View {
             }
         }
         .frame(width: 640)
+        // The panel is always light paper, so unstyled text must not follow a dark system theme.
+        .foregroundStyle(Color.textPrimary)
         .background(Color.surfaceCard, in: panelShape)
         .clipShape(panelShape)
         .hairlineRing(panelShape, variant: .palette)
@@ -81,7 +83,7 @@ struct PaletteView: View {
             Text(DurationFormat.clock(model.elapsed)).monospacedDigit()
         }
         .font(.callout)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Color.textSecondary)
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
@@ -106,10 +108,10 @@ struct PaletteView: View {
 
     private func row(icon: String, text: String, hint: String) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: icon).frame(width: 20).foregroundStyle(.secondary)
+            Image(systemName: icon).frame(width: 20).foregroundStyle(Color.textSecondary)
             Text(text).lineLimit(1)
             Spacer()
-            Text(hint).foregroundStyle(.tertiary)
+            Text(hint).foregroundStyle(Color.textTertiary)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 7)
