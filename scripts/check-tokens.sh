@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Token guard: fails if migrated App/ files bypass the design tokens
-# (hex literals, system accent / .red / .blue / .orange, ad-hoc font sizes).
+# (hex or RGB literals, system or accent colors, ad-hoc font sizes).
 # Usage: scripts/check-tokens.sh [--paths <list-file>] [--root <dir>]
 # Exit codes: 0 clean, 1 violations found, 2 usage or missing path.
 #
@@ -33,15 +33,20 @@ LIST="$(cd "$(dirname "$LIST")" && pwd)/$(basename "$LIST")"
 cd "$ROOT"
 
 # Forbidden patterns (extended regex). `rgb.red` and `size: size` must not match:
-# an implicit `.red` needs a non-identifier character before the dot.
+# an implicit named color needs a non-identifier character before the dot.
 NOT_ID='(^|[^A-Za-z0-9_])'
 END_ID='([^A-Za-z0-9_]|$)'
+NAMED='red|orange|yellow|green|mint|teal|cyan|blue|indigo|purple|pink|brown|gray'
 PATTERNS=(
   -e '#[0-9A-Fa-f]{6}'
-  -e "${NOT_ID}\\.(red|blue|orange)${END_ID}"
-  -e "Color\\.(red|blue|orange)${END_ID}"
-  -e 'Color\.accentColor'
-  -e '\.font\(\.system\(size:[[:space:]]*[0-9]'
+  -e '#[0-9A-Fa-f]{3}([^0-9A-Za-z]|$)'
+  -e "${NOT_ID}0x[0-9A-Fa-f]{6}"
+  -e '(Color|NSColor|UIColor)\(red:'
+  -e "${NOT_ID}\\.(${NAMED})${END_ID}"
+  -e "(Color|NSColor|UIColor)\\.(${NAMED})${END_ID}"
+  -e '\.accentColor'
+  -e '\.system(Red|Orange|Yellow|Green|Mint|Teal|Cyan|Blue|Indigo|Purple|Pink|Brown|Gray)'
+  -e '\.system\([[:space:]]*(size:|$)'
 )
 
 # Read the list: strip comments and blank lines, collect entries.

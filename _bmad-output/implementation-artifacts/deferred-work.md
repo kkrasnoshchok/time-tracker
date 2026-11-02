@@ -52,3 +52,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-token-guard-script.md`
   summary: CLAUDE.md does not say when to run `scripts/check-tokens.sh` (before finishing a UI task) or what the exit codes mean.
   evidence: Nothing runs the guard automatically (hooks and CI are out of scope), so only a rule in CLAUDE.md makes it a habit; the fix edits an agent-context file, so it needs a deliberate decision.
+
+## Resolved in epic 1 retrospective (2026-11-02)
+
+- Guard patterns widened (system colors, `.accentColor`, `Color(red:)`, `0x`, 3-digit hex, `.systemBlue`, `.system(size:` any value or line-split); fixtures `bad-named-more`, `bad-literals`, `bad-font-more`, `clean-lookalikes` seen failing first. `App/Support/CategoryTone.swift` stays unlisted on purpose (documented in `scripts/token-guard-paths.txt`).
+- `CategoryToken` 22% fraction and `surfaceCard` base pinned by `CategoryTokenTests` in `AppTests/CategoryTintTests.swift`.
+- Still open: the six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens) and the CLAUDE.md rules (A2).

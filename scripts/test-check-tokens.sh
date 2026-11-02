@@ -50,6 +50,10 @@ run "bad-hex";      expect "hex literal"           1 "bad-hex/Sample.swift:3: "
 run "bad-named";    expect "named colors"          1 "bad-named/Sample.swift:3: " "bad-named/Sample.swift:4: " "bad-named/Sample.swift:5: " "bad-named/Sample.swift:6: " "bad-named/Sample.swift:7: " "bad-named/Sample.swift:8: "
 run "bad-accent";   expect "accent color"          1 "bad-accent/Sample.swift:3: "
 run "bad-font";     expect "ad-hoc font size"      1 "bad-font/Sample.swift:3: " "bad-font/Sample.swift:4: "
+run "bad-named-more"; expect "more system colors" 1 "bad-named-more/Sample.swift:3: " "bad-named-more/Sample.swift:4: " "bad-named-more/Sample.swift:5: " "bad-named-more/Sample.swift:6: " "bad-named-more/Sample.swift:7: " "bad-named-more/Sample.swift:8: " "bad-named-more/Sample.swift:9: "
+run "bad-literals"; expect "color literals"    1 "bad-literals/Sample.swift:3: " "bad-literals/Sample.swift:4: " "bad-literals/Sample.swift:5: " "bad-literals/Sample.swift:6: "
+run "bad-font-more"; expect "more font sizes"  1 "bad-font-more/Sample.swift:3: " "bad-font-more/Sample.swift:4: " "bad-font-more/Sample.swift:5: "
+run "clean-lookalikes"; expect "lookalikes are not hits" 0
 run "token-layer";  expect "token layer skipped"   0
 run "token-layer-mixed"; expect "violation next to token layer" 1 "token-layer-mixed/Bad.swift:2: "
 run "nonexistent";  expect "missing path"          2 "nonexistent"

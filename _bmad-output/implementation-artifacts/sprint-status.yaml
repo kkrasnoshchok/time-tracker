@@ -29,20 +29,20 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-02-2026 09:11
+last_updated: 11-02-2026 10:18
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
 development_status:
-  epic-1: in-progress
+  epic-1: done
   1-1-category-tone-mapping-with-an-app-test-target: done
-  1-2-semantic-design-tokens: review
-  1-3-primary-button-ghost-button-and-card: review
-  1-4-input-field-badge-and-error-strip: review
-  1-5-category-dot-and-token-tones-on-existing-dots: review
-  1-6-token-guard-script: review
-  epic-1-retrospective: optional
+  1-2-semantic-design-tokens: done
+  1-3-primary-button-ghost-button-and-card: done
+  1-4-input-field-badge-and-error-strip: done
+  1-5-category-dot-and-token-tones-on-existing-dots: done
+  1-6-token-guard-script: done
+  epic-1-retrospective: done
 
   epic-2: backlog
   2-1-opaque-paper-panel-and-60px-field: backlog
@@ -70,3 +70,48 @@ development_status:
   5-3-categories-chrome-settings-and-remaining-errors: backlog
   5-4-whole-app-guard-and-success-check: backlog
   epic-5-retrospective: optional
+action_items:
+  - id: "epic-1-retro-item-1-a1-set-stories-1-2-1-5-to-done-in-sprint"
+    epic: 1
+    action: "A1: Set stories 1-2..1-5 to done in sprint-status.yaml and make the spec-done
+      step sync sprint status"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-1-retro-item-2-a2-add-to-claude-md-when-to-run-scripts"
+    epic: 1
+    action: "A2: Add to CLAUDE.md when to run scripts/check-tokens.sh (before finishing
+      a UI task, exit codes 0/1/2), run test-check-tokens.sh after guard changes,
+      and add the xcodebuild test command"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-1-retro-item-3-a3-before-the-first-screen-enters-token"
+    epic: 1
+    action: "A3: Before the first screen enters token-guard-paths.txt, widen guard
+      patterns (.green/.gray, implicit accentColor, Color(red:), 0x, short hex, NSColor,
+      multi-line .system) with fixtures seen failing first, and decide how CategoryTone.swift
+      is guarded"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-1-retro-item-4-a4-in-stories-2-1-2-2-tick-the-six-defer"
+    epic: 1
+    action: "A4: In Stories 2.1/2.2 tick the six deferred manual checks (Dynamic Type,
+      focus ring, placeholder, tap gesture, tab focus, dots on screens) and add a
+      test pinning CategoryToken 22% tint"
+    owner: "Vadym"
+    status: in-progress
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-1-retro-item-5-a5-name-the-story-id-in-every-implementa"
+    epic: 1
+    action: "A5: Name the story id in every implementation commit subject"
+    owner: "Vadym"
+    status: in-progress
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-1-retro-item-6-a6-commit-the-uncommitted-1-6-review-pat"
+    epic: 1
+    action: "A6: Commit the uncommitted 1-6 review patches and artifact updates"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"

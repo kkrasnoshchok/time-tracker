@@ -1,3 +1,5 @@
 # Paths already migrated to design tokens, one per line (file or directory, relative to repo root).
 # Each epic adds the files it migrates; unmigrated screens must not be listed yet.
+# Deliberately not listed: App/Support/CategoryTone.swift. Its hex literals are the stored Core default
+# colors used as mapping keys (data, not styling); the tone values themselves live in App/Design/ColorToken.swift.
 App/Design
