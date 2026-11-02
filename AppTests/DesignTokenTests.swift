@@ -62,7 +62,8 @@ struct DesignTokenTests {
         #expect([Space.x1, Space.x2, Space.x3, Space.x4, Space.x5, Space.x6, Space.x8, Space.x10] == [4, 8, 12, 16, 20, 24, 32, 40])
         #expect(Space.rowHeight == 44)
         #expect(Space.paletteFieldHeight == 60)
-        #expect([Radius.input, Radius.card, Radius.panel, Radius.pill] == [8, 16, 20, 9999])
+        #expect(Space.suggestionRowHeight == 40)
+        #expect([Radius.input, Radius.row, Radius.card, Radius.panel, Radius.pill] == [8, 10, 16, 20, 9999])
     }
 
     @Test(arguments: [

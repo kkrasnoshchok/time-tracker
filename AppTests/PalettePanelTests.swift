@@ -14,6 +14,12 @@ struct PalettePanelTests {
         #expect(closed == 1)
     }
 
+    @Test func panelShowsAndHidesWithoutAnimation() {
+        let panel = PalettePanel(rootView: EmptyView())
+
+        #expect(panel.animationBehavior == .none)
+    }
+
     @Test func resigningKeyWithoutAnOwnerDoesNothing() {
         let panel = PalettePanel(rootView: EmptyView())
 

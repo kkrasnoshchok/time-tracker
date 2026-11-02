@@ -7,7 +7,9 @@ struct PaletteView: View {
     let onClose: () -> Void
     @FocusState private var focused: Bool
     /// Caret/selection inside the text field, like a ref to the input's `selectionStart`.
-    @State private var selection: TextSelection?
+    @State private var textSelection: TextSelection?
+    /// Row highlighted by ↑/↓; reset whenever the rows change.
+    @State private var selection = PaletteSelection()
 
     private static let inputHint = "Категория название #тег -20m"
 
@@ -15,17 +17,17 @@ struct PaletteView: View {
         VStack(spacing: 0) {
             inputRow
             if let entry = model.running {
-                Divider()
                 runningRow(entry)
             }
             if !viewModel.items.isEmpty {
-                Divider()
-                ForEach(Array(viewModel.items.enumerated()), id: \.offset) { _, item in
-                    itemRow(item)
+                VStack(spacing: 0) {
+                    ForEach(Array(viewModel.items.enumerated()), id: \.offset) { index, item in
+                        itemRow(item, isSelected: index == selection.index)
+                    }
                 }
+                .padding(Space.x2)
             }
             if let prompt = viewModel.prompt {
-                Divider()
                 promptRow(prompt)
             }
         }
@@ -41,6 +43,7 @@ struct PaletteView: View {
             focused = true
         }
         .onAppear { focused = true }
+        .onChange(of: viewModel.items) { selection.reset() }
     }
 
     private var panelShape: RoundedRectangle {
@@ -81,7 +84,7 @@ struct PaletteView: View {
                 let dissolved = input == split.inputAfterBackspace
                 viewModel.input = input
                 if dissolved, let offset = CategoryResolver.caretOffsetAfterDissolve(split, among: categoryNames) {
-                    selection = TextSelection(insertionPoint: input.index(input.startIndex, offsetBy: offset))
+                    textSelection = TextSelection(insertionPoint: input.index(input.startIndex, offsetBy: offset))
                 }
             }
         )
@@ -94,7 +97,7 @@ struct PaletteView: View {
             TextField(
                 "",
                 text: text,
-                selection: $selection,
+                selection: $textSelection,
                 prompt: Text(Self.inputHint).foregroundStyle(Color.textTertiary)
             )
                 .textFieldStyle(.plain)
@@ -103,7 +106,15 @@ struct PaletteView: View {
                 .foregroundStyle(Color.clear)
                 .accessibilityLabel(Self.inputHint)
                 .focused($focused)
-                .onSubmit { handle(viewModel.enter()) }
+                .onSubmit { submit() }
+                .onKeyPress(.downArrow) {
+                    selection.moveDown(count: viewModel.items.count)
+                    return .handled
+                }
+                .onKeyPress(.upArrow) {
+                    selection.moveUp(count: viewModel.items.count)
+                    return .handled
+                }
                 .onKeyPress(.tab) {
                     viewModel.tab()
                     return .handled
@@ -140,52 +151,78 @@ struct PaletteView: View {
     }
 
     private func runningRow(_ entry: TimeEntry) -> some View {
-        HStack(spacing: 8) {
-            CategoryDot(storedHex: entry.category?.colorHex ?? "")
-            Text([entry.category?.name, entry.title].compactMap { $0 }.joined(separator: " · "))
+        HStack(spacing: Space.x3) {
+            Text(entry.title ?? entry.category?.name ?? "")
+                .typeRole(.body)
+                .foregroundStyle(Color.textPrimary)
                 .lineLimit(1)
-            Spacer()
+            Spacer(minLength: Space.x2)
+            HStack(spacing: Space.x2) {
+                CategoryDot(storedHex: entry.category?.colorHex ?? "")
+                Text(entry.category?.name ?? "")
+                    .lineLimit(1)
+            }
             Text(DurationFormat.clock(model.elapsed)).monospacedDigit()
         }
-        .font(.callout)
+        .typeRole(.micro)
         .foregroundStyle(Color.textSecondary)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Space.x4)
+        .padding(.vertical, Space.x2)
+        .frame(maxWidth: .infinity)
+        .background(Color.surfaceCanvas)
+        .accessibilityElement(children: .combine)
     }
 
-    @ViewBuilder
-    private func itemRow(_ item: PaletteItem) -> some View {
+    private func itemRow(_ item: PaletteItem, isSelected: Bool) -> some View {
+        let (text, hint) = Self.rowContent(for: item)
+        return HStack(spacing: Space.x3) {
+            Text(text)
+                .typeRole(.body)
+                .foregroundStyle(Color.textPrimary)
+                .lineLimit(1)
+            Spacer(minLength: Space.x2)
+            Text(hint)
+                .typeRole(.micro)
+                .foregroundStyle(Color.textSecondary)
+        }
+        .padding(.horizontal, Space.x3)
+        .frame(height: Space.suggestionRowHeight)
+        .background(
+            isSelected ? Color.surfaceInset : Color.clear,
+            in: RoundedRectangle(cornerRadius: Radius.row, style: .continuous)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture { activate(item) }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(Self.isSuggestion(item) ? .isButton : [])
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    private static func rowContent(for item: PaletteItem) -> (text: String, hint: String) {
         switch item {
         case .stopCurrent:
-            row(icon: "stop.fill", text: "Остановить текущую запись", hint: "⏎")
+            ("Остановить текущую запись", "⏎")
         case .repeatLast(let title, let category):
-            let label = [category, title].compactMap { $0 }.joined(separator: " — ")
-            row(icon: "arrow.counterclockwise", text: "Повторить: \(label)", hint: "⏎")
+            ("Повторить: " + [category, title].compactMap { $0 }.joined(separator: " — "), "⏎")
         case .createCategory(let name):
-            row(icon: "plus.circle", text: "Создать категорию «\(name)»", hint: "⏎")
+            ("Создать категорию «\(name)»", "⏎")
         case .suggestion(let text):
-            Button { viewModel.input = text } label: {
-                row(icon: "text.append", text: text, hint: "⇥")
-            }
-            .buttonStyle(.plain)
+            (text, "⇥")
         }
     }
 
-    private func row(icon: String, text: String, hint: String) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon).frame(width: 20).foregroundStyle(Color.textSecondary)
-            Text(text).lineLimit(1)
-            Spacer()
-            Text(hint).foregroundStyle(Color.textTertiary)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 7)
-        .contentShape(Rectangle())
+    private static func isSuggestion(_ item: PaletteItem) -> Bool {
+        if case .suggestion = item { return true }
+        return false
+    }
+
+    /// Click on a row, or Enter on the selected one. Only suggestions react: they fill the field.
+    private func activate(_ item: PaletteItem) {
+        if case .suggestion(let text) = item { viewModel.input = text }
     }
 
     private func promptRow(_ prompt: PalettePrompt) -> some View {
         let text: String
-        var isError = false
         switch prompt {
         case .createCategory(let name):
             text = "Категории «\(name)» нет. ⏎ — создать и запустить, Esc — отмена."
@@ -193,14 +230,20 @@ struct PaletteView: View {
             text = "Пересекается с записями: \(count). ⏎ — всё равно, Esc — править."
         case .error(let message):
             text = message
-            isError = true
         }
-        return Text(text)
-            .font(.callout)
-            .foregroundStyle(isError ? Color.red : Color.orange)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+        return ErrorStrip(text)
+            .padding(.horizontal, Space.x2)
+            .padding(.vertical, Space.x2)
+    }
+
+    /// Enter: a selected suggestion fills the field; anything else submits as before.
+    private func submit() {
+        if let index = selection.index, viewModel.items.indices.contains(index),
+           case .suggestion = viewModel.items[index] {
+            activate(viewModel.items[index])
+            return
+        }
+        handle(viewModel.enter())
     }
 
     private func handle(_ outcome: PaletteOutcome) {

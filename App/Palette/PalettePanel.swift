@@ -29,6 +29,8 @@ final class PalettePanel: NSPanel {
         isOpaque = false
         backgroundColor = .clear
         hasShadow = false
+        // Reduce Motion: no show/hide fade or zoom, whatever the system setting is.
+        animationBehavior = .none
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         contentView = NSHostingView(rootView: rootView)
     }
