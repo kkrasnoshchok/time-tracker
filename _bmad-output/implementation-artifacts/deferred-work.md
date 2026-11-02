@@ -57,4 +57,4 @@
 
 - Guard patterns widened (system colors, `.accentColor`, `Color(red:)`, `0x`, 3-digit hex, `.systemBlue`, `.system(size:` any value or line-split); fixtures `bad-named-more`, `bad-literals`, `bad-font-more`, `clean-lookalikes` seen failing first. `App/Support/CategoryTone.swift` stays unlisted on purpose (documented in `scripts/token-guard-paths.txt`).
 - `CategoryToken` 22% fraction and `surfaceCard` base pinned by `CategoryTokenTests` in `AppTests/CategoryTintTests.swift`.
-- Six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens) moved into acceptance criteria of Stories 2.2, 3.2 and 4.3 in epics.md (A4). CLAUDE.md rules (A2) and the commit-subject rule (A5) were added.
+- Six manual checks (Dynamic Type, focus ring, placeholder, tap gesture, tab focus, dots on screens) moved into acceptance criteria of Stories 2.1, 3.1 and 4.2 in epics.md (A4). CLAUDE.md rules (A2) and the commit-subject rule (A5) were added.
