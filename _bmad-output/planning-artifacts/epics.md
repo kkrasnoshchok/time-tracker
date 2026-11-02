@@ -355,6 +355,11 @@ So that it feels like the rest of the design and not like default glass.
 **And** `Packages/TimeTrackerCore` is untouched
 **And** the Swift concepts (`NSHostingView`, view modifiers order) are explained via TypeScript/React analogies
 
+**Given** the manual checks carried over from Epic 1 (retrospective item A4)
+**When** the Palette is exercised in the running app
+**Then** text set with `typeRole` visibly changes size when the system text size changes (if `@ScaledMetric` does not scale on macOS, record it and fix the rule)
+**And** category dots show in eight tones with the category name beside them
+
 ### Story 2.2: Category token in the typed line
 
 As the author,
@@ -463,6 +468,10 @@ So that I can scan the day without noise.
 **Then** one short sentence in `text-secondary` is shown with no illustration
 **And** row hit target is at least 44pt and selection by click and arrow keys still works
 **And** the Swift concepts (`List` selection, `Section`, `.tag`) are explained via TypeScript/React analogies
+
+**Given** the manual check carried over from Epic 1 (retrospective item A4)
+**When** the Journal is exercised in the running app
+**Then** category dots show in their tones with the category name beside them, and no row is filled with a tone
 
 ### Story 3.2: Day header with total
 
@@ -585,6 +594,12 @@ So that it matches the other surfaces.
 **Then** it uses the error strip, not `.red` text
 **And** `RunningTimerView` and `MenuBarContent` use no system fonts such as `.headline` or `.title3` rounded
 **And** the Swift concepts (`@State` init, `onChange`) are explained via TypeScript/React analogies
+
+**Given** the manual checks carried over from Epic 1 (retrospective item A4), the first screen with real buttons and an `InputField`
+**When** the popover is exercised in the running app with Full Keyboard Access on
+**Then** Tab shows exactly one focus ring on each `.primary` and `.ghost` button (not two, not none); if it fails, move `.focusEffectDisabled()` to the call site or read focus via `@FocusState`
+**And** the empty `InputField` placeholder is `text-tertiary`, a click places the caret, drag selects and double-click selects a word, and Tab into the field turns its border `action-primary`
+**And** the category dot shows in its tone with the category name beside it
 
 ### Story 4.3: «долго» in the popover and menu bar guard
 
