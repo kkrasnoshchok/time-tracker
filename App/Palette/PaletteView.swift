@@ -26,9 +26,9 @@ struct PaletteView: View {
             }
         }
         .frame(width: 640)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.separator))
-        .shadow(color: .black.opacity(0.25), radius: 18, y: 8)
+        .background(Color.surfaceCard, in: panelShape)
+        .clipShape(panelShape)
+        .hairlineRing(panelShape, variant: .palette)
         .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
@@ -37,12 +37,26 @@ struct PaletteView: View {
         .onAppear { focused = true }
     }
 
+    private var panelShape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
+    }
+
     private var inputRow: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "timer").font(.title2).foregroundStyle(.secondary)
-            TextField("Категория название #тег -20m", text: $viewModel.input)
+        HStack(spacing: Space.x3) {
+            Image(systemName: "magnifyingglass")
+                .typeRole(.paletteInput)
+                .fontWeight(.light)
+                .foregroundStyle(Color.textTertiary)
+                .accessibilityHidden(true)
+            TextField(
+                "",
+                text: $viewModel.input,
+                prompt: Text("Категория название #тег -20m").foregroundStyle(Color.textTertiary)
+            )
                 .textFieldStyle(.plain)
-                .font(.system(size: 22))
+                .typeRole(.paletteInput)
+                .foregroundStyle(Color.textPrimary)
+                .accessibilityLabel("Категория название #тег -20m")
                 .focused($focused)
                 .onSubmit { handle(viewModel.enter()) }
                 .onKeyPress(.tab) {
@@ -54,7 +68,8 @@ struct PaletteView: View {
                     return .handled
                 }
         }
-        .padding(16)
+        .padding(.horizontal, Space.x4)
+        .frame(height: Space.paletteFieldHeight)
     }
 
     private func runningRow(_ entry: TimeEntry) -> some View {
