@@ -35,3 +35,8 @@ context:
 - low (rejected): `store.categories()` is fetched up to three times per render. The view model already fetches per keystroke; a cache would add state.
 - maybe-false (deferred): the `#tag` muting layer can drift from the field when the line scrolls inside the field, and the transparent-text field may show a different caret or selection look. Would be settled by typing a long line with tags in the running Palette.
 - maybe-false (deferred): after Backspace removes the token, the caret may not land between name and text. Would be settled by pressing Backspace in the running Palette.
+
+## Post-review fix (author test in the running app)
+
+- Bug: Backspace never removed the token. The text field handles Backspace itself, so `onKeyPress(.delete)` never fired.
+- Fix: while a token is shown the field text starts with an invisible anchor (`U+200B`); deleting it dissolves the token (`CategoryResolver.fieldText` / `input(afterEditing:)`, tests seen failing first). `onKeyPress(.delete)` removed. Build, 43 App tests, swiftlint and the token guard pass; the fix itself is not yet seen in the running app.

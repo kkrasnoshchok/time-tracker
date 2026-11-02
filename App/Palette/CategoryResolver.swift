@@ -30,4 +30,21 @@ enum CategoryResolver {
         let restStart = input.index(after: best.end)
         return Split(name: best.name, prefix: String(input[..<restStart]), rest: String(input[restStart...]))
     }
+
+    /// Invisible character the field shows in front of the text while a token is displayed.
+    /// The text field swallows Backspace at the start of an empty or untouched field, so the
+    /// key press gives no signal; deleting this character is the signal instead.
+    static let anchor = "\u{200B}"
+
+    /// What the text field shows: the anchor plus the text after the token.
+    static func fieldText(for split: Split) -> String {
+        anchor + split.rest
+    }
+
+    /// The new `viewModel.input` after the field's text changed while a token is shown.
+    /// Deleting only the anchor (Backspace at the start) dissolves the token; any other edit keeps it.
+    static func input(afterEditing text: String, split: Split) -> String {
+        if !text.contains(anchor), text == split.rest { return split.inputAfterBackspace }
+        return split.prefix + text.replacingOccurrences(of: anchor, with: "")
+    }
 }

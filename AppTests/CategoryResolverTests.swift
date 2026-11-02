@@ -85,3 +85,49 @@ struct TagMutingTests {
         #expect(mutedWords(in: "").isEmpty)
     }
 }
+
+struct TokenEditingTests {
+    private let names = ["Работа"]
+
+    private func split(_ input: String) -> CategoryResolver.Split {
+        CategoryResolver.split(input, among: names)!
+    }
+
+    @Test func fieldTextStartsWithTheAnchorSoBackspaceHasSomethingToDelete() {
+        let text = CategoryResolver.fieldText(for: split("Работа отчёт"))
+
+        #expect(text == CategoryResolver.anchor + "отчёт")
+    }
+
+    @Test func typingKeepsThePrefix() {
+        let s = split("Работа отчёт")
+        let edited = CategoryResolver.input(afterEditing: CategoryResolver.anchor + "отчёты", split: s)
+
+        #expect(edited == "Работа отчёты")
+    }
+
+    @Test func deletingTheAnchorDissolvesTheToken() {
+        let s = split("Работа отчёт")
+
+        #expect(CategoryResolver.input(afterEditing: "отчёт", split: s) == "Работаотчёт")
+    }
+
+    @Test func deletingTheAnchorWithAnEmptyRestDissolvesTheToken() {
+        let s = split("Работа ")
+
+        #expect(CategoryResolver.input(afterEditing: "", split: s) == "Работа")
+    }
+
+    @Test func replacingEverythingKeepsTheTokenAndStripsAnyAnchor() {
+        let s = split("Работа отчёт")
+
+        #expect(CategoryResolver.input(afterEditing: "план", split: s) == "Работа план")
+    }
+
+    @Test func pastedAnchorsAreStripped() {
+        let s = split("Работа ")
+        let pasted = CategoryResolver.anchor + "a" + CategoryResolver.anchor + "b"
+
+        #expect(CategoryResolver.input(afterEditing: pasted, split: s) == "Работа ab")
+    }
+}

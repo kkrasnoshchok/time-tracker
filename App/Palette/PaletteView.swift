@@ -74,8 +74,16 @@ struct PaletteView: View {
     /// Like a controlled `<input value={rest} onChange={e => setInput(prefix + e.target.value)}>`.
     private func inputField(split: CategoryResolver.Split?) -> some View {
         let text = Binding(
-            get: { split?.rest ?? viewModel.input },
-            set: { viewModel.input = (split?.prefix ?? "") + $0 }
+            get: { split.map(CategoryResolver.fieldText(for:)) ?? viewModel.input },
+            set: { newText in
+                guard let split else { viewModel.input = newText; return }
+                let input = CategoryResolver.input(afterEditing: newText, split: split)
+                let dissolved = input == split.inputAfterBackspace
+                viewModel.input = input
+                if dissolved {
+                    selection = TextSelection(insertionPoint: input.index(input.startIndex, offsetBy: split.name.count))
+                }
+            }
         )
         return ZStack(alignment: .leading) {
             Text(Self.mutingTags(in: text.wrappedValue))
@@ -104,19 +112,7 @@ struct PaletteView: View {
                     if !viewModel.cancelPrompt() { onClose() }
                     return .handled
                 }
-                .onKeyPress(.delete) {
-                    guard let split, caretIsAtStart(of: split.rest) else { return .ignored }
-                    viewModel.input = split.inputAfterBackspace
-                    selection = TextSelection(insertionPoint: viewModel.input.index(
-                        viewModel.input.startIndex, offsetBy: split.name.count))
-                    return .handled
-                }
         }
-    }
-
-    private func caretIsAtStart(of text: String) -> Bool {
-        guard case .selection(let range)? = selection?.indices else { return false }
-        return range.isEmpty && range.lowerBound == text.startIndex
     }
 
     private func hex(forCategory name: String) -> String {
