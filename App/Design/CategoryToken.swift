@@ -7,11 +7,15 @@ struct CategoryToken: View {
     let storedHex: String
 
     /// Share of the tone in the background, from the design contract.
-    private static let tintFraction = 0.22
+    static let tintFraction = 0.22
+
+    /// Pill background as a hex string, so tests can pin it without rendering.
+    static func backgroundHex(storedHex: String) -> String {
+        CategoryTone(storedHex: storedHex).tintedHex(over: ColorToken.surfaceCard.hex, fraction: tintFraction)
+    }
 
     private var background: Color {
-        let tone = CategoryTone(storedHex: storedHex)
-        return Color(hex: tone.tintedHex(over: ColorToken.surfaceCard.hex, fraction: Self.tintFraction))
+        Color(hex: Self.backgroundHex(storedHex: storedHex))
     }
 
     var body: some View {

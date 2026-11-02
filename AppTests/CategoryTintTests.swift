@@ -21,3 +21,15 @@ struct CategoryTintTests {
         #expect(tone.tintedHex(over: base, fraction: fraction) == expected)
     }
 }
+
+struct CategoryTokenTests {
+    // Pins the design contract: tone at 22% over the card white, for a stored default hex.
+    @Test func backgroundIsToneAt22PercentOverCard() {
+        #expect(CategoryToken.backgroundHex(storedHex: "#FF9F0A") == "#EFE0DB")
+        #expect(CategoryToken.tintFraction == 0.22)
+    }
+
+    @Test func unknownStoredHexFallsBackToTaupeTint() {
+        #expect(CategoryToken.backgroundHex(storedHex: "") == CategoryTone.taupe.tintedHex(over: "#FFFFFF", fraction: 0.22))
+    }
+}
