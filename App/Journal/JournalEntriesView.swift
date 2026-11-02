@@ -141,7 +141,7 @@ private struct EntryRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Circle().fill(Color(hex: entry.category?.colorHex ?? "")).frame(width: 9, height: 9)
+            CategoryDot(storedHex: entry.category?.colorHex ?? "")
             VStack(alignment: .leading, spacing: 2) {
                 Text(entry.title ?? entry.category?.name ?? "Без названия").lineLimit(1)
                 Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)

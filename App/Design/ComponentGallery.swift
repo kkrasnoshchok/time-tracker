@@ -57,3 +57,16 @@ private struct InputHost: View {
     .padding(Space.x6)
     .background(Color.surfaceCanvas)
 }
+
+#Preview("Category dot and token") {
+    VStack(alignment: .leading, spacing: Space.x3) {
+        ForEach(CategoryTone.allCases, id: \.self) { tone in
+            HStack(spacing: Space.x4) {
+                CategoryDot(storedHex: tone.hex)
+                CategoryToken(name: tone.rawValue.capitalized, storedHex: tone.hex)
+            }
+        }
+    }
+    .padding(Space.x6)
+    .background(Color.surfaceCard)
+}

@@ -32,3 +32,12 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-4-input-field-badge-and-error-strip.md`
   summary: Tabbing to a real `InputField` (border becomes `actionPrimary`) is not checked, and no screen hosts one yet.
   evidence: The AC is manual; check it together with the open Story 1.3 focus-ring item, at the first story that puts an `InputField` on a screen.
+
+## Deferred from: code review of spec-1-5-category-dot-and-token-tones-on-existing-dots (2026-11-02)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-5-category-dot-and-token-tones-on-existing-dots.md`
+  summary: Pin `CategoryToken`'s 22% fraction and `surfaceCard` base with a test when the first screen uses the token.
+  evidence: Only the gallery renders it today; changing `tintFraction` or the base would keep all tests green.
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-5-category-dot-and-token-tones-on-existing-dots.md`
+  summary: Gallery preview and the three screens (Journal, popover, Palette) were not looked at on screen.
+  evidence: Only build, tests and greps ran; check eight dots and tokens in the canvas and the running app.

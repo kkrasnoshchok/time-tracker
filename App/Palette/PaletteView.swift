@@ -59,7 +59,7 @@ struct PaletteView: View {
 
     private func runningRow(_ entry: TimeEntry) -> some View {
         HStack(spacing: 8) {
-            Circle().fill(Color(hex: entry.category?.colorHex ?? "")).frame(width: 9, height: 9)
+            CategoryDot(storedHex: entry.category?.colorHex ?? "")
             Text([entry.category?.name, entry.title].compactMap { $0 }.joined(separator: " · "))
                 .lineLimit(1)
             Spacer()

@@ -46,6 +46,19 @@ enum CategoryTone: String, CaseIterable, Sendable {
         return best?.tone ?? .taupe
     }
 
+    /// This tone mixed `fraction` (0...1) over a `#RRGGBB` base, per sRGB channel, rounded.
+    /// Pure math, like a `mix(a, b, t)` helper in TS; an invalid base falls back to the tone itself.
+    func tintedHex(over baseHex: String, fraction: Double) -> String {
+        guard let base = Self.rgb(fromHex: baseHex.uppercased()),
+              let tone = Self.rgb(fromHex: hex) else { return hex }
+        let amount = min(max(fraction, 0), 1)
+        func channel(_ from: Double, _ to: Double) -> Int {
+            Int(((from + (to - from) * amount) * 255).rounded())
+        }
+        return String(format: "#%02X%02X%02X",
+                      channel(base.red, tone.red), channel(base.green, tone.green), channel(base.blue, tone.blue))
+    }
+
     /// `#RRGGBB` only (leading `#` required, hex digits only).
     private static func rgb(fromHex hex: String) -> SRGB? {
         guard hex.hasPrefix("#") else { return nil }

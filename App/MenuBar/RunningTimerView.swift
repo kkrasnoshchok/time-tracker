@@ -15,9 +15,7 @@ struct RunningTimerView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
-                Circle()
-                    .fill(Color(hex: entry.category?.colorHex ?? ""))
-                    .frame(width: 10, height: 10)
+                CategoryDot(storedHex: entry.category?.colorHex ?? "")
                 Text(entry.category?.name ?? "Без категории")
                     .font(.headline)
                 Spacer()
