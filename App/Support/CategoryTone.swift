@@ -8,18 +8,8 @@ enum CategoryTone: String, CaseIterable, Sendable {
     /// Order used to break exact distance ties: earlier wins.
     static let tieBreakOrder: [CategoryTone] = [.clay, .ochre, .moss, .lagoon, .slate, .plum, .rose, .taupe]
 
-    var hex: String {
-        switch self {
-        case .clay: "#B4705A"
-        case .ochre: "#B8964A"
-        case .moss: "#8A9A6A"
-        case .lagoon: "#5F8A88"
-        case .slate: "#6F86A0"
-        case .plum: "#8D6F8F"
-        case .rose: "#B88A8A"
-        case .taupe: "#7A7570"
-        }
-    }
+    /// Hex comes from the design token layer, not from literals here.
+    var hex: String { ColorToken.category(self).hex }
 
     /// The bright hexes Core assigns to new categories, each pinned to its own tone.
     private static let coreDefaults: [String: CategoryTone] = [

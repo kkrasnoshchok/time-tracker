@@ -10,3 +10,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-1-category-tone-mapping-with-an-app-test-target.md`
   summary: Add `xcodebuild test -scheme TimeTracker -destination 'platform=macOS'` to the CLAUDE.md "Команды" section.
   evidence: CLAUDE.md lists only `swift test --package-path Packages/TimeTrackerCore`; the App tests run only through the Xcode scheme. Deferred because the fix edits an agent-context file.
+
+## Deferred from: code review of spec-1-2-semantic-design-tokens (2026-11-02)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-2-semantic-design-tokens.md`
+  summary: Unverified (possibly medium): `@ScaledMetric` in `TypeRoleModifier` may not scale on macOS, so the "every role scales with Dynamic Type" rule could silently fail.
+  evidence: No test or manual check shows `scale` changing with `dynamicTypeSize` on macOS 26; settle it by checking that in a preview or a small test.
