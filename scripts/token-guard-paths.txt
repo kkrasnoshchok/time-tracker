@@ -1,0 +1,3 @@
+# Paths already migrated to design tokens, one per line (file or directory, relative to repo root).
+# Each epic adds the files it migrates; unmigrated screens must not be listed yet.
+App/Design

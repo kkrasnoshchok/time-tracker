@@ -41,3 +41,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-5-category-dot-and-token-tones-on-existing-dots.md`
   summary: Gallery preview and the three screens (Journal, popover, Palette) were not looked at on screen.
   evidence: Only build, tests and greps ran; check eight dots and tokens in the canvas and the running app.
+
+## Deferred from: code review of spec-1-6-token-guard-script (2026-11-02)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-token-guard-script.md`
+  summary: Widen the token guard patterns to other system colors (`.green`, `.gray`, ...), implicit `.accentColor`, `Font.system(size:)` outside `.font(`, and non-literal sizes.
+  evidence: The guard only matches the spec's exact list, so `.tint(.accentColor)` or `.foregroundStyle(.green)` in a migrated file passes; decide when a later epic migrates such code.

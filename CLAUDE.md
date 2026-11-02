@@ -28,7 +28,10 @@ swift test --package-path Packages/TimeTrackerCore --filter X # один наб�
 xcodegen generate                                             # собрать TimeTracker.xcodeproj из project.yml
 xcodebuild -scheme TimeTracker -destination 'platform=macOS' build | xcbeautify
 swiftlint
+scripts/check-tokens.sh                                    # guard: нет hex/.red/системного акцента/своих размеров шрифта в мигрированных файлах
+scripts/test-check-tokens.sh                               # тесты guard на фикстурах
 ```
+Список мигрированных путей для guard лежит в `scripts/token-guard-paths.txt` (по одному пути в строке); каждый следующий эпик добавляет туда свои файлы.
 `TimeTracker.xcodeproj` не коммитится, его генерирует XcodeGen.
 
 ## MCP (project-local)
