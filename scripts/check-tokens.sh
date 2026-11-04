@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Token guard: fails if migrated App/ files bypass the design tokens
-# (hex or RGB literals, system or accent colors, ad-hoc font sizes).
+# (hex or RGB literals, system or accent colors, white/black, ad-hoc or system-style
+# fonts, NSFont, Font.custom, weights other than regular/medium, .bold(), system text styles, .primary/.secondary
+# foreground styles (also Color.primary/.secondary), .custom( fonts, .weight() other than regular/medium, Color(white:)).
 # Usage: scripts/check-tokens.sh [--paths <list-file>] [--root <dir>]
 # Exit codes: 0 clean, 1 violations found, 2 usage or missing path.
 #
@@ -36,7 +38,7 @@ cd "$ROOT"
 # an implicit named color needs a non-identifier character before the dot.
 NOT_ID='(^|[^A-Za-z0-9_])'
 END_ID='([^A-Za-z0-9_]|$)'
-NAMED='red|orange|yellow|green|mint|teal|cyan|blue|indigo|purple|pink|brown|gray'
+NAMED='red|orange|yellow|green|mint|teal|cyan|blue|indigo|purple|pink|brown|gray|white|black'
 PATTERNS=(
   -e '#[0-9A-Fa-f]{6}'
   -e '#[0-9A-Fa-f]{3}([^0-9A-Za-z]|$)'
@@ -47,6 +49,17 @@ PATTERNS=(
   -e '\.accentColor'
   -e '\.system(Red|Orange|Yellow|Green|Mint|Teal|Cyan|Blue|Indigo|Purple|Pink|Brown|Gray)'
   -e '\.system\([[:space:]]*(size:|$)'
+  -e '\.system\([[:space:]]*\.'
+  -e '(^|[^A-Za-z0-9_])(NSFont|UIFont)([^A-Za-z0-9_]|$)'
+  -e "Font\\.custom${END_ID}"
+  -e '\.fontWeight\([[:space:]]*(\.(ultraLight|thin|light|semibold|bold|heavy|black)|[^.[:space:]]|$)'
+  -e '\.bold\(\)'
+  -e "\\.font\\([[:space:]]*\\.(largeTitle|title[23]?|headline|subheadline|body|callout|footnote|caption[12]?)${END_ID}"
+  -e "foreground(Style|Color)\\([[:space:]]*\\.(primary|secondary|tertiary|quaternary)${END_ID}"
+  -e "(Color|NSColor|UIColor)\\.(primary|secondary|tertiary|quaternary)${END_ID}"
+  -e "${NOT_ID}\\.custom\\("
+  -e '\.weight\([[:space:]]*(\.(ultraLight|thin|light|semibold|bold|heavy|black)|[^.[:space:]]|$)'
+  -e '(Color|NSColor|UIColor)\([[:space:]]*(white:|hue:|\.sRGB|\.display|\.generic)'
 )
 
 # Read the list: strip comments and blank lines, collect entries.
@@ -70,8 +83,9 @@ done
 FOUND=0
 for entry in ${ENTRIES[@]+"${ENTRIES[@]}"}; do
   while IFS= read -r file; do
-    # The token layer is the one place literals are allowed.
+    # The token layer is the one place literals are allowed (HairlineRing draws the ring in black, exempt only under Design/).
     case "$(basename "$file")" in ColorToken.swift|Typography.swift) continue ;; esac
+    case "$file" in */Design/HairlineRing.swift|Design/HairlineRing.swift) continue ;; esac
     hits="$(grep -nE "${PATTERNS[@]}" "$file" || true)"
     if [ -n "$hits" ]; then
       FOUND=1

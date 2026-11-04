@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-04-2026 12:00
+last_updated: 11-04-2026 19:30
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -44,15 +44,15 @@ development_status:
   1-6-token-guard-script: done
   epic-1-retrospective: done
 
-  epic-2: in-progress
+  epic-2: done
   2-1-opaque-paper-panel-and-60px-field: done
   2-2-category-token-in-the-typed-line: done
   2-3-running-row-suggestion-rows-and-prompts: done
   2-4-palette-verification-and-guard: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: done
 
-  epic-3: backlog
-  3-1-journal-rows: backlog
+  epic-3: in-progress
+  3-1-journal-rows: done
   3-2-day-header-with-total: backlog
   3-3-долго-rule-and-note: backlog
   3-4-stable-list-width-and-journal-guard: backlog
@@ -115,3 +115,53 @@ action_items:
     owner: "Vadym"
     status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-02.md"
+  - id: "epic-2-retro-item-7-a1-story-2-4-attach-screenshots-or-per-i"
+    epic: 2
+    action: "A1: Story 2.4: attach screenshots or per-item results for the Palette
+      checks, or amend AC1 to say author-reported"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-8-a2-add-a-resolved-in-epic-2-retrospectiv"
+    epic: 2
+    action: "A2: Add a Resolved in epic 2 retrospective block to deferred-work.md
+      closing the 2.1, 2.2 and 2.4 manual items"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-9-a3-set-epic-2-to-done-in-sprint-status-y"
+    epic: 2
+    action: "A3: Set epic-2 to done in sprint-status.yaml and make the last-story
+      close step flip the epic key"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-10-a4-before-epic-3-screens-enter-the-guard"
+    epic: 2
+    action: "A4: Before Epic 3 screens enter the guard list, add patterns for Color.white/.black,
+      NSFont, Font.custom, .system(.title) and .fontWeight(.light) with fixtures seen
+      failing first"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-11-a5-move-mutingtags-to-a-pure-helper-and"
+    epic: 2
+    action: "A5: Move mutingTags to a pure helper and split rows and prompts out of
+      PaletteView before Epic 3/4 reuse it"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-12-a6-run-manual-checks-for-text-field-and"
+    epic: 2
+    action: "A6: Run manual checks for text-field and key-handling stories before
+      the code review"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-2-retro-item-13-a7-run-explain-change-over-83a143b-f6480"
+    epic: 2
+    action: "A7: Run explain-change over 83a143b..f648064 for the owed Swift-concept
+      explanations"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"

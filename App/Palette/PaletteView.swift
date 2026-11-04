@@ -60,7 +60,6 @@ struct PaletteView: View {
         return HStack(spacing: Space.x3) {
             Image(systemName: "magnifyingglass")
                 .typeRole(.paletteInput)
-                .fontWeight(.light)
                 .foregroundStyle(Color.textTertiary)
                 .accessibilityHidden(true)
             if let split {

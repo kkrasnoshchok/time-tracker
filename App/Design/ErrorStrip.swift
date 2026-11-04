@@ -16,7 +16,6 @@ struct ErrorStrip: View {
         HStack(spacing: Space.x2) {
             Image(systemName: "exclamationmark.circle")
                 .imageScale(.medium)
-                .fontWeight(.light)
                 .foregroundStyle(Color.textPrimary)
                 .accessibilityHidden(true)
             Text(message)

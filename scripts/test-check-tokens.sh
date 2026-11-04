@@ -53,9 +53,12 @@ run "bad-font";     expect "ad-hoc font size"      1 "bad-font/Sample.swift:3: "
 run "bad-named-more"; expect "more system colors" 1 "bad-named-more/Sample.swift:3: " "bad-named-more/Sample.swift:4: " "bad-named-more/Sample.swift:5: " "bad-named-more/Sample.swift:6: " "bad-named-more/Sample.swift:7: " "bad-named-more/Sample.swift:8: " "bad-named-more/Sample.swift:9: "
 run "bad-literals"; expect "color literals"    1 "bad-literals/Sample.swift:3: " "bad-literals/Sample.swift:4: " "bad-literals/Sample.swift:5: " "bad-literals/Sample.swift:6: "
 run "bad-font-more"; expect "more font sizes"  1 "bad-font-more/Sample.swift:3: " "bad-font-more/Sample.swift:4: " "bad-font-more/Sample.swift:5: "
+run "bad-colors-fonts"; expect "white/black, NSFont, Font.custom, text styles, weights" 1 "bad-colors-fonts/Sample.swift:3: " "bad-colors-fonts/Sample.swift:4: " "bad-colors-fonts/Sample.swift:5: " "bad-colors-fonts/Sample.swift:6: " "bad-colors-fonts/Sample.swift:7: " "bad-colors-fonts/Sample.swift:8: " "bad-colors-fonts/Sample.swift:9: " "bad-colors-fonts/Sample.swift:10: "
+run "bad-styles-more"; expect "text styles, system foreground styles, weights, Color(white:)" 1 "bad-styles-more/Sample.swift:3: " "bad-styles-more/Sample.swift:4: " "bad-styles-more/Sample.swift:5: " "bad-styles-more/Sample.swift:6: " "bad-styles-more/Sample.swift:7: " "bad-styles-more/Sample.swift:8: " "bad-styles-more/Sample.swift:9: " "bad-styles-more/Sample.swift:11: " "bad-styles-more/Sample.swift:12: "
+run "bad-spellings"; expect "qualified system foreground colors, .custom font, .weight()" 1 "bad-spellings/Sample.swift:3: " "bad-spellings/Sample.swift:4: " "bad-spellings/Sample.swift:5: " "bad-spellings/Sample.swift:6: " "bad-spellings/Sample.swift:7: " "bad-spellings/Sample.swift:8: "
 run "clean-lookalikes"; expect "lookalikes are not hits" 0
 run "token-layer";  expect "token layer skipped"   0
-run "token-layer-mixed"; expect "violation next to token layer" 1 "token-layer-mixed/Bad.swift:2: "
+run "token-layer-mixed"; expect "violation next to token layer, HairlineRing only exempt under Design/" 1 "token-layer-mixed/Bad.swift:2: " "token-layer-mixed/Other/HairlineRing.swift:3: "
 run "nonexistent";  expect "missing path"          2 "nonexistent"
 run "$(printf '# comment\n\n   \nclean\n# another')"
 expect "comments and blanks ignored" 0

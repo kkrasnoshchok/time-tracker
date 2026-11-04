@@ -62,11 +62,9 @@ struct JournalEntriesView: View {
         }
         .overlay {
             if journal.groups.isEmpty {
-                ContentUnavailableView(
-                    "Записей нет",
-                    systemImage: "clock",
-                    description: Text("Начните запись хоткеем или добавьте её вручную.")
-                )
+                Text(journal.filter == EntryFilter() ? "Записей пока нет." : "Ничего не найдено.")
+                    .typeRole(.body)
+                    .foregroundStyle(Color.textSecondary)
             }
         }
     }
@@ -135,32 +133,48 @@ private struct DayHeader: View {
     }
 }
 
+/// One journal row: a single 44px line. Like a small function component that
+/// receives `entry` and `now` as props and renders from them only.
 private struct EntryRow: View {
     let entry: TimeEntry
     let now: Date
 
+    private var isRunning: Bool { entry.end == nil }
+
     var body: some View {
-        HStack(spacing: 10) {
-            CategoryDot(storedHex: entry.category?.colorHex ?? "")
-            VStack(alignment: .leading, spacing: 2) {
-                Text(entry.title ?? entry.category?.name ?? "Без названия").lineLimit(1)
-                Text(subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+        HStack(spacing: Space.x3) {
+            Text(entry.start.formatted(date: .omitted, time: .shortened))
+                .typeRole(.caption)
+                .foregroundStyle(Color.textSecondary)
+                .tabularFigures()
+                .lineLimit(1)
+                .fixedSize()
+            Text(entry.title ?? "Без названия")
+                .typeRole(.body)
+                .foregroundStyle(Color.textPrimary)
+                .lineLimit(1)
+            Spacer(minLength: Space.x2)
+            HStack(spacing: Space.x2) {
+                CategoryDot(storedHex: entry.category?.colorHex ?? "")
+                Text(entry.category?.name ?? "")
+                    .typeRole(.body)
+                    .foregroundStyle(Color.textSecondary)
+                    .lineLimit(1)
             }
-            Spacer()
-            Text(entry.end == nil ? "идёт" : DurationFormat.short(duration))
-                .monospacedDigit()
-                .foregroundStyle(entry.end == nil ? Color.accentColor : Color.secondary)
+            Text(DurationFormat.short(duration))
+                .typeRole(isRunning ? .bodyEmphasis : .body)
+                .foregroundStyle(isRunning ? Color.textPrimary : Color.textSecondary)
+                .tabularFigures()
+                .lineLimit(1)
+                .fixedSize()
         }
+        .padding(.horizontal, Space.x2)
+        .frame(height: Space.rowHeight)
+        .background(isRunning ? Color.surfaceInset : Color.clear, in: RoundedRectangle(cornerRadius: Radius.row))
+        .contentShape(Rectangle())
     }
 
     private var duration: TimeInterval {
         (entry.end ?? now).timeIntervalSince(entry.start)
-    }
-
-    private var subtitle: String {
-        let time = entry.start.formatted(date: .omitted, time: .shortened)
-            + " – " + (entry.end?.formatted(date: .omitted, time: .shortened) ?? "…")
-        let tags = entry.tagList.map(\.name).sorted().map { "#" + $0 }.joined(separator: " ")
-        return [entry.category?.name, time, tags.isEmpty ? nil : tags].compactMap { $0 }.joined(separator: " · ")
     }
 }

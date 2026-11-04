@@ -85,3 +85,21 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-4-palette-verification-and-guard.md`
   summary: Token guard patterns miss `Color.white`/`.black`, `NSFont`, `Font.custom` and `.system(.title)`-style fonts.
   evidence: Pre-existing guard design; `App/Palette` has none of these today (grep found nothing). Add patterns with fixtures seen failing first when a migrated file needs one.
+
+## Resolved in epic 2 retrospective (2026-11-04)
+
+Author-reported on 2026-11-04 (no screenshots or per-item notes; accepted as sufficient evidence):
+- Hotkey race: the palette does not close right after opening from several apps (2.1).
+- System dark mode: caret, selection and divider are visible in the fixed-light card (2.1).
+- 2.1 leftovers: `typeRole` follows system text size, eight-tone dots, placeholder color, click and selection in the field, Tab focus ring.
+- `#tag` layer drift on a long line (2.2); stale `TextSelection` after Tab completion, typing the space, clear and submit (2.2); VoiceOver announces the token and does not speak U+200B (2.2); Backspace dissolving the token (fixed in `5881471`).
+- Leading whitespace before the category name gives no token (2.2): left as is, trim only if it shows up.
+
+Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.black`, `NSFont`, `Font.custom`, `.system(.title)`-style fonts, `.fontWeight(.light)`, qualified `Color.secondary`/`.primary`, `.custom(` and `.weight()` (retro action A4; the author closes A4 in `sprint-status.yaml`). Still not caught: modifier arguments wrapped onto the next line, e.g. `.font(` then `.title)`.
+
+## Deferred from: code review of spec-3-1-journal-rows (2026-11-04)
+
+- Running entry has no VoiceOver cue now that «идёт» is gone (row has no combined accessibility element or label). Decided: do it in Story 3.3 together with «долго».
+- No automated check for `EntryRow` running/non-running choice, the «Без названия» fallback or the two empty-state sentences. Extract a pure helper and test it in `AppTests` when 3.3/3.4 touch the row.
+- The four manual checks of 3.1 are unticked (retro A6, author-owed).
+- Guard still misses modifier arguments wrapped onto the next line (`.font(` / `.title)`); a `$` alternative would flag legitimate wrapped `Typography.*` calls.
