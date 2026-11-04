@@ -29,21 +29,25 @@ context:
 ### Manual checklist for the author (record the result next to each item)
 
 States and look (screenshots of each, against the panel spec: opaque white, radius 20, 60px field, tinted token, 40px rows, text 20/15/12):
-- [ ] Idle (empty field, running row if a timer runs)
-- [ ] Typing (suggestions, ↑/↓ highlight, hover does not move it)
-- [ ] Typing with a category token and `#tag`
-- [ ] Running state
-- [ ] Prompt state (create category, overlap, error: error-strip look, no red/orange)
+- [x] Idle (empty field, running row if a timer runs)
+- [x] Typing (suggestions, ↑/↓ highlight, hover does not move it)
+- [x] Typing with a category token and `#tag`
+- [x] Running state
+- [x] Prompt state (create category, overlap, error: error-strip look, no red/orange)
 
 Behavior re-verification:
-- [ ] Esc closes; Enter submits and closes; clicking outside (focus loss) closes
-- [ ] Grammar `category title #tag -20m` still parses and starts the entry as before
+- [x] Esc closes; Enter submits and closes; clicking outside (focus loss) closes
+- [x] Grammar `category title #tag -20m` still parses and starts the entry as before
 
 Deferred items settled here:
-- [ ] Opening with the hotkey from several apps: the panel does not close right after opening (2.1)
-- [ ] System dark mode: caret, selection and divider are visible in the fixed-light card (2.1)
-- [ ] Long line with several `#tags`: muting layer does not drift (2.2); if it does, fallback is an `NSTextField` wrapper
-- [ ] Backspace at the start of the text after: Tab completion, typing the space, clearing, submit: caret is right, no crash (2.2)
-- [ ] VoiceOver in token mode: token category is announced, U+200B not spoken (2.2)
-- [ ] Leading whitespace before the category name gives no token (2.2, low): trim only if it shows up
-- [ ] 2.1 leftovers: `typeRole` text follows system text size; eight-tone dots with names; placeholder is `text-tertiary`; click and select text in the field behave normally; Tab focus ring
+- [x] Opening with the hotkey from several apps: the panel does not close right after opening (2.1)
+- [x] System dark mode: caret, selection and divider are visible in the fixed-light card (2.1)
+- [x] Long line with several `#tags`: muting layer does not drift (2.2); if it does, fallback is an `NSTextField` wrapper
+- [x] Backspace at the start of the text after: Tab completion, typing the space, clearing, submit: caret is right, no crash (2.2)
+- [x] VoiceOver in token mode: token category is announced, U+200B not spoken (2.2)
+- [x] Leading whitespace before the category name gives no token (2.2, low): trim only if it shows up
+- [x] 2.1 leftovers: `typeRole` text follows system text size; eight-tone dots with names; placeholder is `text-tertiary`; click and select text in the field behave normally; Tab focus ring
+
+### Author confirmation
+
+2026-11-04: the author ran every item of the checklist above in the running app and reported in chat that all of them work. No per-item notes or screenshots were attached to the report; the ticks rest on that statement only. No failures, so no code fixes.
