@@ -79,3 +79,9 @@
 - Stale `TextSelection` when the token appears or disappears without Backspace (Tab completion, typing the space, clear, submit): caret may sit before the anchor or out of range. Unverified, medium if real. Settle by pressing Backspace after each of those in the running Palette (Story 2.4).
 - Accessibility of the transparent `TextField` over the drawn `Text`: U+200B in the field value may be spoken by VoiceOver, nothing in the field says a token is active, the token label «Категория …» is not heard-checked. Unverified, medium if real. Settle with VoiceOver on the palette in token mode (Story 2.4).
 - `#tag` layer drift on a long line: same item as the Story 2.2 build entry above; still open, `NSTextField` wrapper is the fallback.
+
+## Deferred from: code review of spec-2-4-palette-verification-and-guard (2026-11-04)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-2-4-palette-verification-and-guard.md`
+  summary: Token guard patterns miss `Color.white`/`.black`, `NSFont`, `Font.custom` and `.system(.title)`-style fonts.
+  evidence: Pre-existing guard design; `App/Palette` has none of these today (grep found nothing). Add patterns with fixtures seen failing first when a migrated file needs one.
