@@ -21,16 +21,17 @@ struct MenuBarContent: View {
             shortcutRow("Журнал", name: .openJournal)
             HStack(spacing: Space.x2) {
                 Button("Палитра") { onTogglePalette() }
-                    .buttonStyle(.ghost)
+                    .buttonStyle(.ghost).lineLimit(1).fixedSize()
                 Button("Журнал") { AppRouter.shared.openJournal() }
-                    .buttonStyle(.ghost)
+                    .buttonStyle(.ghost).lineLimit(1).fixedSize()
                 Spacer()
                 Button("Выйти") { NSApp.terminate(nil) }
-                    .buttonStyle(.ghost)
+                    .buttonStyle(.ghost).lineLimit(1).fixedSize()
             }
         }
         .padding(Space.x4)
-        .frame(width: 300)
+        .frame(width: 340)
+        .fixedSize(horizontal: false, vertical: true)
         .background(Color.surfaceCanvas)
     }
 
@@ -52,7 +53,7 @@ struct MenuBarContent: View {
                 .foregroundStyle(Color.textSecondary)
             Spacer()
             Button("Изменить…") { AppRouter.shared.openSettings() }
-                .buttonStyle(.ghost)
+                .buttonStyle(.ghost).lineLimit(1).fixedSize()
         }
     }
 }

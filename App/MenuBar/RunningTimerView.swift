@@ -50,19 +50,20 @@ struct RunningTimerView: View {
             content: TextEditor(text: $notes)
                 .scrollContentBackground(.hidden)
                 .focused($notesFocused)
-                .frame(height: 70)
-                .overlay(alignment: .topLeading) {
-                    if notes.isEmpty {
-                        Text("Описание")
-                            .foregroundStyle(Color.textTertiary)
-                            .padding(.horizontal, 5)
-                            .padding(.top, 1)
-                            .allowsHitTesting(false)
-                    }
-                }
+                .frame(minHeight: 70, maxHeight: 70)
                 .onChange(of: notes) { _, newValue in
                     model.setNotes(newValue, for: entry)
                 }
         )
+        .overlay(alignment: .topLeading) {
+            if notes.isEmpty {
+                Text("Описание")
+                    .typeRole(.body)
+                    .foregroundStyle(Color.textTertiary)
+                    .padding(.horizontal, Space.x3 + 5)
+                    .padding(.top, Space.x2)
+                    .allowsHitTesting(false)
+            }
+        }
     }
 }
