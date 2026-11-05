@@ -170,7 +170,7 @@ private struct EntryRow: View {
                 .tabularFigures()
                 .lineLimit(1)
                 .fixedSize()
-            Text(entry.title ?? "Без названия")
+            Text(entry.title ?? EntryRowText.untitled)
                 .typeRole(.body)
                 .foregroundStyle(Color.textPrimary)
                 .lineLimit(1)
@@ -182,17 +182,35 @@ private struct EntryRow: View {
                     .foregroundStyle(Color.textSecondary)
                     .lineLimit(1)
             }
-            Text(DurationFormat.short(duration))
-                .typeRole(isRunning ? .bodyEmphasis : .body)
-                .foregroundStyle(isRunning ? Color.textPrimary : Color.textSecondary)
-                .tabularFigures()
-                .lineLimit(1)
-                .fixedSize()
+            HStack(spacing: Space.x2) {
+                if isLong {
+                    Text(EntryRowText.longNote)
+                        .typeRole(.caption)
+                        .foregroundStyle(Color.textSecondary)
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+                Text(DurationFormat.short(duration))
+                    .typeRole(isRunning ? .bodyEmphasis : .body)
+                    .foregroundStyle(isRunning ? Color.textPrimary : Color.textSecondary)
+                    .tabularFigures()
+                    .lineLimit(1)
+                    .fixedSize()
+            }
         }
         .padding(.horizontal, Space.x2)
         .frame(height: Space.rowHeight)
         .background(isRunning ? Color.surfaceInset : Color.clear, in: RoundedRectangle(cornerRadius: Radius.row))
         .contentShape(Rectangle())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            EntryRowText.accessibilityLabel(
+                title: entry.title, category: entry.category?.name,
+                duration: duration, isLong: isLong, isRunning: isRunning))
+    }
+
+    private var isLong: Bool {
+        LongEntry.isLong(start: entry.start, end: entry.end, now: now)
     }
 
     private var duration: TimeInterval {
