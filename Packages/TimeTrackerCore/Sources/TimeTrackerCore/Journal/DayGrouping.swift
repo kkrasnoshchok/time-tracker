@@ -7,6 +7,15 @@ public struct DayGroup: Equatable {
     public let entries: [TimeEntry]
     /// Time that falls inside this day, including the part of entries that started earlier.
     public let total: TimeInterval
+    /// The `now` this group was computed at.
+    public let asOf: Date
+    /// True for the group of today when a running entry is among the input: its total keeps growing.
+    public let isLive: Bool
+
+    /// The day's total at `now`. Only a live group grows after grouping; never shrinks if `now` is earlier.
+    public func liveTotal(at now: Date) -> TimeInterval {
+        isLive ? total + max(0, now.timeIntervalSince(asOf)) : total
+    }
 }
 
 public enum DayGrouping {
@@ -15,6 +24,8 @@ public enum DayGrouping {
     public static func group(_ entries: [TimeEntry], calendar: Calendar, now: Date) -> [DayGroup] {
         var totals: [Date: TimeInterval] = [:]
         var listed: [Date: [TimeEntry]] = [:]
+        let today = calendar.startOfDay(for: now)
+        let hasRunning = entries.contains { $0.end == nil && $0.start <= now }
 
         for entry in entries {
             let start = entry.start
@@ -40,7 +51,9 @@ public enum DayGrouping {
             DayGroup(
                 day: day,
                 entries: (listed[day] ?? []).sorted { $0.start > $1.start },
-                total: totals[day] ?? 0
+                total: totals[day] ?? 0,
+                asOf: now,
+                isLive: hasRunning && day == today
             )
         }
     }

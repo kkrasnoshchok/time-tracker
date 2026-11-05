@@ -103,3 +103,18 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - No automated check for `EntryRow` running/non-running choice, the «Без названия» fallback or the two empty-state sentences. Extract a pure helper and test it in `AppTests` when 3.3/3.4 touch the row.
 - The four manual checks of 3.1 are unticked (retro A6, author-owed).
 - Guard still misses modifier arguments wrapped onto the next line (`.font(` / `.title)`); a `$` alternative would flag legitimate wrapped `Typography.*` calls.
+
+## Added after Story 3.2 (2026-11-04), author decisions
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-2-day-header-with-total.md`
+  summary: Future epic: dark theme. The author saw the Journal looking worse in system dark mode; the app is light-only in v1 (DESIGN.md, epics non-goals).
+  evidence: Tokens are semantic, so a dark set can be added later; the fixed-light Palette card and the open dark-mode caret/selection items above belong to the same epic.
+- source_spec: `_bmad-output/implementation-artifacts/spec-3-2-day-header-with-total.md`
+  summary: Selected Journal row shows the native system blue; moved into Story 3.4 as an AC (surface-inset plus HairlineRing).
+  evidence: Author feedback while checking 3-2 in the running app; epic 3 context and `epics.md` updated.
+
+## Deferred from: code review of spec-3-2-day-header-with-total (2026-11-04)
+
+- No automated check that `DayHeader` passes the ticking `model.now` into `liveTotal(at:)` (replacing it with `group.asOf` keeps all Core tests green and freezes the header). Thin view glue; the author's manual check «header total moves with the running row» settles it. Extract a pure helper only if 3.4 touches the header again.
+- The three manual checks of 3-2: author-reported done on 2026-11-05 (no screenshots; accepted as in epic 2). Closed.
+- Near-midnight edge (accepted, rejected as low): until the next reload the old «today» group keeps growing and the title flips to «Вчера». Revisit if a regroup-on-day-change trigger is added.

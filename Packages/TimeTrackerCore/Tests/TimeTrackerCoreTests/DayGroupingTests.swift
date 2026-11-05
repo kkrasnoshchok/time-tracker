@@ -120,6 +120,63 @@ struct DayGroupingTests {
         #expect(groups[0].total == 5400)
     }
 
+    @Test func totalOfDayWithRunningEntryGrowsWithNow() throws {
+        time.current = day(3).addingTimeInterval(9 * 3600)
+        let running = try store.startTimer(category: work, title: nil, tags: [])
+        let reloadedAt = day(3).addingTimeInterval(10 * 3600)
+        let groups = DayGrouping.group([running], calendar: utc, now: reloadedAt)
+        #expect(groups[0].total == 3600)
+        #expect(groups[0].liveTotal(at: reloadedAt) == 3600)
+        #expect(groups[0].liveTotal(at: reloadedAt.addingTimeInterval(90)) == 3690)
+    }
+
+    @Test func totalNeverShrinksWhenNowIsEarlierThanGrouping() throws {
+        time.current = day(3).addingTimeInterval(9 * 3600)
+        let running = try store.startTimer(category: work, title: nil, tags: [])
+        let reloadedAt = day(3).addingTimeInterval(10 * 3600)
+        let groups = DayGrouping.group([running], calendar: utc, now: reloadedAt)
+        #expect(groups[0].liveTotal(at: reloadedAt.addingTimeInterval(-60)) == 3600)
+    }
+
+    @Test func totalOfDayWithoutRunningEntryIgnoresNow() throws {
+        let entry = try add(day(3).addingTimeInterval(9 * 3600), day(3).addingTimeInterval(10 * 3600))
+        let reloadedAt = day(3).addingTimeInterval(12 * 3600)
+        let groups = DayGrouping.group([entry], calendar: utc, now: reloadedAt)
+        #expect(groups[0].liveTotal(at: reloadedAt.addingTimeInterval(600)) == 3600)
+    }
+
+    @Test func pastDayStaysFixedWhileRunningEntryGrowsToday() throws {
+        let yesterday = try add(day(2).addingTimeInterval(9 * 3600), day(2).addingTimeInterval(10 * 3600))
+        time.current = day(3).addingTimeInterval(9 * 3600)
+        let running = try store.startTimer(category: work, title: nil, tags: [])
+        let reloadedAt = day(3).addingTimeInterval(10 * 3600)
+        let groups = DayGrouping.group([yesterday, running], calendar: utc, now: reloadedAt)
+        let later = reloadedAt.addingTimeInterval(300)
+        #expect(groups[0].liveTotal(at: later) == 3900)
+        #expect(groups[1].liveTotal(at: later) == 3600)
+    }
+
+    @Test func overnightRunningEntryMakesOnlyTodayLive() throws {
+        time.current = day(2).addingTimeInterval(23 * 3600)
+        let running = try store.startTimer(category: work, title: nil, tags: [])
+        let reloadedAt = day(3).addingTimeInterval(3600)
+        let groups = DayGrouping.group([running], calendar: utc, now: reloadedAt)
+        let later = reloadedAt.addingTimeInterval(300)
+        #expect(groups.map(\.day) == [day(3), day(2)])
+        #expect(groups.map(\.isLive) == [true, false])
+        #expect(groups[0].liveTotal(at: later) == 3600 + 300)
+        #expect(groups[1].liveTotal(at: later) == 3600)
+    }
+
+    @Test func runningEntryStartingAfterNowDoesNotMakeGroupLive() throws {
+        time.current = day(3).addingTimeInterval(11 * 3600)
+        let running = try store.startTimer(category: work, title: nil, tags: [])
+        let reloadedAt = day(3).addingTimeInterval(10 * 3600)
+        let groups = DayGrouping.group([running], calendar: utc, now: reloadedAt)
+        #expect(groups[0].isLive == false)
+        #expect(groups[0].liveTotal(at: reloadedAt.addingTimeInterval(600)) == groups[0].total)
+    }
+
     @Test func zeroLengthEntryStillAppears() throws {
         let entry = try add(day(1).addingTimeInterval(3600), day(1).addingTimeInterval(3600))
         let groups = DayGrouping.group([entry], calendar: utc, now: day(5))

@@ -60,7 +60,7 @@ NFR8: Rollout order: tokens and mapping first (FR1, FR2), then Palette (FR4), Jo
 - New-category tone choice in Categories tab: first tone in the order above not used by any category; if all eight used, cycle by `count % 8`. The stored value is the tone's own hex, which maps to itself. Two categories may share a tone; the category name always sits beside the dot.
 - «долго» is evaluated per entry from its duration (running: `now − start`); entries spanning midnight use their full duration; threshold 8h inclusive.
 - Open (not in scope, decide later): moving mapping and «долго» into Core; whether Palette in-place category creation uses the "first unused" rule.
-- Non-goals: dark theme; any change to Core, data model, palette grammar or hotkeys; a stop hotkey or "stop now" in Entry detail; rewriting stored colorHex; custom window chrome, replacing the menu bar item, restyling system dialogs.
+- Non-goals: dark theme (a separate future epic, see `deferred-work.md`); any change to Core, data model, palette grammar or hotkeys; a stop hotkey or "stop now" in Entry detail; rewriting stored colorHex; custom window chrome, replacing the menu bar item, restyling system dialogs.
 
 ### UX Design Requirements
 
@@ -533,6 +533,11 @@ So that the Journal does not jump.
 **Given** the Journal split view
 **When** a row is selected and deselected repeatedly, and the detail pane appears
 **Then** the list width does not change
+
+**Given** a Journal row is selected by click or arrow keys
+**When** the row is drawn
+**Then** it does not use the system blue selection; it sits on `surface-inset` with a `HairlineRing` (`Radius.row`), so it stays distinct from the running row, which has `surface-inset` and no ring
+**And** a row that is both selected and running shows both (inset fill and ring), and click and arrow-key selection still work
 
 **Given** the Journal in the running app
 **When** screenshots are taken for populated, running-entry, long-entry and empty states
