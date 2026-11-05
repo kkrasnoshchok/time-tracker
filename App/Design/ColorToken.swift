@@ -5,7 +5,7 @@ import SwiftUI
 /// TS analogy: a `const colors = { surfaceCanvas: "#F7F7F5", ... } as const`
 /// plus a union type of its keys. `CaseIterable` is like `Object.keys(colors)`.
 enum ColorToken: CaseIterable, Sendable {
-    case surfaceCanvas, surfaceCard, surfaceInset, surfaceInput
+    case surfaceCanvas, surfaceCard, surfaceInset, surfaceSelected, surfaceInput
     case textPrimary, textSecondary, textTertiary, textBody
     case actionPrimary, onActionPrimary, borderGhost
     case categoryClay, categoryOchre, categoryMoss, categoryLagoon
@@ -17,6 +17,7 @@ enum ColorToken: CaseIterable, Sendable {
         case .surfaceCanvas: "#F7F7F5"
         case .surfaceCard: "#FFFFFF"
         case .surfaceInset: "#EDECE7"
+        case .surfaceSelected: "#E1DEE6"
         case .surfaceInput: "#EEEEEE"
         case .textPrimary: "#1B0624"
         case .textSecondary: "#766A7C"
@@ -60,6 +61,7 @@ extension Color {
     static let surfaceCanvas = ColorToken.surfaceCanvas.color
     static let surfaceCard = ColorToken.surfaceCard.color
     static let surfaceInset = ColorToken.surfaceInset.color
+    static let surfaceSelected = ColorToken.surfaceSelected.color
     static let surfaceInput = ColorToken.surfaceInput.color
     static let textPrimary = ColorToken.textPrimary.color
     static let textSecondary = ColorToken.textSecondary.color

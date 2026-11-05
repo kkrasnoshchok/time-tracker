@@ -240,9 +240,6 @@ private struct EntryRow: View {
             rowFill,
             in: RoundedRectangle(cornerRadius: Radius.row)
         )
-        .overlay {
-            if isSelected { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
-        }
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
@@ -252,10 +249,10 @@ private struct EntryRow: View {
                 duration: duration, isLong: isLong, isRunning: isRunning))
     }
 
-    /// Running: inset (warm gray). Selected: card (white) with a ring. Never the system blue.
+    /// Running: inset (warm gray). Selected: a cool lavender-gray fill. Never the system blue.
     private var rowFill: Color {
         if isRunning { return Color.surfaceInset }
-        return isSelected ? Color.surfaceCard : Color.clear
+        return isSelected ? Color.surfaceSelected : Color.clear
     }
 
     private var isLong: Bool {

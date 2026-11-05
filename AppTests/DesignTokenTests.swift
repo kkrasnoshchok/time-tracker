@@ -8,6 +8,7 @@ struct DesignTokenTests {
         (ColorToken.surfaceCanvas, "#F7F7F5"),
         (.surfaceCard, "#FFFFFF"),
         (.surfaceInset, "#EDECE7"),
+        (.surfaceSelected, "#E1DEE6"),
         (.surfaceInput, "#EEEEEE"),
         (.textPrimary, "#1B0624"),
         (.textSecondary, "#766A7C"),
@@ -31,7 +32,7 @@ struct DesignTokenTests {
     }
 
     @Test func tokenTableCoversEveryColor() {
-        #expect(ColorToken.allCases.count == 19)
+        #expect(ColorToken.allCases.count == 20)
     }
 
     @Test(arguments: [
@@ -102,6 +103,7 @@ struct DesignTokenTests {
         (Color.surfaceCanvas, "#F7F7F5"),
         (.surfaceCard, "#FFFFFF"),
         (.surfaceInset, "#EDECE7"),
+        (.surfaceSelected, "#E1DEE6"),
         (.surfaceInput, "#EEEEEE"),
         (.textPrimary, "#1B0624"),
         (.textSecondary, "#766A7C"),

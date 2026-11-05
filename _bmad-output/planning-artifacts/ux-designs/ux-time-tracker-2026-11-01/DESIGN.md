@@ -10,6 +10,7 @@ colors:
   surface-canvas: '#F7F7F5'
   surface-card: '#FFFFFF'
   surface-inset: '#EDECE7'
+  surface-selected: '#E1DEE6'
   surface-input: '#EEEEEE'
   text-primary: '#1B0624'
   text-secondary: '#766A7C'
@@ -146,7 +147,8 @@ Interface is almost achromatic.
 
 - **`{colors.surface-canvas}` (Linen)**: window background. Warm off-white; never pure white as the page.
 - **`{colors.surface-card}` (white)**: cards, the palette panel, list containers.
-- **`{colors.surface-inset}` (Bone)**: nested panels, selected row, badges, running-entry row.
+- **`{colors.surface-inset}` (Bone)**: nested panels, badges, running-entry row.
+- **`{colors.surface-selected}` (Heather)**: the selected Journal row (a cool tint, so it differs from the warm running row).
 - **`{colors.surface-input}` (Mist)**: fillable areas only.
 - **`{colors.text-primary}` (Aubergine Ink)**: all primary text. **`{colors.action-primary}` (Espresso)**: the only filled button color.
 - **`{colors.text-secondary}` (Warm Ash)**: meta text (category name in a row, captions). **`{colors.text-tertiary}` (Stone)**: placeholders and decorative marks only; on white it is below AA for small text, so never use it for information the user must read.
