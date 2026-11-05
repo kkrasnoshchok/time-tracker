@@ -24,11 +24,7 @@ struct RunningTimerView: View {
                     .foregroundStyle(Color.textPrimary)
                     .lineLimit(1)
             }
-            Text(DurationFormat.clock(model.elapsed))
-                .typeRole(.timerDisplay)
-                .foregroundStyle(Color.textPrimary)
-                .tabularFigures()
-                .lineLimit(1)
+            elapsedRow
             if let title = entry.title {
                 Text(title)
                     .typeRole(.body)
@@ -40,6 +36,26 @@ struct RunningTimerView: View {
                 .buttonStyle(.primary)
                 .keyboardShortcut(.defaultAction)
         }
+    }
+
+    /// Elapsed time with the gray «долго» note beside it once the timer has run 8 hours or more.
+    private var elapsedRow: some View {
+        let note = PopoverText.longNote(start: entry.start, now: model.now)
+        return HStack(alignment: .firstTextBaseline, spacing: Space.x2) {
+            Text(DurationFormat.clock(model.elapsed))
+                .typeRole(.timerDisplay)
+                .foregroundStyle(Color.textPrimary)
+                .tabularFigures()
+                .lineLimit(1)
+            if let note {
+                Text(note)
+                    .typeRole(.caption)
+                    .foregroundStyle(Color.textSecondary)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            PopoverText.elapsedAccessibilityLabel(elapsed: model.elapsed, isLong: note != nil))
     }
 
     /// Notes use the input field look (`InputFieldShell`) around a multiline `TextEditor`.

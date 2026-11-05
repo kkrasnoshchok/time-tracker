@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-05-2026 12:17
+last_updated: 11-05-2026 22:15
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -61,7 +61,7 @@ development_status:
   epic-4: in-progress
   4-1-menu-bar-item-as-plain-text: review
   4-2-popover-in-the-design-language: done
-  4-3-долго-in-the-popover-and-menu-bar-guard: backlog
+  4-3-долго-in-the-popover-and-menu-bar-guard: review
   epic-4-retrospective: optional
 
   epic-5: backlog
