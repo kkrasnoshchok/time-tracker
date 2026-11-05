@@ -35,6 +35,7 @@ struct TimeTrackerApp: App {
                     Image(systemName: "clock")
                 }
             }
+            .accessibilityLabel(model.menuBarAccessibilityLabel)
             .background(RouterCapture())
         }
         .menuBarExtraStyle(.window)

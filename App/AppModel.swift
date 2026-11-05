@@ -36,8 +36,12 @@ final class AppModel {
 
     var menuBarTitle: String? {
         guard let running else { return nil }
-        let name = running.category?.name ?? ""
-        return "\(name) \(DurationFormat.clock(elapsed))"
+        return MenuBarLabel.text(category: running.category?.name, elapsed: elapsed)
+    }
+
+    var menuBarAccessibilityLabel: String {
+        MenuBarLabel.accessibilityLabel(
+            category: running?.category?.name, elapsed: running == nil ? nil : elapsed)
     }
 
     func stopTimer() {
