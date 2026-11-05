@@ -27,14 +27,19 @@ struct JournalEntriesView: View {
         }
     }
 
+    private static let detailWidth: CGFloat = 400
+
     private var selectedEntry: TimeEntry? {
         journal.groups.flatMap(\.entries).first { $0.id == selection }
     }
 
     var body: some View {
-        HSplitView {
-            entryList.frame(minWidth: 400, idealWidth: 500, maxWidth: .infinity, maxHeight: .infinity)
-            detail.frame(minWidth: 360, idealWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
+        // Fixed-width detail pane: the list takes the rest, so its width depends
+        // only on the window, never on what the detail pane contains.
+        HStack(spacing: 0) {
+            entryList.frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
+            Divider()
+            detail.frame(width: Self.detailWidth).frame(maxHeight: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .searchable(text: $journal.filter.text, prompt: "Поиск по названию, описанию, тегам")
@@ -63,6 +68,8 @@ struct JournalEntriesView: View {
             }
         }
         .scrollContentBackground(.hidden)
+        .onKeyPress(.upArrow) { moveSelection(by: -1) }
+        .onKeyPress(.downArrow) { moveSelection(by: 1) }
         .overlay {
             if journal.groups.isEmpty {
                 Text(journal.filter == EntryFilter() ? "Записей пока нет." : "Ничего не найдено.")
@@ -102,6 +109,20 @@ struct JournalEntriesView: View {
             }
             Button("Добавить запись", systemImage: "plus") { showingAddSheet = true }
         }
+    }
+
+    /// Arrow keys: move through all entries in on-screen order (days flattened).
+    private func moveSelection(by step: Int) -> KeyPress.Result {
+        let ids = journal.groups.flatMap(\.entries).map(\.id)
+        guard !ids.isEmpty else { return .ignored }
+        let next: Int
+        if let current = selection.flatMap({ ids.firstIndex(of: $0) }) {
+            next = min(max(current + step, 0), ids.count - 1)
+        } else {
+            next = step > 0 ? 0 : ids.count - 1
+        }
+        selection = ids[next]
+        return .handled
     }
 
     private func applyPeriod() {
@@ -205,11 +226,11 @@ private struct EntryRow: View {
         .padding(.horizontal, Space.x2)
         .frame(height: Space.rowHeight)
         .background(
-            isRunning || isSelected ? Color.surfaceInset : Color.clear,
+            isRunning ? Color.surfaceInset : Color.clear,
             in: RoundedRectangle(cornerRadius: Radius.row)
         )
         .overlay {
-            if isSelected { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
+            if isSelected && !isRunning { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
         }
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
