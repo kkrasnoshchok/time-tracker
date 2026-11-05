@@ -124,15 +124,9 @@ struct JournalEntriesView: View {
     /// Arrow keys: move through all entries in on-screen order (days flattened).
     private func moveSelection(by step: Int, proxy: ScrollViewProxy) -> KeyPress.Result {
         let ids = journal.groups.flatMap(\.entries).map(\.id)
-        guard !ids.isEmpty else { return .ignored }
-        let next: Int
-        if let current = selection.flatMap({ ids.firstIndex(of: $0) }) {
-            next = min(max(current + step, 0), ids.count - 1)
-        } else {
-            next = step > 0 ? 0 : ids.count - 1
-        }
-        selection = ids[next]
-        proxy.scrollTo(ids[next])
+        guard let next = JournalSelection.next(from: selection, in: ids, step: step) else { return .ignored }
+        selection = next
+        proxy.scrollTo(next)
         return .handled
     }
 
@@ -202,7 +196,7 @@ private struct EntryRow: View {
         HStack(spacing: Space.x3) {
             Text(entry.start.formatted(date: .omitted, time: .shortened))
                 .typeRole(.caption)
-                .foregroundStyle(Color.textSecondary)
+                .foregroundStyle(secondaryText)
                 .tabularFigures()
                 .lineLimit(1)
                 .fixedSize()
@@ -215,20 +209,20 @@ private struct EntryRow: View {
                 CategoryDot(storedHex: entry.category?.colorHex ?? "")
                 Text(entry.category?.name ?? "")
                     .typeRole(.body)
-                    .foregroundStyle(Color.textSecondary)
+                    .foregroundStyle(secondaryText)
                     .lineLimit(1)
             }
             HStack(spacing: Space.x2) {
                 if isLong {
                     Text(EntryRowText.longNote)
                         .typeRole(.caption)
-                        .foregroundStyle(Color.textSecondary)
+                        .foregroundStyle(secondaryText)
                         .lineLimit(1)
                         .fixedSize()
                 }
                 Text(DurationFormat.short(duration))
                     .typeRole(isRunning ? .bodyEmphasis : .body)
-                    .foregroundStyle(isRunning ? Color.textPrimary : Color.textSecondary)
+                    .foregroundStyle(isRunning ? Color.textPrimary : secondaryText)
                     .tabularFigures()
                     .lineLimit(1)
                     .fixedSize()
@@ -247,6 +241,11 @@ private struct EntryRow: View {
             EntryRowText.accessibilityLabel(
                 title: entry.title, category: entry.category?.name,
                 duration: duration, isLong: isLong, isRunning: isRunning))
+    }
+
+    /// `text-secondary` is 3.83:1 on `surface-selected` (below AA), so a selected row uses `text-primary`.
+    private var secondaryText: Color {
+        isSelected && !isRunning ? Color.textPrimary : Color.textSecondary
     }
 
     /// Running: inset (warm gray). Selected: a cool lavender-gray fill. Never the system blue.

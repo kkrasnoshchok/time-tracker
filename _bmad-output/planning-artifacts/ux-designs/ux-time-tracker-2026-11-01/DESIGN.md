@@ -148,7 +148,7 @@ Interface is almost achromatic.
 - **`{colors.surface-canvas}` (Linen)**: window background. Warm off-white; never pure white as the page.
 - **`{colors.surface-card}` (white)**: cards, the palette panel, list containers.
 - **`{colors.surface-inset}` (Bone)**: nested panels, badges, running-entry row.
-- **`{colors.surface-selected}` (Heather)**: the selected Journal row (a cool tint, so it differs from the warm running row).
+- **`{colors.surface-selected}` (Heather)**: the selected Journal row (a cool tint, so it differs from the warm running row). A running row that is also selected keeps the running fill (`surface-inset`) and shows no extra selection cue; accepted for now. Text on a selected row uses `text-primary` instead of `text-secondary` (3.83:1 on this fill, below AA; no lighter fill reaches 4.5:1 without matching the canvas).
 - **`{colors.surface-input}` (Mist)**: fillable areas only.
 - **`{colors.text-primary}` (Aubergine Ink)**: all primary text. **`{colors.action-primary}` (Espresso)**: the only filled button color.
 - **`{colors.text-secondary}` (Warm Ash)**: meta text (category name in a row, captions). **`{colors.text-tertiary}` (Stone)**: placeholders and decorative marks only; on white it is below AA for small text, so never use it for information the user must read.

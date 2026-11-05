@@ -124,3 +124,10 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - `.accessibilityElement(children: .ignore)` on the `EntryRow` of `List(selection:)` may drop the selected trait or row actions in VoiceOver (unverified medium). Settle with the author's VoiceOver check: the selected row must be announced as selected. If not, switch to `.combine` plus `.accessibilityAddTraits(isSelected ? .isSelected : [])`, as in `PaletteView.swift:200`.
 - No automated check that `EntryRow` feeds `entry.start`, `entry.end`, `now` into `LongEntry.isLong` and the real title, category and duration into `EntryRowText.accessibilityLabel`. Thin private-view glue; the author's manual checks cover it. Extract a pure `EntryRowModel(entry:now:)` only if 3.4 touches the row again.
 - The «долго» note widens the trailing group: the category column shifts on long rows, and the title may truncate earlier. Belongs to Story 3.4 (stable list width); recheck there.
+
+## Deferred from: code review of spec-3-4-stable-list-width-and-journal-guard (2026-11-05)
+
+- Arrow keys may not move selection right after a click or while the search field has focus (unverified medium). Settle: click a row and press ↓/↑; then focus the search field and press ↓.
+- VoiceOver may not select a Journal row: `onTapGesture` + `.isButton`, `children: .ignore`, no `accessibilityAction` (unverified medium, same open item as the 3-3 deferral). Settle: VO+Space on a row selects it and it is announced as selected.
+- Detail pane content may overflow the fixed 400pt width (unverified medium; the cause of the original width change was never confirmed by diagnostics). Settle: check the width with a long title, note and many tags.
+- `epic-3-context.md` line 24 and the frozen block of spec 3-4 still say `surface-inset` + `HairlineRing`; shipped is `surface-selected`, no ring. Update on the author's say-so.
