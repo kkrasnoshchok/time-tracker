@@ -48,6 +48,7 @@ struct RunningTimerView: View {
         InputFieldShell(
             isFocused: notesFocused,
             content: TextEditor(text: $notes)
+                .typeRole(.body)
                 .scrollContentBackground(.hidden)
                 .focused($notesFocused)
                 .frame(minHeight: 70, maxHeight: 70)
@@ -61,7 +62,7 @@ struct RunningTimerView: View {
                     .typeRole(.body)
                     .foregroundStyle(Color.textTertiary)
                     .padding(.horizontal, Space.x3 + 5)
-                    .padding(.top, Space.x2)
+                    .padding(.top, Space.x2 + 1)
                     .allowsHitTesting(false)
             }
         }
