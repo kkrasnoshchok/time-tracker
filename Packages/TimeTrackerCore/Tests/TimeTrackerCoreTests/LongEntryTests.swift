@@ -34,6 +34,14 @@ struct LongEntryTests {
         #expect(LongEntry.isLong(start: evening, end: morning, now: morning))
     }
 
+    @Test func finishedWithEndBeforeStartIsNotLong() {
+        #expect(!LongEntry.isLong(start: start, end: start.addingTimeInterval(-3600), now: at(hours: 20)))
+    }
+
+    @Test func finishedWithZeroDurationIsNotLong() {
+        #expect(!LongEntry.isLong(start: start, end: start, now: at(hours: 20)))
+    }
+
     @Test func clockBeforeStartIsNotLong() {
         #expect(!LongEntry.isLong(start: start, end: nil, now: start.addingTimeInterval(-3600)))
     }

@@ -118,3 +118,9 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - No automated check that `DayHeader` passes the ticking `model.now` into `liveTotal(at:)` (replacing it with `group.asOf` keeps all Core tests green and freezes the header). Thin view glue; the author's manual check «header total moves with the running row» settles it. Extract a pure helper only if 3.4 touches the header again.
 - The three manual checks of 3-2: author-reported done on 2026-11-05 (no screenshots; accepted as in epic 2). Closed.
 - Near-midnight edge (accepted, rejected as low): until the next reload the old «today» group keeps growing and the title flips to «Вчера». Revisit if a regroup-on-day-change trigger is added.
+
+## Deferred from: code review of spec-3-3-dolgo-rule-and-note (2026-11-05)
+
+- `.accessibilityElement(children: .ignore)` on the `EntryRow` of `List(selection:)` may drop the selected trait or row actions in VoiceOver (unverified medium). Settle with the author's VoiceOver check: the selected row must be announced as selected. If not, switch to `.combine` plus `.accessibilityAddTraits(isSelected ? .isSelected : [])`, as in `PaletteView.swift:200`.
+- No automated check that `EntryRow` feeds `entry.start`, `entry.end`, `now` into `LongEntry.isLong` and the real title, category and duration into `EntryRowText.accessibilityLabel`. Thin private-view glue; the author's manual checks cover it. Extract a pure `EntryRowModel(entry:now:)` only if 3.4 touches the row again.
+- The «долго» note widens the trailing group: the category column shifts on long rows, and the title may truncate earlier. Belongs to Story 3.4 (stable list width); recheck there.

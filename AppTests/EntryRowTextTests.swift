@@ -20,6 +20,12 @@ struct EntryRowTextTests {
         #expect(label == "Без названия, 10 мин, идёт")
     }
 
+    @Test func longRunningEntryReadsLongNoteBeforeRunningCue() {
+        let label = EntryRowText.accessibilityLabel(
+            title: "A", category: nil, duration: 9 * 3600, isLong: true, isRunning: true)
+        #expect(label == "A, 9 ч, долго, идёт")
+    }
+
     @Test func emptyCategoryIsSkipped() {
         let label = EntryRowText.accessibilityLabel(
             title: "A", category: "", duration: 60, isLong: false, isRunning: false)
