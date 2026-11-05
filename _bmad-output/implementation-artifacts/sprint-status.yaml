@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-05-2026
+last_updated: 11-05-2026 12:17
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -51,12 +51,12 @@ development_status:
   2-4-palette-verification-and-guard: done
   epic-2-retrospective: done
 
-  epic-3: in-progress
+  epic-3: done
   3-1-journal-rows: done
   3-2-day-header-with-total: done
   3-3-долго-rule-and-note: done
   3-4-stable-list-width-and-journal-guard: done
-  epic-3-retrospective: optional
+  epic-3-retrospective: done
 
   epic-4: backlog
   4-1-menu-bar-item-as-plain-text: backlog
@@ -156,7 +156,7 @@ action_items:
     action: "A6: Run manual checks for text-field and key-handling stories before
       the code review"
     owner: "Vadym"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
   - id: "epic-2-retro-item-13-a7-run-explain-change-over-83a143b-f6480"
     epic: 2
@@ -165,3 +165,52 @@ action_items:
     owner: "Vadym"
     status: open
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-04.md"
+  - id: "epic-3-retro-item-14-b1-reconcile-specs-with-the-as-built-jou"
+    epic: 3
+    action: "B1: Reconcile specs with the as-built Journal (epics.md Story 3.4 AC2/AC3/AC4,
+      Core non-goal wording, epic-3-context line 24, frozen block of spec 3-4)"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-15-b2-set-epic-3-to-done-in-sprint-status-y"
+    epic: 3
+    action: "B2: Set epic-3 to done in sprint-status.yaml and make the last-story
+      close step flip the epic key"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-16-b3-record-author-reported-manual-checks"
+    epic: 3
+    action: "B3: Record author-reported manual checks of 3-1, 3-3, 3-4 in deferred-work.md
+      and run the VoiceOver row-selection check"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-17-b4-before-story-4-3-extract-a-pure-entry"
+    epic: 3
+    action: "B4: Inside Story 4.2 (decided 2026-11-05) extract a pure EntryRowModel with
+      tests and move EntryRow and DayHeader out of JournalEntriesView.swift"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-18-b5-first-commit-of-a-story-names-the-sto"
+    epic: 3
+    action: "B5: First commit of a story names the story and holds only that story;
+      preparatory work gets its own chore commit"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-19-b6-for-stories-that-depend-on-native-con"
+    epic: 3
+    action: "B6: For stories that depend on native control look or keys, write the
+      assumption as unverified and try it in the running app before review"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-3-retro-item-20-b7-run-explain-change-over-f648064-51b24"
+    epic: 3
+    action: "B7: Run explain-change over f648064..51b245b and 83a143b..f648064 for
+      the owed Swift-concept explanations"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"

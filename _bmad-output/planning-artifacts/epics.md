@@ -606,6 +606,12 @@ So that it matches the other surfaces.
 **And** the empty `InputField` placeholder is `text-tertiary`, a click places the caret, drag selects and double-click selects a word, and Tab into the field turns its border `action-primary`
 **And** the category dot shows in its tone with the category name beside it
 
+**Given** Story 4.3 will reuse the «долго» row logic (Epic 3 retrospective item B4, moved here from "before 4.3")
+**When** Story 4.2 is done
+**Then** a pure `EntryRowModel` exists with tests seen failing first, and `EntryRow` and `DayHeader` live outside `JournalEntriesView.swift`
+**And** the Journal looks and behaves as before (token guard and existing tests still pass)
+**And** this refactor is its own `chore(4-2)` commit, not mixed into the popover commits (retrospective item B5)
+
 ### Story 4.3: «долго» in the popover and menu bar guard
 
 As the author,

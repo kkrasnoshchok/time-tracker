@@ -19,6 +19,7 @@
 - Не знаешь, с чего начать: `bmad-help`. Фича: `bmad-prd` → `bmad-ux` / `bmad-architecture` → `bmad-create-epics-and-stories` → `bmad-sprint-planning` → `bmad-build` → `bmad-code-review`. Мелочи: `bmad-spec` + `bmad-build`.
 - Superpowers остаётся набором отдельных навыков (TDD, отладка, ревью), но spec и планы пишем через BMAD. Старые спеки лежат в `docs/superpowers/`.
 - Обновление BMAD: только осознанно, с пересмотром архива по правилу про сторонний код; внешние модули не ставим.
+- Статус эпика (`epic-N` в `sprint-status.yaml`) переключаем в `done` вручную, одной строкой, когда закрыта последняя история или в конце ретро. `sprint_status.py update` ставит только `epic-N-retrospective`, поэтому без этого шага ключ эпика зависает в `in-progress`.
 - Личные настройки BMAD (имя, язык) в `_bmad/custom/config.user.toml`, он в `.gitignore`.
 - Дорожная карта: `docs/superpowers/specs/2026-11-01-bmad-and-ui-roadmap-design.md`.
 
