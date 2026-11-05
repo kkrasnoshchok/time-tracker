@@ -27,7 +27,7 @@ The Journal reads in one calm glance: a day header with the total «в фоку�
 - `Date()` is forbidden in logic and tests; no `sleep`. Time is stored in UTC; "now" comes from `TimeProvider`.
 - Logic belongs in `Packages/TimeTrackerCore` where it is pure and shared (the «долго» rule, day totals if not already there); `App/Journal` views only render state.
 - Last story adds `App/Journal/JournalEntriesView.swift` to `scripts/token-guard-paths.txt`; `scripts/check-tokens.sh` must exit 0. Per retro A4 the guard is widened first (see below). Run the guard at the end of every UI task.
-- Commit subjects name the story: `feat(3-1): …`, `test(3-3): …`. Nothing is committed and `sprint-status.yaml` is not edited by hand until the author says so.
+- Commit subjects name the story: `feat(3-1): …`, `test(3-3): …`.
 
 ## Technical Decisions
 
