@@ -4,3 +4,4 @@
 # colors used as mapping keys (data, not styling); the tone values themselves live in App/Design/ColorToken.swift.
 App/Design
 App/Palette
+App/Journal/JournalEntriesView.swift

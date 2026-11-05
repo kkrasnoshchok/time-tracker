@@ -55,7 +55,7 @@ development_status:
   3-1-journal-rows: done
   3-2-day-header-with-total: done
   3-3-долго-rule-and-note: done
-  3-4-stable-list-width-and-journal-guard: backlog
+  3-4-stable-list-width-and-journal-guard: review
   epic-3-retrospective: optional
 
   epic-4: backlog

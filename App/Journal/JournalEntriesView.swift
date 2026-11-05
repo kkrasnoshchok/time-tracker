@@ -53,13 +53,16 @@ struct JournalEntriesView: View {
             ForEach(journal.groups, id: \.day) { group in
                 Section {
                     ForEach(group.entries) { entry in
-                        EntryRow(entry: entry, now: model.now).tag(entry.id)
+                        EntryRow(entry: entry, now: model.now, isSelected: selection == entry.id)
+                            .tag(entry.id)
+                            .listRowBackground(Color.clear)
                     }
                 } header: {
                     DayHeader(group: group, now: model.now)
                 }
             }
         }
+        .scrollContentBackground(.hidden)
         .overlay {
             if journal.groups.isEmpty {
                 Text(journal.filter == EntryFilter() ? "Записей пока нет." : "Ничего не найдено.")
@@ -159,6 +162,7 @@ private struct DayHeader: View {
 private struct EntryRow: View {
     let entry: TimeEntry
     let now: Date
+    let isSelected: Bool
 
     private var isRunning: Bool { entry.end == nil }
 
@@ -200,7 +204,13 @@ private struct EntryRow: View {
         }
         .padding(.horizontal, Space.x2)
         .frame(height: Space.rowHeight)
-        .background(isRunning ? Color.surfaceInset : Color.clear, in: RoundedRectangle(cornerRadius: Radius.row))
+        .background(
+            isRunning || isSelected ? Color.surfaceInset : Color.clear,
+            in: RoundedRectangle(cornerRadius: Radius.row)
+        )
+        .overlay {
+            if isSelected { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
+        }
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
