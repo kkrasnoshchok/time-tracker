@@ -53,28 +53,38 @@ struct JournalEntriesView: View {
         .onAppear { journal.reload() }
     }
 
+    /// Selection is drawn and handled by us, not by `List(selection:)`: the native
+    /// macOS highlight is the system blue and cannot be restyled. A tap sets
+    /// `selection`, the arrow keys move it, and each row paints its own state
+    /// (like a controlled component in React instead of a native <select>).
     private var entryList: some View {
-        List(selection: $selection) {
-            ForEach(journal.groups, id: \.day) { group in
-                Section {
-                    ForEach(group.entries) { entry in
-                        EntryRow(entry: entry, now: model.now, isSelected: selection == entry.id)
-                            .tag(entry.id)
-                            .listRowBackground(Color.clear)
+        ScrollViewReader { proxy in
+            List {
+                ForEach(journal.groups, id: \.day) { group in
+                    Section {
+                        ForEach(group.entries) { entry in
+                            EntryRow(entry: entry, now: model.now, isSelected: selection == entry.id)
+                                .id(entry.id)
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .onTapGesture { selection = entry.id }
+                        }
+                    } header: {
+                        DayHeader(group: group, now: model.now)
                     }
-                } header: {
-                    DayHeader(group: group, now: model.now)
                 }
             }
-        }
-        .scrollContentBackground(.hidden)
-        .onKeyPress(.upArrow) { moveSelection(by: -1) }
-        .onKeyPress(.downArrow) { moveSelection(by: 1) }
-        .overlay {
-            if journal.groups.isEmpty {
-                Text(journal.filter == EntryFilter() ? "Записей пока нет." : "Ничего не найдено.")
-                    .typeRole(.body)
-                    .foregroundStyle(Color.textSecondary)
+            .scrollContentBackground(.hidden)
+            .focusable()
+            .focusEffectDisabled()
+            .onKeyPress(.upArrow) { moveSelection(by: -1, proxy: proxy) }
+            .onKeyPress(.downArrow) { moveSelection(by: 1, proxy: proxy) }
+            .overlay {
+                if journal.groups.isEmpty {
+                    Text(journal.filter == EntryFilter() ? "Записей пока нет." : "Ничего не найдено.")
+                        .typeRole(.body)
+                        .foregroundStyle(Color.textSecondary)
+                }
             }
         }
     }
@@ -112,7 +122,7 @@ struct JournalEntriesView: View {
     }
 
     /// Arrow keys: move through all entries in on-screen order (days flattened).
-    private func moveSelection(by step: Int) -> KeyPress.Result {
+    private func moveSelection(by step: Int, proxy: ScrollViewProxy) -> KeyPress.Result {
         let ids = journal.groups.flatMap(\.entries).map(\.id)
         guard !ids.isEmpty else { return .ignored }
         let next: Int
@@ -122,6 +132,7 @@ struct JournalEntriesView: View {
             next = step > 0 ? 0 : ids.count - 1
         }
         selection = ids[next]
+        proxy.scrollTo(ids[next])
         return .handled
     }
 
@@ -226,18 +237,25 @@ private struct EntryRow: View {
         .padding(.horizontal, Space.x2)
         .frame(height: Space.rowHeight)
         .background(
-            isRunning ? Color.surfaceInset : Color.clear,
+            rowFill,
             in: RoundedRectangle(cornerRadius: Radius.row)
         )
         .overlay {
-            if isSelected && !isRunning { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
+            if isSelected { Color.clear.hairlineRing(RoundedRectangle(cornerRadius: Radius.row)) }
         }
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
         .accessibilityLabel(
             EntryRowText.accessibilityLabel(
                 title: entry.title, category: entry.category?.name,
                 duration: duration, isLong: isLong, isRunning: isRunning))
+    }
+
+    /// Running: inset (warm gray). Selected: card (white) with a ring. Never the system blue.
+    private var rowFill: Color {
+        if isRunning { return Color.surfaceInset }
+        return isSelected ? Color.surfaceCard : Color.clear
     }
 
     private var isLong: Bool {
