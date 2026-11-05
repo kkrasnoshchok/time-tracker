@@ -9,7 +9,9 @@ struct MenuBarContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Space.x3) {
             if let entry = model.running {
+                // `.id` is like React's `key`: a new entry remounts the view, so `notes` state resets.
                 RunningTimerView(model: model, entry: entry)
+                    .id(entry.persistentModelID)
             } else {
                 idle
             }

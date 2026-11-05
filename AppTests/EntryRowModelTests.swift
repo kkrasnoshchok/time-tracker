@@ -46,4 +46,16 @@ struct EntryRowModelTests {
         let row = model(now: 9 * 3600)
         #expect(row.accessibilityLabel == "Отчёт, Работа, 9 ч, долго, идёт")
     }
+
+    @Test func labelUsesUntitledWhenTitleMissing() {
+        #expect(model(now: 60, title: nil).accessibilityLabel == "Без названия, Работа, 1 мин, идёт")
+    }
+
+    @Test func labelOmitsCategoryWhenMissing() {
+        #expect(model(now: 60, category: nil).accessibilityLabel == "Отчёт, 1 мин, идёт")
+    }
+
+    @Test func labelOfFinishedShortEntryHasNoLongOrRunning() {
+        #expect(model(end: 5400, now: 99_999).accessibilityLabel == "Отчёт, Работа, 1 ч 30 мин")
+    }
 }

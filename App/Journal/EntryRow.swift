@@ -13,7 +13,7 @@ struct EntryRow: View {
 
     var body: some View {
         HStack(spacing: Space.x3) {
-            Text(entry.start.formatted(date: .omitted, time: .shortened))
+            Text(model.start.formatted(date: .omitted, time: .shortened))
                 .typeRole(.caption)
                 .foregroundStyle(secondaryText)
                 .tabularFigures()
@@ -26,7 +26,7 @@ struct EntryRow: View {
             Spacer(minLength: Space.x2)
             HStack(spacing: Space.x2) {
                 CategoryDot(storedHex: entry.category?.colorHex ?? "")
-                Text(entry.category?.name ?? "")
+                Text(model.displayCategory)
                     .typeRole(.body)
                     .foregroundStyle(secondaryText)
                     .lineLimit(1)

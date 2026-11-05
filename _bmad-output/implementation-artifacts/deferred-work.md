@@ -131,3 +131,8 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - VoiceOver may not select a Journal row: `onTapGesture` + `.isButton`, `children: .ignore`, no `accessibilityAction` (unverified medium, same open item as the 3-3 deferral). Settle: VO+Space on a row selects it and it is announced as selected.
 - Detail pane content may overflow the fixed 400pt width (unverified medium; the cause of the original width change was never confirmed by diagnostics). Settle: check the width with a long title, note and many tags.
 - `epic-3-context.md` line 24 and the frozen block of spec 3-4 still say `surface-inset` + `HairlineRing`; shipped is `surface-selected`, no ring. Update on the author's say-so.
+
+## Deferred from: code review of story 4-2 popover-in-the-design-language (2026-11-05)
+
+- `App/MenuBar/MenuBarContent.swift` and `RunningTimerView.swift` are migrated to tokens but not in `scripts/token-guard-paths.txt`, so a return to `.headline`, `.secondary` or `.red` passes `scripts/check-tokens.sh`. Planned for Story 4.3 (epic-4-context); add both files there and run the guard. Raw numbers (70pt notes height, 340pt width, placeholder offsets `Space.x3 + 5`, `Space.x2 + 1`) are not caught by the guard either.
+- `DayHeader.title` decides «Сегодня»/«Вчера» with `Calendar.current` (system clock) instead of the `now` it already receives, so it is untestable. Pre-existing, moved unchanged in `764b3ab`. Extract a pure helper taking `now` and a calendar if the header is touched again.
