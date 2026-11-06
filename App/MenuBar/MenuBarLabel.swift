@@ -5,6 +5,7 @@ import TimeTrackerCore
 enum MenuBarLabel {
     static let noCategory = "Без категории"
     static let idle = "Таймер не запущен"
+    static let lessThanAMinute = "меньше минуты"
 
     /// Visible text while a timer runs: `Работа 12:05`.
     static func text(category: String?, elapsed: TimeInterval) -> String {
@@ -14,7 +15,8 @@ enum MenuBarLabel {
     /// VoiceOver sentence: category and elapsed time, or the idle state.
     static func accessibilityLabel(category: String?, elapsed: TimeInterval?) -> String {
         guard let elapsed else { return idle }
-        return "\(name(category)), \(DurationFormat.short(elapsed))"
+        let spoken = elapsed < 60 ? lessThanAMinute : DurationFormat.short(elapsed)
+        return "\(name(category)), \(spoken)"
     }
 
     private static func name(_ category: String?) -> String {

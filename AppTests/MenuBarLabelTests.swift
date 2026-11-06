@@ -22,4 +22,14 @@ struct MenuBarLabelTests {
     @Test func accessibilityIdleSaysNothingRuns() {
         #expect(MenuBarLabel.accessibilityLabel(category: nil, elapsed: nil) == "Таймер не запущен")
     }
+
+    @Test func accessibilityUnderAMinuteSaysLessThanAMinute() {
+        #expect(MenuBarLabel.accessibilityLabel(category: "Работа", elapsed: 0) == "Работа, меньше минуты")
+        #expect(MenuBarLabel.accessibilityLabel(category: "Работа", elapsed: 59) == "Работа, меньше минуты")
+        #expect(MenuBarLabel.accessibilityLabel(category: "Работа", elapsed: 60) == "Работа, 1 мин")
+    }
+
+    @Test func accessibilityMissingCategoryUsesFallback() {
+        #expect(MenuBarLabel.accessibilityLabel(category: nil, elapsed: 5400) == "Без категории, 1 ч 30 мин")
+    }
 }
