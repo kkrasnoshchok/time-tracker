@@ -136,3 +136,12 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 
 - `App/MenuBar/MenuBarContent.swift` and `RunningTimerView.swift` are migrated to tokens but not in `scripts/token-guard-paths.txt`, so a return to `.headline`, `.secondary` or `.red` passes `scripts/check-tokens.sh`. Planned for Story 4.3 (epic-4-context); add both files there and run the guard. Raw numbers (70pt notes height, 340pt width, placeholder offsets `Space.x3 + 5`, `Space.x2 + 1`) are not caught by the guard either.
 - `DayHeader.title` decides «Сегодня»/«Вчера» with `Calendar.current` (system clock) instead of the `now` it already receives, so it is untestable. Pre-existing, moved unchanged in `764b3ab`. Extract a pure helper taking `now` and a calendar if the header is touched again.
+
+## Deferred from: code review of spec-4-3-long-in-the-popover-and-menu-bar-guard (2026-11-05)
+
+- `RunningTimerView.elapsedRow` wiring (`entry.start` + `model.now` into `PopoverText.longNote`, `isLong: note != nil`, `.accessibilityElement(children: .ignore)`) has no automated test; only the pure helpers are covered. Repo has no SwiftUI view tests. Settle it with the manual check owed in the spec (timer 8h+ via a shifted start in a debug store: gray «долго» on the baseline beside the 32pt timer, fits 340pt, VoiceOver reads time plus «долго»). If a swapped flag or time source ever matters, move the `note`/label decision into one pure function and test that.
+
+## Deferred from: code review of spec-4-1-menu-bar-item-as-plain-text (2026-11-06)
+
+- VoiceOver on the menu bar item is not verified: it should read category and elapsed time (unverified medium, spec 4-1). The visual check passed on 2026-11-07 (plain `Text`, no color, no jitter). The author postponed VoiceOver until before release. Settle: run the app, VO on the menu bar item.
+- Static `.accessibilityLabel` on a ticking menu bar label may not be re-read or may go stale (unverified, low to medium). Settle in the same VoiceOver run: wait past a minute, re-focus the item. If stale, add `.accessibilityAddTraits(.updatesFrequently)` or an `accessibilityValue`.
