@@ -9,3 +9,4 @@ App/Journal/EntryRow.swift
 App/Journal/DayHeader.swift
 App/Journal/EntryRowModel.swift
 App/MenuBar
+App/Journal/ToneSwatchPicker.swift

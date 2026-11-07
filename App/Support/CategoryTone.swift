@@ -46,6 +46,18 @@ enum CategoryTone: String, CaseIterable, Sendable {
         return best?.tone ?? .taupe
     }
 
+    /// Tone for a new category: the first tone in `tieBreakOrder` that no stored hex maps to.
+    /// When all eight are used it cycles by how many categories exist (`count % 8`).
+    /// Like picking the first unused key from an ordered list in TS, with a modulo fallback.
+    /// The caller stores `result.hex`, which maps back to the same tone.
+    static func nextFree(usedStoredHexes: [String]) -> CategoryTone {
+        let used = Set(usedStoredHexes.map { CategoryTone(storedHex: $0) })
+        if let free = tieBreakOrder.first(where: { !used.contains($0) }) {
+            return free
+        }
+        return tieBreakOrder[usedStoredHexes.count % tieBreakOrder.count]
+    }
+
     /// This tone mixed `fraction` (0...1) over a `#RRGGBB` base, per sRGB channel, rounded.
     /// Pure math, like a `mix(a, b, t)` helper in TS; an invalid base falls back to the tone itself.
     func tintedHex(over baseHex: String, fraction: Double) -> String {

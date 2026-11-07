@@ -35,7 +35,7 @@ struct CategoriesView: View {
 
     private func add() {
         do {
-            try journal.addCategory(name: newName, colorHex: randomColor())
+            try journal.addCategory(name: newName, colorHex: newCategoryHex())
             newName = ""
             problem = nil
         } catch {
@@ -66,8 +66,9 @@ struct CategoriesView: View {
         }
     }
 
-    private func randomColor() -> String {
-        PaletteViewModel.categoryColors[journal.categories.count % PaletteViewModel.categoryColors.count]
+    /// First tone no category uses yet; its own hex is stored so it maps to itself.
+    private func newCategoryHex() -> String {
+        CategoryTone.nextFree(usedStoredHexes: journal.categories.map(\.colorHex)).hex
     }
 }
 
@@ -93,7 +94,7 @@ private struct CategoryRow: View {
 
     var body: some View {
         HStack {
-            ColorPicker("", selection: colorBinding, supportsOpacity: false).labelsHidden()
+            ToneSwatchPicker(storedHex: category.colorHex, onSelect: select)
             TextField("Название", text: $name)
                 .onSubmit(rename)
             Spacer()
@@ -103,17 +104,12 @@ private struct CategoryRow: View {
         }
     }
 
-    private var colorBinding: Binding<Color> {
-        Binding(
-            get: { Color(hex: category.colorHex) },
-            set: { newColor in
-                do throws(StoreError) {
-                    try journal.setColor(newColor.hexString, for: category)
-                } catch {
-                    problem = error
-                }
-            }
-        )
+    private func select(_ tone: CategoryTone) {
+        do throws(StoreError) {
+            try journal.setColor(tone.hex, for: category)
+        } catch {
+            problem = error
+        }
     }
 
     private func rename() {

@@ -69,4 +69,40 @@ struct CategoryToneTests {
     func invalidHexIsTaupe(hex: String) {
         #expect(CategoryTone(storedHex: hex) == .taupe)
     }
+    // MARK: First unused tone (Story 5.1)
+
+    @Test func noCategoriesGivesClay() {
+        #expect(CategoryTone.nextFree(usedStoredHexes: []) == .clay)
+    }
+
+    @Test func clayUsedGivesOchre() {
+        #expect(CategoryTone.nextFree(usedStoredHexes: [CategoryTone.clay.hex]) == .ochre)
+    }
+
+    @Test func firstGapInOrderWins() {
+        let used = [CategoryTone.clay, .ochre, .lagoon].map(\.hex)
+        #expect(CategoryTone.nextFree(usedStoredHexes: used) == .moss)
+    }
+
+    @Test func brightCoreHexCountsAsItsTone() {
+        // #FF9F0A is the old orange, which maps to clay.
+        #expect(CategoryTone.nextFree(usedStoredHexes: ["#FF9F0A"]) == .ochre)
+    }
+
+    @Test func invalidHexCountsAsTaupe() {
+        let used = CategoryTone.tieBreakOrder.dropLast().map(\.hex) + [""]
+        // Seven tones plus taupe via the invalid hex: all eight used, count 8 % 8 == 0.
+        #expect(CategoryTone.nextFree(usedStoredHexes: used) == .clay)
+    }
+
+    @Test func allEightUsedCyclesByCount() {
+        let used = CategoryTone.tieBreakOrder.map(\.hex)
+        #expect(CategoryTone.nextFree(usedStoredHexes: used) == .clay)
+        #expect(CategoryTone.nextFree(usedStoredHexes: used + used.prefix(3)) == .lagoon)
+    }
+
+    @Test(arguments: CategoryTone.allCases)
+    func storedValueMapsToItself(tone: CategoryTone) {
+        #expect(CategoryTone(storedHex: tone.hex) == tone)
+    }
 }
