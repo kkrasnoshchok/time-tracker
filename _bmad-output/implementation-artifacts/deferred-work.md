@@ -145,3 +145,7 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 
 - VoiceOver on the menu bar item is not verified: it should read category and elapsed time (unverified medium, spec 4-1). The visual check passed on 2026-11-07 (plain `Text`, no color, no jitter). The author postponed VoiceOver until before release. Settle: run the app, VO on the menu bar item.
 - Static `.accessibilityLabel` on a ticking menu bar label may not be re-read or may go stale (unverified, low to medium). Settle in the same VoiceOver run: wait past a minute, re-focus the item. If stale, add `.accessibilityAddTraits(.updatesFrequently)` or an `accessibilityValue`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-1-tone-swatches-in-the-categories-tab.md`
+  summary: `Color.hexString` in `App/Support/Color+Hex.swift` is now used only by tests after `ColorPicker` was removed; delete it (and its test usage) or keep deliberately.
+  evidence: grep shows references only in `AppTests/DesignTokenTests.swift`; candidate for the whole-app cleanup in Story 5.4.

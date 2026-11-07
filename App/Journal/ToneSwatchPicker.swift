@@ -28,7 +28,7 @@ enum ToneSwatch {
 
 /// Row of eight tone swatches. The chosen one is marked by a ring and a check,
 /// so color is never the only carrier. Like a `<RadioGroup>` of colored buttons:
-/// `ForEach(CategoryTone.allCases)` is `tones.map(...)`, and `onSelect` is the
+/// `ForEach` over the tones is `tones.map(...)`, and `onSelect` is the
 /// `onChange` callback prop. The parent owns the value (a controlled component).
 struct ToneSwatchPicker: View {
     let storedHex: String

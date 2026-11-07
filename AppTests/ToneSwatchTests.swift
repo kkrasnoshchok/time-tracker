@@ -21,4 +21,9 @@ struct ToneSwatchTests {
     @Test func everyToneHasAName() {
         #expect(Set(CategoryTone.allCases.map { ToneSwatch.displayName($0) }).count == 8)
     }
+
+    @Test func pickerOrderCoversEveryTone() {
+        #expect(Set(CategoryTone.tieBreakOrder) == Set(CategoryTone.allCases))
+        #expect(CategoryTone.tieBreakOrder.count == CategoryTone.allCases.count)
+    }
 }

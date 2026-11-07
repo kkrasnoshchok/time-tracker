@@ -2,7 +2,7 @@
 title: 'Tone swatches in the Categories tab'
 type: 'feature'
 created: '2026-11-07'
-status: 'in-progress'
+status: 'done'
 route: 'oneshot'
 review_loop_iteration: 0
 context:
@@ -42,3 +42,21 @@ context:
 - Done: `CategoryTone.nextFree(usedStoredHexes:)`; `ToneSwatch` (names, selected flag, VoiceOver text) and `ToneSwatchPicker` in `App/Journal/ToneSwatchPicker.swift` (24pt hit area, ring plus check on the selected tone, `.plain` buttons, `.help` tooltip); `CategoriesView` uses it, `ColorPicker`, `colorBinding` and `randomColor()` are gone (grep clean); `ToneSwatchPicker.swift` added to the guard list.
 - Seen: tests red first (compile: `nextFree`, `ToneSwatch` missing); then App tests succeeded, Core 208 passed, swiftlint 0, `check-tokens.sh` exit 0, `test-check-tokens.sh` passed.
 - Running app (B6): the Debug build launches, but this session has no screen control (no assistive access), so the Categories tab was NOT inspected. Owed by the author: [ ] swatches render as eight 24pt circles, selected one has ring and check; [ ] Tab reaches the swatches and Space/Return selects; [ ] clicking a swatch changes the dot color in Journal; [ ] a new category gets the first unused tone; [ ] VoiceOver reads name and «выбран».
+- Author-reported 2026-11-07: all five items above checked in the running app, OK (no issues).
+
+## Review Triage Log
+
+- Stale doc comment says `allCases`, code uses `tieBreakOrder` + no test tying the lists: low, real. Patched (comment, `pickerOrderCoversEveryTone`).
+- Group label «Цвет категории» has no category name: low, rare; row's text field sits beside it. Rejected.
+- No arrow-key navigation / focus ring / radio-group trait: Tab+Space author-checked OK; Epic 5.3 chrome. Rejected.
+- Checkmark contrast on ochre/taupe: author saw it on screen, OK. Rejected.
+- Literal 24/4/1.5 sizes, narrow window overflow: guard passes, author-checked at normal width. Rejected.
+- Hard-coded Russian strings: false, app is Russian-only with no string catalog.
+- Tapping the selected swatch rewrites a legacy bright hex to the tone hex: harmless, arguably wanted. Rejected.
+- No tests for `CategoryRow.select`/error path: thin glue, covered by manual checks (retro C5). Rejected.
+- `nextFree` depends on `journal.categories` contents: that list is the live category set; no archive concept. False.
+- All-eight-used repeats a color without hint: required by the AC. False.
+- `Color.hexString` now unused in `App/` (tests only), `PaletteViewModel.categoryColors` still used by Core: medium-low, defer (deleted-code cleanup for 5.4).
+- Custom colors silently shown as nearest tone: by design (CAP-2 mapping). False.
+- Missing blank line before MARK: false, swiftlint 0 violations.
+- `nextFree` in `App/` not Core: by design, moving mapping to Core is a listed follow-up. False.
