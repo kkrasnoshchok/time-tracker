@@ -149,3 +149,12 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-1-tone-swatches-in-the-categories-tab.md`
   summary: `Color.hexString` in `App/Support/Color+Hex.swift` is now used only by tests after `ColorPicker` was removed; delete it (and its test usage) or keep deliberately.
   evidence: grep shows references only in `AppTests/DesignTokenTests.swift`; candidate for the whole-app cleanup in Story 5.4.
+
+## Deferred from: author look at spec-5-2-entry-detail-and-add-entry-sheet (2026-11-07)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-2-entry-detail-and-add-entry-sheet.md`
+  summary: Replace the native category `Picker` and the native start/end `DatePicker` in `EntryFormFields` with token-styled controls.
+  evidence: Author says they look poor inside the cards; to be done in a separate design session.
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-2-entry-detail-and-add-entry-sheet.md`
+  summary: Default content height of the detail pane and the add sheet exceeds the default window, giving a double scroll; compact the layout (shorter notes, tighter cards, or fit the sheet height).
+  evidence: Author-reported on the running app (pane `ScrollView` plus the sheet's `ScrollView` inside a fixed 600pt frame).
