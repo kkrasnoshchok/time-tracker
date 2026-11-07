@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-06-2026 16:58
+last_updated: 11-07-2026 00:33
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -58,11 +58,11 @@ development_status:
   3-4-stable-list-width-and-journal-guard: done
   epic-3-retrospective: done
 
-  epic-4: in-progress
+  epic-4: done
   4-1-menu-bar-item-as-plain-text: done
   4-2-popover-in-the-design-language: done
   4-3-долго-in-the-popover-and-menu-bar-guard: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   epic-5: backlog
   5-1-tone-swatches-in-the-categories-tab: backlog
@@ -188,24 +188,24 @@ action_items:
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
   - id: "epic-3-retro-item-17-b4-before-story-4-3-extract-a-pure-entry"
     epic: 3
-    action: "B4: Inside Story 4.2 (decided 2026-11-05) extract a pure EntryRowModel with
-      tests and move EntryRow and DayHeader out of JournalEntriesView.swift"
+    action: "B4: Inside Story 4.2 (decided 2026-11-05) extract a pure EntryRowModel
+      with tests and move EntryRow and DayHeader out of JournalEntriesView.swift"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
   - id: "epic-3-retro-item-18-b5-first-commit-of-a-story-names-the-sto"
     epic: 3
     action: "B5: First commit of a story names the story and holds only that story;
       preparatory work gets its own chore commit"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
   - id: "epic-3-retro-item-19-b6-for-stories-that-depend-on-native-con"
     epic: 3
     action: "B6: For stories that depend on native control look or keys, write the
       assumption as unverified and try it in the running app before review"
     owner: "Vadym"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
   - id: "epic-3-retro-item-20-b7-run-explain-change-over-f648064-51b24"
     epic: 3
@@ -214,3 +214,44 @@ action_items:
     owner: "Vadym"
     status: open
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-05.md"
+  - id: "epic-4-retro-item-21-c1-record-author-reported-result-per-man"
+    epic: 4
+    action: "C1: Record author-reported result per manual AC item of Story 4.2 in
+      deferred-work.md"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-4-retro-item-22-c2-run-the-app-with-a-timer-8h-and-recor"
+    epic: 4
+    action: "C2: Run the app with a timer 8h+ and record the on-screen result of the
+      popover долго note"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-4-retro-item-23-c3-pre-release-gate-voiceover-pass-on-th"
+    epic: 4
+    action: "C3: Pre-release gate: VoiceOver pass on the menu bar item and popover
+      долго reading"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-4-retro-item-24-c4-every-story-gets-its-own-spec-n-m-fil"
+    epic: 4
+    action: "C4: Every story gets its own spec-n-m file, even inside a bigger session"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-4-retro-item-25-c5-document-that-thin-swiftui-glue-is-co"
+    epic: 4
+    action: "C5: Document that thin SwiftUI glue is covered by manual checks and pure
+      helpers"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-4-retro-item-26-c6-run-explain-change-over-0f302d4-head"
+    epic: 4
+    action: "C6: Run explain-change over 0f302d4^..HEAD for owed Swift concepts of
+      epic 4"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
