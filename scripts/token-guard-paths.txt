@@ -10,3 +10,7 @@ App/Journal/DayHeader.swift
 App/Journal/EntryRowModel.swift
 App/MenuBar
 App/Journal/ToneSwatchPicker.swift
+App/Journal/EntryDetailView.swift
+App/Journal/AddEntrySheet.swift
+App/Journal/EntryFormFields.swift
+App/Journal/EntryProblem.swift

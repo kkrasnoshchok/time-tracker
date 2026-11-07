@@ -18,18 +18,26 @@ struct EntryDetailView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            EntryFormFields(draft: $draft, categories: journal.categories)
-            if let problem {
-                ProblemBanner(problem: problem) { save(allowOverlap: true) }
-                    .padding(.horizontal)
+        ScrollView {
+            VStack(alignment: .leading, spacing: Space.x4) {
+                EntryFormFields(draft: $draft, categories: journal.categories)
+                if let problem {
+                    ErrorStrip(
+                        EntryProblem.message(problem),
+                        action: EntryProblem.actionLabel(problem).map { label in
+                            (label: label, handler: { save(allowOverlap: true) })
+                        }
+                    )
+                }
+                HStack {
+                    Spacer()
+                    Button("Удалить запись") { confirmingDelete = true }
+                        .buttonStyle(.ghost)
+                }
             }
-            HStack {
-                Spacer()
-                Button("Удалить запись", role: .destructive) { confirmingDelete = true }
-            }
-            .padding([.horizontal, .bottom])
+            .padding(Space.x5)
         }
+        .background(Color.surfaceCanvas)
         .onChange(of: draft) { save(allowOverlap: false) }
         .confirmationDialog("Удалить запись?", isPresented: $confirmingDelete) {
             Button("Удалить", role: .destructive, action: delete)
