@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-01-2026 17:08
-last_updated: 11-08-2026 14:45
+last_updated: 11-08-2026 16:10
 project: time-tracker
 project_key: NOKEY
 tracking_system: file-system
@@ -69,7 +69,7 @@ development_status:
   5-2-entry-detail-and-add-entry-sheet: done
   5-3-categories-chrome-settings-and-remaining-errors: done
   5-4-whole-app-guard-and-success-check: done
-  epic-5-retrospective: optional
+  epic-5-retrospective: done
 action_items:
   - id: "epic-1-retro-item-1-a1-set-stories-1-2-1-5-to-done-in-sprint"
     epic: 1
@@ -226,7 +226,7 @@ action_items:
     action: "C2: Run the app with a timer 8h+ and record the on-screen result of the
       popover долго note"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
   - id: "epic-4-retro-item-23-c3-pre-release-gate-voiceover-pass-on-th"
     epic: 4
@@ -239,14 +239,14 @@ action_items:
     epic: 4
     action: "C4: Every story gets its own spec-n-m file, even inside a bigger session"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
   - id: "epic-4-retro-item-25-c5-document-that-thin-swiftui-glue-is-co"
     epic: 4
     action: "C5: Document that thin SwiftUI glue is covered by manual checks and pure
       helpers"
     owner: "Vadym"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
   - id: "epic-4-retro-item-26-c6-run-explain-change-over-0f302d4-head"
     epic: 4
@@ -255,3 +255,65 @@ action_items:
     owner: "Vadym"
     status: open
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-07.md"
+  - id: "epic-5-retro-item-27-d1-run-the-app-over-eight-screens-confir"
+    epic: 5
+    action: "D1: Run the app over eight screens, confirm only paper and eight category
+      tones, record screenshots in spec-5-4"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-28-d2-run-the-13h-flow-long-shows-fix-end-d"
+    epic: 5
+    action: "D2: Run the 13h flow (long shows, fix end, disappears, total updates);
+      also closes epic 4 C2"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-29-d3-close-5-3-b6-list-settings-export-sec"
+    epic: 5
+    action: "D3: Close 5-3 B6 list, Settings export section and VoiceOver pass (recorder
+      label, ErrorStrip, menu bar, popover); also closes epic 4 C3"
+    owner: "Vadym"
+    status: in-progress
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-30-d4-reconcile-5-4-and-epic-5-done-status"
+    epic: 5
+    action: "D4: Reconcile 5-4 and epic-5 done status with owed manual ACs; manual-AC
+      stories stay review until result recorded"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-31-d5-update-claude-md-guard-description-wh"
+    epic: 5
+    action: "D5: Update CLAUDE.md guard description (whole App, exemptions in check-tokens.sh)"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-32-d6-decide-whether-the-token-guard-runs-a"
+    epic: 5
+    action: "D6: Decide whether the token guard runs automatically (hook or build
+      phase)"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-33-d7-document-thin-swiftui-glue-convention"
+    epic: 5
+    action: "D7: Document thin-SwiftUI-glue convention in CLAUDE.md or docs/code-quality.md
+      (epic 4 C5)"
+    owner: "Vadym"
+    status: done
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-34-d8-color-hex-token-fallback-or-assertion"
+    epic: 5
+    action: "D8: Color(hex:) token fallback or assertionFailure plus test"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
+  - id: "epic-5-retro-item-35-d9-follow-ups-tone-mapping-and-long-rule"
+    epic: 5
+    action: "D9: Follow-ups: tone mapping and long rule into Core, first-unused tone
+      for Palette categories, design session for native Picker/DatePicker and double
+      scroll"
+    owner: "Vadym"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-08.md"
