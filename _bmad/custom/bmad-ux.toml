@@ -1,0 +1,10 @@
+# Team override (committed): project rules every run keeps in context,
+# and a hard stop so each BMAD step lives in its own session.
+[workflow]
+persistent_facts = [
+  "file:{project-root}/CLAUDE.md",
+  "file:{project-root}/docs/application-design.md",
+]
+on_complete = """
+STOP. Do not invoke any other BMAD skill and do not continue to the next workflow step in this session, even if the request seems to imply it. Finish by telling the user, in {communication_language}: (1) the artifact paths created or changed; (2) the one recommended next skill; (3) a paste-ready opening prompt for a fresh session that names those artifact paths. Then end your turn.
+"""

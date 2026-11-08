@@ -1,0 +1,12 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj
+xcuserdata/
+.superpowers/
+Packages/*_mutated/
+Packages/TimeTrackerCore/muter_logs/
+
+# BMAD: personal install answers (generated per machine)
+_bmad/config.user.toml

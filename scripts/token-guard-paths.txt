@@ -1,0 +1,5 @@
+# Paths already migrated to design tokens, one per line (file or directory, relative to repo root).
+# Since Story 5.4 the guard covers all of App/. Exemptions live in check-tokens.sh: the token layer
+# (ColorToken.swift, Typography.swift, Design/HairlineRing.swift) and Support/CategoryTone.swift,
+# whose hex literals are stored Core colors used as mapping keys (data, not styling).
+App

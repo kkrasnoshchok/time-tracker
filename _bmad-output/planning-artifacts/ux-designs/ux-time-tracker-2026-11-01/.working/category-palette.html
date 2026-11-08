@@ -1,0 +1,36 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Category palette</title>
+<style>
+/* Exploration mock, not final. Governs DESIGN.md: Colors (category palette), Components (category dot, token). */
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,system-ui,sans-serif;background:#f7f7f5;color:#1b0624;padding:32px;max-width:860px}
+h1{font-size:15px;font-weight:500;margin-bottom:6px}p{font-size:12px;color:#766a7c;margin-bottom:20px;line-height:1.5}
+.sw{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.c{background:#fff;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);padding:14px}
+.dot{width:36px;height:36px;border-radius:50%;margin-bottom:10px}
+.c b{font-weight:500;font-size:13px;display:block}.c span{font-size:12px;color:#898683;font-variant-numeric:tabular-nums}
+.card{background:#fff;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid rgba(0,0,0,.04);font-size:15px}.row:first-child{border-top:0}
+.d{width:8px;height:8px;border-radius:50%}.r{margin-left:auto;font-variant-numeric:tabular-nums}.cat{color:#898683;font-size:13px}
+.tok{display:inline-flex;align-items:center;gap:8px;background:#edece7;border-radius:999px;padding:6px 12px 6px 10px;font-size:15px;font-weight:500;margin-right:8px}
+</style></head><body>
+<h1>Палитра категорий: 8 приглушённых тонов</h1>
+<p>Все оттенки с одинаковой «пыльной» насыщенностью и яркостью, чтобы ни один не кричал на тёплом фоне Linen. Цвет — маленькая точка 8px, никогда не заливка строки.</p>
+<div class="sw">
+<div class="c"><div class="dot" style="background:#b4705a"></div><b>Clay</b><span>#B4705A</span></div>
+<div class="c"><div class="dot" style="background:#b8964a"></div><b>Ochre</b><span>#B8964A</span></div>
+<div class="c"><div class="dot" style="background:#8a9a6a"></div><b>Moss</b><span>#8A9A6A</span></div>
+<div class="c"><div class="dot" style="background:#5f8a88"></div><b>Lagoon</b><span>#5F8A88</span></div>
+<div class="c"><div class="dot" style="background:#6f86a0"></div><b>Slate</b><span>#6F86A0</span></div>
+<div class="c"><div class="dot" style="background:#8d6f8f"></div><b>Plum</b><span>#8D6F8F</span></div>
+<div class="c"><div class="dot" style="background:#b88a8a"></div><b>Rose</b><span>#B88A8A</span></div>
+<div class="c"><div class="dot" style="background:#7a7570"></div><b>Taupe</b><span>#7A7570</span></div>
+</div>
+<div class="card">
+<div class="row"><span class="d" style="background:#6f86a0"></span><span style="color:#898683;width:48px;font-size:13px">14:05</span><span>review PR #18</span><span class="cat">Работа</span><span class="r">0:37</span></div>
+<div class="row"><span class="d" style="background:#6f86a0"></span><span style="color:#898683;width:48px;font-size:13px">11:30</span><span>planning sprint</span><span class="cat">Работа</span><span class="r">2:35</span></div>
+<div class="row"><span class="d" style="background:#8a9a6a"></span><span style="color:#898683;width:48px;font-size:13px">10:10</span><span>учу SwiftUI</span><span class="cat">Учёба</span><span class="r">1:20</span></div>
+<div class="row"><span class="d" style="background:#b4705a"></span><span style="color:#898683;width:48px;font-size:13px">09:00</span><span>завтрак</span><span class="cat">Личное</span><span class="r">0:30</span></div>
+</div>
+<p style="margin-top:20px">Токен в палитре:</p>
+<span class="tok"><i class="d" style="background:#6f86a0;display:inline-block"></i>Работа</span><span class="tok"><i class="d" style="background:#8a9a6a;display:inline-block"></i>Учёба</span>
+<p style="margin-top:20px">Токен с тонированным фоном (22% цвета на белом), текст Aubergine Ink:</p><div style="background:#fff;border-radius:16px;padding:20px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);line-height:3"><span class="tok" style="background:#b4705a;background:color-mix(in srgb,#b4705a 22%,#fff)">Clay</span><span class="tok" style="background:#b8964a;background:color-mix(in srgb,#b8964a 22%,#fff)">Ochre</span><span class="tok" style="background:#8a9a6a;background:color-mix(in srgb,#8a9a6a 22%,#fff)">Moss</span><span class="tok" style="background:#5f8a88;background:color-mix(in srgb,#5f8a88 22%,#fff)">Lagoon</span><span class="tok" style="background:#6f86a0;background:color-mix(in srgb,#6f86a0 22%,#fff)">Slate</span><span class="tok" style="background:#8d6f8f;background:color-mix(in srgb,#8d6f8f 22%,#fff)">Plum</span><span class="tok" style="background:#b88a8a;background:color-mix(in srgb,#b88a8a 22%,#fff)">Rose</span><span class="tok" style="background:#7a7570;background:color-mix(in srgb,#7a7570 22%,#fff)">Taupe</span></div></body></html>

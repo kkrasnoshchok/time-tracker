@@ -1,0 +1,54 @@
+name: TimeTracker
+options:
+  bundleIdPrefix: dev.hesoyam
+  deploymentTarget:
+    macOS: "26.0"
+packages:
+  TimeTrackerCore:
+    path: Packages/TimeTrackerCore
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    exactVersion: 1.10.0
+targets:
+  TimeTracker:
+    type: application
+    platform: macOS
+    sources: [App]
+    dependencies:
+      - package: TimeTrackerCore
+      - package: KeyboardShortcuts
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.hesoyam.TimeTracker
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+        MARKETING_VERSION: "0.1.1"
+        CURRENT_PROJECT_VERSION: "2"
+        INFOPLIST_KEY_CFBundleDisplayName: Time Tracker
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+  TimeTrackerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [AppTests]
+    dependencies:
+      - target: TimeTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.hesoyam.TimeTrackerTests
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+schemes:
+  TimeTracker:
+    build:
+      targets:
+        TimeTracker: all
+    test:
+      targets:
+        - TimeTrackerTests

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Token guard before every commit: exit 1 blocks the commit and prints file:line.
+exec "$(git rev-parse --show-toplevel)/scripts/check-tokens.sh"

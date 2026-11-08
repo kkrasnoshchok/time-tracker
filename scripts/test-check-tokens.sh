@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# Tests for scripts/check-tokens.sh against fixtures (no real App/ files involved).
+# Usage: scripts/test-check-tokens.sh
+# TS analogy: a tiny test runner; each `expect` is an `expect(...).toBe(...)` call.
+set -euo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+GUARD="$HERE/check-tokens.sh"
+ROOT="$HERE/fixtures/token-guard"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+FAILED=0
+OUT=""
+CODE=0
+
+# run <list-content>: writes the list file, runs the guard, fills OUT (stdout+stderr) and CODE.
+run() {
+  printf '%s\n' "$1" > "$TMP/list.txt"
+  CODE=0
+  OUT="$("$GUARD" --root "$ROOT" --paths "$TMP/list.txt" 2>&1)" || CODE=$?
+}
+
+# expect <name> <expected-code> [expected-substring...]
+expect() {
+  local name="$1" code="$2" ok=1
+  shift 2
+  if [ "$CODE" -ne "$code" ]; then ok=0; fi
+  local needle
+  for needle in "$@"; do
+    case "$OUT" in *"$needle"*) ;; *) ok=0 ;; esac
+  done
+  if [ "$ok" -eq 1 ]; then
+    echo "PASS $name"
+  else
+    echo "FAIL $name (exit $CODE, expected $code)"
+    echo "$OUT" | sed 's/^/     | /'
+    FAILED=1
+  fi
+}
+
+if [ ! -x "$GUARD" ]; then
+  echo "FAIL check-tokens.sh is missing or not executable: $GUARD"
+  exit 1
+fi
+
+run "clean";        expect "clean tree"            0
+[ -z "$OUT" ] || { echo "FAIL clean tree prints nothing"; FAILED=1; }
+run "bad-hex";      expect "hex literal"           1 "bad-hex/Sample.swift:3: "
+run "bad-named";    expect "named colors"          1 "bad-named/Sample.swift:3: " "bad-named/Sample.swift:4: " "bad-named/Sample.swift:5: " "bad-named/Sample.swift:6: " "bad-named/Sample.swift:7: " "bad-named/Sample.swift:8: "
+run "bad-accent";   expect "accent color"          1 "bad-accent/Sample.swift:3: "
+run "bad-font";     expect "ad-hoc font size"      1 "bad-font/Sample.swift:3: " "bad-font/Sample.swift:4: "
+run "bad-named-more"; expect "more system colors" 1 "bad-named-more/Sample.swift:3: " "bad-named-more/Sample.swift:4: " "bad-named-more/Sample.swift:5: " "bad-named-more/Sample.swift:6: " "bad-named-more/Sample.swift:7: " "bad-named-more/Sample.swift:8: " "bad-named-more/Sample.swift:9: "
+run "bad-literals"; expect "color literals"    1 "bad-literals/Sample.swift:3: " "bad-literals/Sample.swift:4: " "bad-literals/Sample.swift:5: " "bad-literals/Sample.swift:6: "
+run "bad-font-more"; expect "more font sizes"  1 "bad-font-more/Sample.swift:3: " "bad-font-more/Sample.swift:4: " "bad-font-more/Sample.swift:5: "
+run "bad-colors-fonts"; expect "white/black, NSFont, Font.custom, text styles, weights" 1 "bad-colors-fonts/Sample.swift:3: " "bad-colors-fonts/Sample.swift:4: " "bad-colors-fonts/Sample.swift:5: " "bad-colors-fonts/Sample.swift:6: " "bad-colors-fonts/Sample.swift:7: " "bad-colors-fonts/Sample.swift:8: " "bad-colors-fonts/Sample.swift:9: " "bad-colors-fonts/Sample.swift:10: "
+run "bad-styles-more"; expect "text styles, system foreground styles, weights, Color(white:)" 1 "bad-styles-more/Sample.swift:3: " "bad-styles-more/Sample.swift:4: " "bad-styles-more/Sample.swift:5: " "bad-styles-more/Sample.swift:6: " "bad-styles-more/Sample.swift:7: " "bad-styles-more/Sample.swift:8: " "bad-styles-more/Sample.swift:9: " "bad-styles-more/Sample.swift:11: " "bad-styles-more/Sample.swift:12: "
+run "bad-spellings"; expect "qualified system foreground colors, .custom font, .weight()" 1 "bad-spellings/Sample.swift:3: " "bad-spellings/Sample.swift:4: " "bad-spellings/Sample.swift:5: " "bad-spellings/Sample.swift:6: " "bad-spellings/Sample.swift:7: " "bad-spellings/Sample.swift:8: "
+run "clean-lookalikes"; expect "lookalikes are not hits" 0
+run "token-layer";  expect "token layer skipped"   0
+run "token-layer-mixed"; expect "violation next to token layer, token layer files only exempt under Design/" 1 "token-layer-mixed/Bad.swift:2: " "token-layer-mixed/Other/HairlineRing.swift:3: " "token-layer-mixed/Other/Typography.swift:1: "
+run "data-exempt";  expect "CategoryTone.swift under Support/ is the data exemption" 0
+run "data-exempt-mixed"; expect "exemption is only Support/CategoryTone.swift" 1 "data-exempt-mixed/Other/CategoryTone.swift:2: " "data-exempt-mixed/Support/Color.swift:2: "
+run "nonexistent";  expect "missing path"          2 "nonexistent"
+run "$(printf '# comment\n\n   \nclean\n# another')"
+expect "comments and blanks ignored" 0
+run "$(printf 'clean\nbad-hex')"; expect "several paths" 1 "bad-hex/Sample.swift:3: "
+run "bad-font/Sample.swift";      expect "single file path" 1 "bad-font/Sample.swift:3: "
+
+# Missing option value is a usage error (exit 2), not "violations found".
+for opt in --paths --root; do
+  CODE=0
+  OUT="$("$GUARD" "$opt" 2>&1)" || CODE=$?
+  expect "$opt without value" 2 "usage"
+done
+
+# Unknown argument and missing --paths file / --root dir are usage errors (exit 2).
+CODE=0; OUT="$("$GUARD" --bogus 2>&1)" || CODE=$?
+expect "unknown argument" 2 "usage"
+CODE=0; OUT="$("$GUARD" --root "$ROOT" --paths "$TMP/no-such-list.txt" 2>&1)" || CODE=$?
+expect "missing --paths file" 2 "list file not found"
+CODE=0; OUT="$("$GUARD" --root "$TMP/no-such-dir" --paths "$TMP/list.txt" 2>&1)" || CODE=$?
+expect "missing --root dir" 2 "root not found"
+
+if [ "$FAILED" -ne 0 ]; then
+  echo "SOME TESTS FAILED"
+  exit 1
+fi
+echo "ALL TESTS PASSED"

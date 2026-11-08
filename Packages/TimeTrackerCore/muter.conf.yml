@@ -1,0 +1,6 @@
+arguments:
+- test
+executable: /usr/bin/swift
+exclude:
+- Package.swift
+excludeCalls: []
