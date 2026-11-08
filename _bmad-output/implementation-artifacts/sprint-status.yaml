@@ -64,11 +64,11 @@ development_status:
   4-3-долго-in-the-popover-and-menu-bar-guard: done
   epic-4-retrospective: done
 
-  epic-5: in-progress
+  epic-5: done
   5-1-tone-swatches-in-the-categories-tab: done
   5-2-entry-detail-and-add-entry-sheet: done
   5-3-categories-chrome-settings-and-remaining-errors: done
-  5-4-whole-app-guard-and-success-check: review
+  5-4-whole-app-guard-and-success-check: done
   epic-5-retrospective: optional
 action_items:
   - id: "epic-1-retro-item-1-a1-set-stories-1-2-1-5-to-done-in-sprint"

@@ -2,7 +2,7 @@
 title: 'Whole-app guard and success check'
 type: 'feature'
 created: '2026-11-08'
-status: 'in-review'
+status: 'done'
 route: 'oneshot'
 review_loop_iteration: 0
 context:
