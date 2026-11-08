@@ -41,7 +41,7 @@ struct TimeTrackerApp: App {
         .menuBarExtraStyle(.window)
 
         Settings {
-            SettingsView()
+            SettingsView(store: model.store)
         }
 
         Window("Журнал", id: "journal") {

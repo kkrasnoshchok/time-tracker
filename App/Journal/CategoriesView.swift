@@ -56,6 +56,7 @@ struct CategoriesView: View {
         ordered.move(fromOffsets: source, toOffset: destination)
         do {
             try journal.reorderCategories(ordered)
+            problem = nil
         } catch {
             problem = error
         }
@@ -117,6 +118,7 @@ private struct CategoryRow: View {
     private func select(_ tone: CategoryTone) {
         do throws(StoreError) {
             try journal.setColor(tone.hex, for: category)
+            problem = nil
         } catch {
             problem = error
         }

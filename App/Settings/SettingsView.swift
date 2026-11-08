@@ -6,6 +6,9 @@ import TimeTrackerCore
 /// The page is a card of hotkey rows on the canvas. The recorder itself is a system control and
 /// keeps its look on purpose; only its label, hint and error line use the design tokens.
 struct SettingsView: View {
+    let store: TimeStore
+    /// Last export failure; cleared by the next export attempt.
+    @State private var exportProblem: String?
     @State private var hotkeys = HotkeySettingsViewModel(
         palette: KeyboardShortcuts.getShortcut(for: .togglePalette)?.keyCombo,
         journal: KeyboardShortcuts.getShortcut(for: .openJournal)?.keyCombo
@@ -25,10 +28,34 @@ struct SettingsView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .card()
+            Text("Экспорт")
+                .typeRole(.title)
+                .foregroundStyle(Color.textPrimary)
+            VStack(alignment: .leading, spacing: Space.x4) {
+                HStack(spacing: Space.x3) {
+                    Button("CSV…") { exportProblem = ExportActions.exportCSV(allRows()) }
+                        .buttonStyle(.ghost)
+                    Button("SQLite…") { exportProblem = ExportActions.exportSQLite(allRows()) }
+                        .buttonStyle(.ghost)
+                }
+                Text("Все записи без фильтров.")
+                    .typeRole(.caption)
+                    .foregroundStyle(Color.textSecondary)
+                if let exportProblem {
+                    ErrorStrip(exportProblem)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .card()
         }
         .padding(Space.x5)
         .frame(width: 440)
         .background(Color.surfaceCanvas)
+    }
+
+    /// A fresh view model has no filter, so this exports every entry.
+    private func allRows() -> [ExportRow] {
+        JournalViewModel(store: store).exportRows()
     }
 
     /// `LabeledContent` is a label on the left and a control on the right in one row,
