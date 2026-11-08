@@ -35,3 +35,10 @@ context:
 - NOT done here (no screen control; owed by the author, unverified): [ ] visual pass over Palette, Journal, Entry detail, Add sheet, Categories, Settings, menu bar item, popover: only paper tones and the eight category tones, screenshots recorded in this story; [ ] flow: entry of 13h from the previous day → «долго» shows, fix the end time → it disappears and the day total updates; [ ] open B6 checks from 5.3 and the VoiceOver items in `deferred-work.md`.
 - Follow-ups, not done: move the tone mapping and the «долго» rule into Core; first-unused tone for Palette-created categories (`PaletteViewModel.categoryColors` still uses bright hexes); the epic-5 deferrals on native `Picker`/`DatePicker` and double scroll. CLAUDE.md still says the guard covers «мигрированных файлах» (see deferred-work).
 - Review not run by the author's rule; review goes to a fresh session.
+
+### Review Findings
+
+- [x] [Review][Patch] Token-layer exemption matched by basename anywhere in `App/`; now only under `Design/`, fixture `token-layer-mixed/Other/Typography.swift` seen FAIL first [scripts/check-tokens.sh:91]
+- [x] [Review][Patch] Starter-category seed had no test; `seedDefaultCategoriesIfEmpty` made internal, `StarterCategoriesTests` added (seen FAIL on access level first) [App/AppEnvironment.swift:25]
+- [x] [Review][Patch] `hexString` test helper returned `#000000` on failed conversion; now returns a visible marker [AppTests/ColorHexString.swift:88]
+- [x] [Review][Defer] Guard not in a hook/build phase; `Color(hex:)` gray fallback and its missing test; owed manual checks (see deferred-work.md)

@@ -181,3 +181,9 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-whole-app-guard-and-success-check.md`
   summary: Resolved: `Color.hexString` moved to `AppTests/ColorHexString.swift` (test-only helper), `Color+Hex.swift` removed.
   evidence: Closes the Story 5.1 deferral; kept deliberately because the token tests use it.
+
+## Deferred from: code review of spec-5-4-whole-app-guard-and-success-check (2026-11-08)
+
+- Guard is not in any automatic path (not in a pre-commit hook or Xcode build phase); a literal added under `App/` is caught only when someone runs `scripts/check-tokens.sh`. Process decision for the author: hook or build phase.
+- `Color(hex:)` in `App/Design/ColorToken.swift` falls back to system `.gray` on a malformed hex (moved code, behavior unchanged). Decide on a token fallback or a debug `assertionFailure`; there is also no test for valid / `#`-prefixed / invalid input.
+- Process: story is `review` while the visual pass, 13h «долго» flow and B6/VoiceOver checks are owed (already listed above and in the spec); only the author's running-app pass settles it.

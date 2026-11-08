@@ -84,8 +84,8 @@ done
 FOUND=0
 for entry in ${ENTRIES[@]+"${ENTRIES[@]}"}; do
   while IFS= read -r file; do
-    # The token layer is the one place literals are allowed (HairlineRing draws the ring in black, exempt only under Design/).
-    case "$(basename "$file")" in ColorToken.swift|Typography.swift) continue ;; esac
+    # The token layer is the one place literals are allowed, only under Design/ (HairlineRing draws the ring in black).
+    case "$file" in */Design/ColorToken.swift|Design/ColorToken.swift|*/Design/Typography.swift|Design/Typography.swift) continue ;; esac
     case "$file" in */Design/HairlineRing.swift|Design/HairlineRing.swift) continue ;; esac
     # Data exemption: CategoryTone's hexes are stored Core colors used as mapping keys, not styling.
     case "$file" in */Support/CategoryTone.swift|Support/CategoryTone.swift) continue ;; esac

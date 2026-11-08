@@ -20,9 +20,9 @@ enum AppEnvironment {
     }
 
     /// First launch only: a few starter categories so the palette is usable immediately.
-    private static func seedDefaultCategoriesIfEmpty(_ store: TimeStore) {
+    static func seedDefaultCategoriesIfEmpty(_ store: TimeStore) {
         guard store.categories().isEmpty else { return }
-        let defaults = [("Работа", CategoryTone.slate), ("Учёба", .moss), ("Личное", .clay)]
+        let defaults: [(String, CategoryTone)] = [("Работа", CategoryTone.slate), ("Учёба", .moss), ("Личное", .clay)]
         for (name, tone) in defaults {
             _ = try? store.addCategory(name: name, colorHex: tone.hex)
         }
