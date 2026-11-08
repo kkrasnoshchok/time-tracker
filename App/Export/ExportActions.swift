@@ -5,22 +5,26 @@ import UniformTypeIdentifiers
 /// Save-panel wrappers around the exporters from `TimeTrackerCore`.
 @MainActor
 enum ExportActions {
-    static func exportCSV(_ rows: [ExportRow]) {
-        guard let url = askForFile(name: "time-tracker.csv", type: .commaSeparatedText) else { return }
+    /// Both return the problem text for the caller's error strip, or `nil` when the file
+    /// was written or the person cancelled the save panel.
+    static func exportCSV(_ rows: [ExportRow]) -> String? {
+        guard let url = askForFile(name: "time-tracker.csv", type: .commaSeparatedText) else { return nil }
         do {
             try CSVExporter.csv(rows).write(to: url, atomically: true, encoding: .utf8)
+            return nil
         } catch {
-            show(error)
+            return ExportProblem.message(error)
         }
     }
 
-    static func exportSQLite(_ rows: [ExportRow]) {
+    static func exportSQLite(_ rows: [ExportRow]) -> String? {
         let sqlite = UTType(filenameExtension: "sqlite") ?? .data
-        guard let url = askForFile(name: "time-tracker.sqlite", type: sqlite) else { return }
+        guard let url = askForFile(name: "time-tracker.sqlite", type: sqlite) else { return nil }
         do {
             try SQLiteExporter.write(rows, to: url)
+            return nil
         } catch {
-            show(error)
+            return ExportProblem.message(error)
         }
     }
 
@@ -32,10 +36,4 @@ enum ExportActions {
         return panel.runModal() == .OK ? panel.url : nil
     }
 
-    private static func show(_ error: Error) {
-        let alert = NSAlert()
-        alert.messageText = "Не удалось экспортировать"
-        alert.informativeText = error.localizedDescription
-        alert.runModal()
-    }
 }

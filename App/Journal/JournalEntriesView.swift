@@ -7,6 +7,8 @@ struct JournalEntriesView: View {
     @State private var selection: UUID?
     @State private var period: Period = .all
     @State private var showingAddSheet = false
+    /// Last export failure; cleared by the next export attempt (like `{error && <ErrorStrip/>}`).
+    @State private var exportProblem: String?
     private let refreshTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
 
     enum Period: String, CaseIterable, Identifiable {
@@ -36,10 +38,15 @@ struct JournalEntriesView: View {
     var body: some View {
         // Fixed-width detail pane: the list takes the rest, so its width depends
         // only on the window, never on what the detail pane contains.
-        HStack(spacing: 0) {
-            entryList.frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
-            Divider()
-            detail.frame(width: Self.detailWidth).frame(maxHeight: .infinity)
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                entryList.frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
+                Divider()
+                detail.frame(width: Self.detailWidth).frame(maxHeight: .infinity)
+            }
+            if let exportProblem {
+                ErrorStrip(exportProblem).padding(Space.x3)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .searchable(text: $journal.filter.text, prompt: "Поиск по названию, описанию, тегам")
@@ -114,8 +121,8 @@ struct JournalEntriesView: View {
                 ForEach(journal.tags) { Text("#" + $0.name).tag(UUID?.some($0.id)) }
             }
             Menu("Экспорт", systemImage: "square.and.arrow.up") {
-                Button("CSV…") { ExportActions.exportCSV(journal.exportRows()) }
-                Button("SQLite…") { ExportActions.exportSQLite(journal.exportRows()) }
+                Button("CSV…") { exportProblem = ExportActions.exportCSV(journal.exportRows()) }
+                Button("SQLite…") { exportProblem = ExportActions.exportSQLite(journal.exportRows()) }
             }
             Button("Добавить запись", systemImage: "plus") { showingAddSheet = true }
         }

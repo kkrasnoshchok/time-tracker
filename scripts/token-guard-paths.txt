@@ -14,3 +14,6 @@ App/Journal/EntryDetailView.swift
 App/Journal/AddEntrySheet.swift
 App/Journal/EntryFormFields.swift
 App/Journal/EntryProblem.swift
+App/Journal/CategoriesView.swift
+App/Settings/SettingsView.swift
+App/Export

@@ -8,26 +8,34 @@ struct CategoriesView: View {
     @State private var deleting: EntryCategory?
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Space.x4) {
+            // `List` stays: it gives drag-to-reorder (`onMove`). Its own background and
+            // separators are hidden, and the card around it supplies the paper look.
             List {
                 ForEach(journal.categories) { category in
                     CategoryRow(journal: journal, category: category, problem: $problem) {
                         requestDelete(category)
                     }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
                 .onMove(perform: move)
             }
-            HStack {
-                TextField("Новая категория", text: $newName)
+            .scrollContentBackground(.hidden)
+            .card()
+            HStack(spacing: Space.x3) {
+                InputField("Новая категория", text: $newName)
                     .onSubmit(add)
                 Button("Добавить", action: add)
+                    .buttonStyle(.primary)
                     .disabled(newName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
             if let problem {
-                Text(problem.message).font(.callout).foregroundStyle(.red)
+                ErrorStrip(EntryProblem.message(problem))
             }
         }
-        .padding()
+        .padding(Space.x5)
+        .background(Color.surfaceCanvas)
         .sheet(item: $deleting) { category in
             MoveEntriesSheet(journal: journal, category: category, problem: $problem)
         }
@@ -93,14 +101,16 @@ private struct CategoryRow: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(spacing: Space.x3) {
             ToneSwatchPicker(storedHex: category.colorHex, onSelect: select)
-            TextField("Название", text: $name)
+            InputField("Название", text: $name)
                 .onSubmit(rename)
-            Spacer()
-            Text("\(category.entries?.count ?? 0) записей").foregroundStyle(.secondary)
+            Text("\(category.entries?.count ?? 0) записей")
+                .typeRole(.caption)
+                .foregroundStyle(Color.textSecondary)
             Button("Удалить", systemImage: "trash", role: .destructive, action: onDelete)
                 .labelStyle(.iconOnly)
+                .buttonStyle(.ghost)
         }
     }
 
@@ -134,22 +144,32 @@ private struct MoveEntriesSheet: View {
     private var others: [EntryCategory] { journal.categories.filter { $0.id != category.id } }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("В «\(category.name)» есть записи (\(category.entries?.count ?? 0)).").font(.headline)
+        VStack(alignment: .leading, spacing: Space.x4) {
+            Text("В «\(category.name)» есть записи (\(category.entries?.count ?? 0)).")
+                .typeRole(.bodyEmphasis)
+                .foregroundStyle(Color.textPrimary)
             Text("Перенесите их в другую категорию, затем эта категория будет удалена.")
-                .foregroundStyle(.secondary)
+                .typeRole(.body)
+                .foregroundStyle(Color.textSecondary)
+            // Native menu `Picker`, like in the entry form (design session owns restyling it).
             Picker("Перенести в", selection: $destinationID) {
                 ForEach(others) { Text($0.name).tag(UUID?.some($0.id)) }
             }
+            .typeRole(.body)
             HStack {
                 Button("Отмена", role: .cancel) { dismiss() }
+                    .buttonStyle(.ghost)
+                    .keyboardShortcut(.cancelAction)
                 Spacer()
                 Button("Перенести и удалить", role: .destructive, action: moveAndDelete)
+                    .buttonStyle(.primary)
+                    .keyboardShortcut(.defaultAction)
                     .disabled(destinationID == nil)
             }
         }
-        .padding()
+        .padding(Space.x5)
         .frame(width: 420)
+        .background(Color.surfaceCanvas)
         .onAppear { destinationID = others.first?.id }
     }
 
