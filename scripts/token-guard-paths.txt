@@ -1,19 +1,5 @@
 # Paths already migrated to design tokens, one per line (file or directory, relative to repo root).
-# Each epic adds the files it migrates; unmigrated screens must not be listed yet.
-# Deliberately not listed: App/Support/CategoryTone.swift. Its hex literals are the stored Core default
-# colors used as mapping keys (data, not styling); the tone values themselves live in App/Design/ColorToken.swift.
-App/Design
-App/Palette
-App/Journal/JournalEntriesView.swift
-App/Journal/EntryRow.swift
-App/Journal/DayHeader.swift
-App/Journal/EntryRowModel.swift
-App/MenuBar
-App/Journal/ToneSwatchPicker.swift
-App/Journal/EntryDetailView.swift
-App/Journal/AddEntrySheet.swift
-App/Journal/EntryFormFields.swift
-App/Journal/EntryProblem.swift
-App/Journal/CategoriesView.swift
-App/Settings/SettingsView.swift
-App/Export
+# Since Story 5.4 the guard covers all of App/. Exemptions live in check-tokens.sh: the token layer
+# (ColorToken.swift, Typography.swift, Design/HairlineRing.swift) and Support/CategoryTone.swift,
+# whose hex literals are stored Core colors used as mapping keys (data, not styling).
+App

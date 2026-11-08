@@ -172,3 +172,12 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - No automated test that `ExportActions.exportCSV/exportSQLite` return the problem text on a failed write and `nil` on success/cancel, nor that `JournalEntriesView` clears the strip. `NSSavePanel.runModal` blocks unit tests. If it regresses, split the write step into `write(rows, to:) -> String?` and test it.
 - Low: `MoveEntriesSheet` with a single category that has entries shows an empty `Picker` and a permanently disabled primary button (pre-existing logic). Add an explanatory line or hide the move action if the sheet is touched again.
 - Unverified: the Settings export section added by the review patch (CSV…/SQLite… ghost buttons, strip, window height) builds and App tests pass, but was not looked at in the running app. Settle with the B6 pass above.
+
+## Added in build of spec-5-4-whole-app-guard-and-success-check (2026-11-08)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-whole-app-guard-and-success-check.md`
+  summary: CLAUDE.md still describes the guard as covering «мигрированных файлах» and `token-guard-paths.txt` as a per-epic list; it now scans all of `App/` with exemptions in `check-tokens.sh`.
+  evidence: Fix edits an agent-context file, so it needs the author's decision.
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-whole-app-guard-and-success-check.md`
+  summary: Resolved: `Color.hexString` moved to `AppTests/ColorHexString.swift` (test-only helper), `Color+Hex.swift` removed.
+  evidence: Closes the Story 5.1 deferral; kept deliberately because the token tests use it.

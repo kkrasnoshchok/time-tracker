@@ -3,6 +3,7 @@
 # (hex or RGB literals, system or accent colors, white/black, ad-hoc or system-style
 # fonts, NSFont, Font.custom, weights other than regular/medium, .bold(), system text styles, .primary/.secondary
 # foreground styles (also Color.primary/.secondary), .custom( fonts, .weight() other than regular/medium, Color(white:)).
+# Exemptions: the token layer (ColorToken/Typography, Design/HairlineRing) and Support/CategoryTone.swift (data keys).
 # Usage: scripts/check-tokens.sh [--paths <list-file>] [--root <dir>]
 # Exit codes: 0 clean, 1 violations found, 2 usage or missing path.
 #
@@ -86,6 +87,8 @@ for entry in ${ENTRIES[@]+"${ENTRIES[@]}"}; do
     # The token layer is the one place literals are allowed (HairlineRing draws the ring in black, exempt only under Design/).
     case "$(basename "$file")" in ColorToken.swift|Typography.swift) continue ;; esac
     case "$file" in */Design/HairlineRing.swift|Design/HairlineRing.swift) continue ;; esac
+    # Data exemption: CategoryTone's hexes are stored Core colors used as mapping keys, not styling.
+    case "$file" in */Support/CategoryTone.swift|Support/CategoryTone.swift) continue ;; esac
     hits="$(grep -nE "${PATTERNS[@]}" "$file" || true)"
     if [ -n "$hits" ]; then
       FOUND=1

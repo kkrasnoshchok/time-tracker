@@ -68,7 +68,7 @@ development_status:
   5-1-tone-swatches-in-the-categories-tab: done
   5-2-entry-detail-and-add-entry-sheet: done
   5-3-categories-chrome-settings-and-remaining-errors: done
-  5-4-whole-app-guard-and-success-check: backlog
+  5-4-whole-app-guard-and-success-check: in-progress
   epic-5-retrospective: optional
 action_items:
   - id: "epic-1-retro-item-1-a1-set-stories-1-2-1-5-to-done-in-sprint"

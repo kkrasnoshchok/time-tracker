@@ -59,6 +59,8 @@ run "bad-spellings"; expect "qualified system foreground colors, .custom font, .
 run "clean-lookalikes"; expect "lookalikes are not hits" 0
 run "token-layer";  expect "token layer skipped"   0
 run "token-layer-mixed"; expect "violation next to token layer, HairlineRing only exempt under Design/" 1 "token-layer-mixed/Bad.swift:2: " "token-layer-mixed/Other/HairlineRing.swift:3: "
+run "data-exempt";  expect "CategoryTone.swift under Support/ is the data exemption" 0
+run "data-exempt-mixed"; expect "exemption is only Support/CategoryTone.swift" 1 "data-exempt-mixed/Other/CategoryTone.swift:2: " "data-exempt-mixed/Support/Color.swift:2: "
 run "nonexistent";  expect "missing path"          2 "nonexistent"
 run "$(printf '# comment\n\n   \nclean\n# another')"
 expect "comments and blanks ignored" 0
