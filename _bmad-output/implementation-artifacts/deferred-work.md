@@ -158,3 +158,9 @@ Closed in the review of 3-1 (2026-11-04): the guard now catches `Color.white`/`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-2-entry-detail-and-add-entry-sheet.md`
   summary: Default content height of the detail pane and the add sheet exceeds the default window, giving a double scroll; compact the layout (shorter notes, tighter cards, or fit the sheet height).
   evidence: Author-reported on the running app (pane `ScrollView` plus the sheet's `ScrollView` inside a fixed 600pt frame).
+
+## Deferred from: code review of spec-5-2 (2026-11-08)
+
+- [settled 2026-11-08, author check passed] `ErrorStrip` is `lineLimit(1)`; a long `saveFailed(reason)` may be truncated in the 400pt detail pane (unverified medium). Settle: force a long error in the running app.
+- [settled 2026-11-08, all passed] Story 5.2 B6 manual checks were unchecked: Tab order incl. notes editor, Return in notes vs `.defaultAction`, overlap strip with «Всё равно», 400pt overflow, delete confirmation (unverified medium). Settle: author's running-app pass.
+- No automated test that «Всё равно» saves with `allowOverlap: true`, nor for flow 3 (row and day total update after editing the end). Thin glue, checked by hand per retro C5.

@@ -14,8 +14,8 @@ struct EntryProblemTests {
 
     @Test func otherErrorsOfferNoAction() {
         let others: [StoreError] = [
-            .emptyName, .startInFuture, .endInFuture, .missingEnd,
-            .endBeforeStart, .notFound, .saveFailed("x")
+            .emptyName, .duplicateName, .categoryHasEntries, .startInFuture, .endInFuture,
+            .missingEnd, .endBeforeStart, .noRunningTimer, .notFound, .saveFailed("x")
         ]
         for error in others {
             #expect(EntryProblem.actionLabel(error) == nil)

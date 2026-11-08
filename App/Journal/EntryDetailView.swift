@@ -18,25 +18,28 @@ struct EntryDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: Space.x4) {
-                EntryFormFields(draft: $draft, categories: journal.categories)
-                if let problem {
-                    ErrorStrip(
-                        EntryProblem.message(problem),
-                        action: EntryProblem.actionLabel(problem).map { label in
-                            (label: label, handler: { save(allowOverlap: true) })
-                        }
-                    )
-                }
-                HStack {
-                    Spacer()
-                    Button("Удалить запись") { confirmingDelete = true }
-                        .buttonStyle(.ghost)
+        VStack(alignment: .leading, spacing: Space.x4) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: Space.x4) {
+                    EntryFormFields(draft: $draft, categories: journal.categories)
+                    HStack {
+                        Spacer()
+                        Button("Удалить запись", role: .destructive) { confirmingDelete = true }
+                            .buttonStyle(.ghost)
+                    }
                 }
             }
-            .padding(Space.x5)
+            // Outside the scroll area, so a failed autosave stays in view.
+            if let problem {
+                ErrorStrip(
+                    EntryProblem.message(problem),
+                    action: EntryProblem.actionLabel(problem).map { label in
+                        (label: label, handler: { save(allowOverlap: true) })
+                    }
+                )
+            }
         }
+        .padding(Space.x5)
         .background(Color.surfaceCanvas)
         .onChange(of: draft) { save(allowOverlap: false) }
         .confirmationDialog("Удалить запись?", isPresented: $confirmingDelete) {

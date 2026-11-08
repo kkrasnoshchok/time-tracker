@@ -9,6 +9,8 @@ import TimeTrackerCore
 struct EntryFormFields: View {
     @Binding var draft: EntryDraft
     let categories: [EntryCategory]
+    /// Like `useState` + `onFocus`/`onBlur` for one field: lets the notes shell draw its focus border.
+    @FocusState private var notesFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: Space.x4) {
@@ -47,8 +49,9 @@ struct EntryFormFields: View {
 
     private var notesEditor: some View {
         InputFieldShell(
-            isFocused: false,
+            isFocused: notesFocused,
             content: TextEditor(text: $draft.notes)
+                .focused($notesFocused)
                 .scrollContentBackground(.hidden)
                 .frame(minHeight: 120)
                 .accessibilityLabel("Описание")

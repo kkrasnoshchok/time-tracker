@@ -32,7 +32,7 @@ struct AddEntrySheet: View {
                 )
             }
             HStack {
-                Button("Отмена") { dismiss() }
+                Button("Отмена", role: .cancel) { dismiss() }
                     .buttonStyle(.ghost)
                     .keyboardShortcut(.cancelAction)
                 Spacer()
